@@ -139,13 +139,24 @@ function compileGoRegex(goRegex: string): RegExp | null {
       jsRegex = jsRegex.substring(4);
     }
     
-    // Remove inline case modifiers that JS doesn't support
+    // Remove all inline case modifiers that JS doesn't support
+    // (?i) - case insensitive
+    // (?-i) - case sensitive
+    // (?i:...) - case insensitive group
+    // (?-i:...) - case sensitive group
     jsRegex = jsRegex.replace(/\(\?-i:/g, '(?:');
     jsRegex = jsRegex.replace(/\(\?i:/g, '(?:');
+    jsRegex = jsRegex.replace(/\(\?i\)/g, '');
+    
+    // Remove named capture groups (?P<name>...) - convert to regular capture groups
+    jsRegex = jsRegex.replace(/\(\?P<[^>]+>/g, '(');
+    
+    // Remove other unsupported Go regex features
+    jsRegex = jsRegex.replace(/\(\?:/g, '(?:'); // Non-capturing groups are supported, just normalize
     
     return new RegExp(jsRegex, flags);
   } catch (error) {
-    console.error(`Failed to compile regex: ${goRegex}`, error);
+    // Silently skip rules with incompatible regex patterns
     return null;
   }
 }
