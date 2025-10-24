@@ -8,6 +8,7 @@ import { CodeEditor } from "@/components/CodeEditor";
 import { FileUpload } from "@/components/FileUpload";
 import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import type { ScanMatch } from "@/types/scanner";
 
 const Index = () => {
@@ -113,13 +114,16 @@ const Index = () => {
       {/* Header */}
       <header className="border-b border-border/50 backdrop-blur-sm bg-background/80">
         <div className="container mx-auto px-8 py-6">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl font-semibold tracking-tight">
-              SecretScan <span className="text-primary">Playground</span>
-            </h1>
-            <p className="text-sm text-muted-foreground mt-3 font-light">
-              Client-side secret scanner powered by Gitleaks rules
-            </p>
+          <div className="flex items-center justify-between max-w-7xl mx-auto">
+            <div>
+              <h1 className="text-4xl font-semibold tracking-tight">
+                Vibe<span className="text-primary">Leaks</span>
+              </h1>
+              <p className="text-sm text-muted-foreground mt-3 font-light">
+                Client-side secret scanner powered by Gitleaks rules
+              </p>
+            </div>
+            <ThemeToggle />
           </div>
         </div>
       </header>
