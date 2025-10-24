@@ -91,4 +91,31 @@ All colors MUST be HSL.
   .code-text {
     color: hsl(var(--code-text));
   }
+
+  /* Binary number animations */
+  @keyframes scrollUp {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
+    }
+  }
+
+  @keyframes scrollDown {
+    0% {
+      transform: translateY(-50%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .animate-scroll-up {
+    animation: scrollUp 20s linear infinite;
+  }
+
+  .animate-scroll-down {
+    animation: scrollDown 20s linear infinite;
+  }
 }

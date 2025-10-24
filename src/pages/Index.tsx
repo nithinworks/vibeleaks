@@ -16,6 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
+import numbersLeft from "@/assets/numbers-img.webp";
+import numbersLeftReversed from "@/assets/numbers-reversed-img.webp";
+import numbersRight from "@/assets/numbers-right-img.webp";
+import numbersRightReversed from "@/assets/numbers-right-reversed-img.webp";
 
 const Index = () => {
   const [code, setCode] = useState("");
@@ -187,9 +191,23 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Animated binary backgrounds */}
+      <div className="fixed left-0 top-0 w-32 h-[200%] opacity-[0.03] pointer-events-none z-0">
+        <div className="animate-scroll-up">
+          <img src={numbersLeft} alt="" className="w-full" />
+          <img src={numbersLeftReversed} alt="" className="w-full" />
+        </div>
+      </div>
+      <div className="fixed right-0 top-0 w-32 h-[200%] opacity-[0.03] pointer-events-none z-0">
+        <div className="animate-scroll-down">
+          <img src={numbersRight} alt="" className="w-full" />
+          <img src={numbersRightReversed} alt="" className="w-full" />
+        </div>
+      </div>
+      
       {/* Header */}
-      <header className="border-b border-border/50 backdrop-blur-sm bg-background/80">
+      <header className="border-b border-border/50 backdrop-blur-sm bg-background/80 relative z-10">
         <div className="container mx-auto px-8 py-6">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div>
@@ -204,7 +222,7 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-8 py-8">
+      <main className="container mx-auto px-8 py-8 relative z-10">
         <div className="max-w-7xl mx-auto">
           {viewMode === 'input' && (
             <div className="flex items-center justify-center min-h-[calc(100vh-240px)]">
