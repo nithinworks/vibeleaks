@@ -98,13 +98,13 @@ export const FileTree = ({ files }: FileTreeProps) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="text-sm font-medium mb-4">Project Files</div>
-      <div className="flex-1 overflow-auto border border-border rounded-md p-2 bg-muted/20">
+      <div className="text-sm font-medium mb-2">Project Files</div>
+      <div className="h-[500px] overflow-auto border border-border rounded-md p-2 bg-muted/20">
         {tree.map((node) => (
           <TreeNode key={node.path} node={node} />
         ))}
       </div>
-      <div className="mt-4 text-xs text-muted-foreground">
+      <div className="mt-2 text-xs text-muted-foreground">
         {files.length} file(s) loaded
       </div>
     </div>

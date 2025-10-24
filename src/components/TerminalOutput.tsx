@@ -12,7 +12,7 @@ interface TerminalOutputProps {
 
 export const TerminalOutput = ({ logs, matches, isScanning, progress }: TerminalOutputProps) => {
   return (
-    <div className="flex flex-col h-full terminal-bg rounded-lg border terminal-border">
+    <div className="flex flex-col h-[580px] terminal-bg rounded-lg border terminal-border">
       <div className="flex items-center gap-2 px-4 py-2 border-b terminal-border">
         <div className="flex gap-1.5">
           <div className="w-3 h-3 rounded-full bg-destructive" />
@@ -24,8 +24,8 @@ export const TerminalOutput = ({ logs, matches, isScanning, progress }: Terminal
         </span>
       </div>
 
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-2 font-mono text-sm">
+      <ScrollArea className="flex-1">
+        <div className="p-4 space-y-2 font-mono text-sm">{/* ... keep existing code */}
           {isScanning && progress && (
             <div className="terminal-text opacity-90 mb-4">
               <div className="flex items-center gap-2">

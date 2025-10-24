@@ -12,20 +12,22 @@ export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       <Label htmlFor="code-input" className="text-sm font-medium mb-2">
         Code Input
       </Label>
-      <div className="flex-1 overflow-auto border border-border rounded-md">
+      <div className="h-[500px] overflow-auto border border-border rounded-md">
         <CodeEditorComponent
           value={value}
           language="javascript"
           placeholder="Paste your code here or upload files..."
           onChange={(e) => onChange(e.target.value)}
           padding={16}
+          data-color-mode="dark"
           style={{
             fontSize: 13,
             fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
             backgroundColor: 'hsl(var(--code-bg))',
             minHeight: '100%',
+            counterReset: 'line',
           }}
-          className="font-mono"
+          className="font-mono [&>textarea]:!outline-none [&_.token-line]:before:content-[counter(line)] [&_.token-line]:before:counter-increment-[line] [&_.token-line]:before:mr-4 [&_.token-line]:before:text-muted-foreground [&_.token-line]:before:inline-block [&_.token-line]:before:w-8 [&_.token-line]:before:text-right"
         />
       </div>
     </div>

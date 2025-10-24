@@ -127,7 +127,7 @@ const Index = () => {
       <main className="container mx-auto px-8 py-8">
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[calc(100vh-240px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left: Code Editor */}
           <Card className="p-8 flex flex-col border-border/50 shadow-sm">
             <div className="flex items-center justify-between mb-6">
@@ -135,13 +135,11 @@ const Index = () => {
               <FileUpload onFilesSelected={handleFilesSelected} />
             </div>
             
-            <div className="flex-1 min-h-0">
-              {isDirectory && files.length > 0 ? (
-                <FileTree files={files} />
-              ) : (
-                <CodeEditor value={code} onChange={setCode} />
-              )}
-            </div>
+            {isDirectory && files.length > 0 ? (
+              <FileTree files={files} />
+            ) : (
+              <CodeEditor value={code} onChange={setCode} />
+            )}
 
             <Separator className="my-6" />
 
@@ -163,14 +161,12 @@ const Index = () => {
           {/* Right: Terminal Output */}
           <Card className="p-8 flex flex-col border-border/50 shadow-sm">
             <h2 className="text-xl font-lora font-medium mb-6">Output</h2>
-            <div className="flex-1 min-h-0">
-              <TerminalOutput
-                logs={logs}
-                matches={matches}
-                isScanning={isScanning}
-                progress={progress}
-              />
-            </div>
+            <TerminalOutput
+              logs={logs}
+              matches={matches}
+              isScanning={isScanning}
+              progress={progress}
+            />
           </Card>
         </div>
       </main>
