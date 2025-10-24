@@ -8,11 +8,11 @@ interface CodeEditorProps {
 
 export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col">
       <Label htmlFor="code-input" className="text-sm font-medium mb-2">
         Code Input
       </Label>
-      <div className="h-[400px] min-h-0 border border-border rounded-md overflow-hidden relative">
+      <div className="h-[400px] border border-border rounded-md overflow-hidden relative">
         <CodeEditorComponent
           value={value}
           language="javascript"
@@ -26,9 +26,8 @@ export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
             backgroundColor: 'hsl(var(--code-bg))',
             height: '100%',
             overflow: 'auto',
-            maxHeight: '100%',
           }}
-          className="font-mono [&>textarea]:!outline-none [&>textarea]:!resize-none [&>textarea]:!overflow-auto [&>textarea]:!h-full [&>textarea]:!max-h-full [&>pre]:!overflow-visible"
+          className="font-mono [&>textarea]:!outline-none [&>textarea]:!resize-none [&>textarea]:!overflow-auto [&>textarea]:!h-full [&>pre]:!overflow-visible"
         />
       </div>
     </div>
