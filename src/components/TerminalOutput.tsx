@@ -1,8 +1,43 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
-import type { ScanMatch } from "@/types/scanner";
+import { AlertCircle, CheckCircle2, Loader2, Shield, ShieldAlert, AlertTriangle, Info } from "lucide-react";
+import type { ScanMatch, SeverityLevel } from "@/types/scanner";
+
+const severityConfig = {
+  critical: {
+    icon: ShieldAlert,
+    color: "text-red-500",
+    bgColor: "bg-red-500/5",
+    borderColor: "border-red-500/20",
+    badgeVariant: "destructive" as const,
+    label: "Critical"
+  },
+  high: {
+    icon: AlertTriangle,
+    color: "text-orange-500",
+    bgColor: "bg-orange-500/5",
+    borderColor: "border-orange-500/20",
+    badgeVariant: "destructive" as const,
+    label: "High"
+  },
+  medium: {
+    icon: AlertCircle,
+    color: "text-yellow-500",
+    bgColor: "bg-yellow-500/5",
+    borderColor: "border-yellow-500/20",
+    badgeVariant: "secondary" as const,
+    label: "Medium"
+  },
+  low: {
+    icon: Info,
+    color: "text-blue-500",
+    bgColor: "bg-blue-500/5",
+    borderColor: "border-blue-500/20",
+    badgeVariant: "secondary" as const,
+    label: "Low"
+  }
+};
 interface TerminalOutputProps {
   logs: string[];
   matches: ScanMatch[];
@@ -35,12 +70,18 @@ export const TerminalOutput = ({
             </Card>}
 
           {matches.length > 0 && <div className="space-y-3">
-              {matches.map((match, idx) => <Card key={idx} className="p-4 border-destructive/20 bg-destructive/5">
+              {matches.map((match, idx) => {
+                const config = severityConfig[match.severity];
+                const Icon = config.icon;
+                return <Card key={idx} className={`p-4 ${config.borderColor} ${config.bgColor}`}>
                   <div className="flex items-start gap-3">
-                    <AlertCircle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
+                    <Icon className={`h-4 w-4 ${config.color} mt-0.5 flex-shrink-0`} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-2">
-                        <Badge variant="destructive" className="text-xs font-normal">
+                        <Badge variant={config.badgeVariant} className="text-xs font-normal">
+                          {config.label}
+                        </Badge>
+                        <Badge variant="outline" className="text-xs font-normal">
                           {match.ruleId}
                         </Badge>
                         <span className="text-xs text-muted-foreground truncate">
@@ -70,7 +111,8 @@ export const TerminalOutput = ({
                       </div>
                     </div>
                   </div>
-                </Card>)}
+                </Card>;
+              })}
             </div>}
 
           {!isScanning && matches.length === 0 && logs.length > 0 && <Card className="p-6 border-primary/20 bg-primary/5">

@@ -102,9 +102,62 @@ const enhancedAllowlistPatterns = [
   /^(localhost|127\.0\.0\.1)/,
   /^https?:\/\//,
   
-  // Very short strings (likely not secrets)
+// Very short strings (likely not secrets)
   /^.{1,6}$/,
 ];
+
+// Determine severity level based on rule ID
+function getSeverityLevel(ruleId: string): 'critical' | 'high' | 'medium' | 'low' {
+  const id = ruleId.toLowerCase();
+  
+  // Critical: Private keys, database credentials, root credentials
+  if (
+    id.includes('private-key') ||
+    id.includes('private_key') ||
+    id.includes('database') ||
+    id.includes('postgres') ||
+    id.includes('mysql') ||
+    id.includes('mongodb') ||
+    id.includes('aws-secret-access-key') ||
+    id.includes('root') ||
+    id.includes('master') ||
+    id.includes('admin-password')
+  ) {
+    return 'critical';
+  }
+  
+  // High: Service API keys, OAuth secrets
+  if (
+    id.includes('aws-access-key') ||
+    id.includes('github') ||
+    id.includes('gitlab') ||
+    id.includes('stripe') ||
+    id.includes('paypal') ||
+    id.includes('openai') ||
+    id.includes('anthropic') ||
+    id.includes('google') ||
+    id.includes('azure') ||
+    id.includes('oauth') ||
+    id.includes('client-secret') ||
+    id.includes('api-key') && !id.includes('generic')
+  ) {
+    return 'high';
+  }
+  
+  // Medium: Service tokens, less critical keys
+  if (
+    id.includes('token') ||
+    id.includes('bearer') ||
+    id.includes('jwt') ||
+    id.includes('session') ||
+    id.includes('cookie')
+  ) {
+    return 'medium';
+  }
+  
+  // Low: Generic patterns
+  return 'low';
+}
 
 self.onmessage = async (e: MessageEvent<ScanMessage>) => {
   const { files } = e.data;
@@ -269,6 +322,7 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
               lineNumber: lineNum + 1,
               snippet: matchedText,
               line: line.trim(),
+              severity: getSeverityLevel(rule.id),
             });
           }
         } catch (error) {

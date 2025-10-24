@@ -2,14 +2,21 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Search, Trash2 } from "lucide-react";
+import { Search, Trash2, Download, Filter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CodeEditor } from "@/components/CodeEditor";
 import { FileUpload } from "@/components/FileUpload";
 import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import type { ScanMatch } from "@/types/scanner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 
 const Index = () => {
   const [code, setCode] = useState("");
@@ -19,8 +26,22 @@ const Index = () => {
   const [matches, setMatches] = useState<ScanMatch[]>([]);
   const [isScanning, setIsScanning] = useState(false);
   const [progress, setProgress] = useState<{ current: number; total: number; filename: string }>();
+  const [severityFilter, setSeverityFilter] = useState<SeverityLevel | "all">("all");
   const workerRef = useRef<Worker>();
   const { toast } = useToast();
+
+  // Filter matches based on severity
+  const filteredMatches = severityFilter === "all" 
+    ? matches 
+    : matches.filter(m => m.severity === severityFilter);
+
+  // Count by severity
+  const severityCounts = {
+    critical: matches.filter(m => m.severity === 'critical').length,
+    high: matches.filter(m => m.severity === 'high').length,
+    medium: matches.filter(m => m.severity === 'medium').length,
+    low: matches.filter(m => m.severity === 'low').length,
+  };
 
   useEffect(() => {
     // Initialize Web Worker
@@ -89,6 +110,38 @@ const Index = () => {
     setLogs([]);
     setMatches([]);
     setProgress(undefined);
+    setSeverityFilter("all");
+  };
+
+  const handleExportJSON = () => {
+    const exportData = {
+      timestamp: new Date().toISOString(),
+      summary: {
+        total: matches.length,
+        critical: severityCounts.critical,
+        high: severityCounts.high,
+        medium: severityCounts.medium,
+        low: severityCounts.low,
+      },
+      matches: matches,
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `vibleaks-scan-${Date.now()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Export successful",
+      description: "Scan results exported as JSON",
+    });
   };
 
   const handleFilesSelected = (selectedFiles: { name: string; content: string }[], isDir: boolean) => {
@@ -169,11 +222,36 @@ const Index = () => {
           {/* Right: Terminal Output */}
           <div className="flex flex-col h-[calc(100vh-240px)]">
             <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
-              <h2 className="text-xl font-medium mb-6">Output</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-medium">Output</h2>
+                <div className="flex items-center gap-2">
+                  {matches.length > 0 && (
+                    <>
+                      <Select value={severityFilter} onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}>
+                        <SelectTrigger className="w-[140px] h-9">
+                          <Filter className="h-3.5 w-3.5 mr-2" />
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All ({matches.length})</SelectItem>
+                          <SelectItem value="critical">Critical ({severityCounts.critical})</SelectItem>
+                          <SelectItem value="high">High ({severityCounts.high})</SelectItem>
+                          <SelectItem value="medium">Medium ({severityCounts.medium})</SelectItem>
+                          <SelectItem value="low">Low ({severityCounts.low})</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Button onClick={handleExportJSON} variant="outline" size="sm" className="h-9">
+                        <Download className="h-3.5 w-3.5 mr-2" />
+                        Export JSON
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
               <div className="flex-1 min-h-0">
                 <TerminalOutput
                   logs={logs}
-                  matches={matches}
+                  matches={filteredMatches}
                   isScanning={isScanning}
                   progress={progress}
                 />

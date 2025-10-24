@@ -17,6 +17,8 @@ export interface TOMLConfig {
   allowlist?: AllowList;
 }
 
+export type SeverityLevel = 'critical' | 'high' | 'medium' | 'low';
+
 export interface ScanMatch {
   ruleId: string;
   description: string;
@@ -24,6 +26,7 @@ export interface ScanMatch {
   lineNumber: number;
   snippet: string;
   line: string;
+  severity: SeverityLevel;
 }
 
 export interface ScanResult {
