@@ -1,57 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Upload, FolderOpen } from "lucide-react";
+import { FolderOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface FileUploadProps {
   onFilesSelected: (files: { name: string; content: string }[], isDirectory: boolean) => void;
+  variant?: "default" | "outline";
+  size?: "default" | "sm" | "lg";
+  className?: string;
 }
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB per file
 const MAX_TOTAL_SIZE = 200 * 1024 * 1024; // 200MB total project
 const MAX_FILES = 2000; // Maximum number of files
 
-export const FileUpload = ({ onFilesSelected }: FileUploadProps) => {
+export const FileUpload = ({ onFilesSelected, variant = "outline", size = "sm", className = "" }: FileUploadProps) => {
   const { toast } = useToast();
-
-  const handleFileSelect = async () => {
-    try {
-      // @ts-ignore - File System Access API
-      const handles = await window.showOpenFilePicker({
-        multiple: true,
-        types: [
-          {
-            description: 'Code files',
-            accept: {
-              'text/*': ['.js', '.ts', '.jsx', '.tsx', '.py', '.java', '.go', '.rb', '.php', '.env', '.json', '.yaml', '.yml'],
-            },
-          },
-        ],
-      });
-
-      const files = await Promise.all(
-        handles.map(async (handle) => {
-          const file = await handle.getFile();
-          const content = await file.text();
-          return { name: file.name, content };
-        })
-      );
-
-      onFilesSelected(files, false);
-      
-      toast({
-        title: "Files loaded",
-        description: `${files.length} file(s) selected for scanning`,
-      });
-    } catch (error: any) {
-      if (error.name !== 'AbortError') {
-        toast({
-          title: "Error loading files",
-          description: error.message,
-          variant: "destructive",
-        });
-      }
-    }
-  };
 
   const handleDirectorySelect = async () => {
     try {
@@ -123,15 +86,9 @@ export const FileUpload = ({ onFilesSelected }: FileUploadProps) => {
   };
 
   return (
-    <div className="flex gap-2">
-      <Button onClick={handleFileSelect} variant="outline" size="sm">
-        <Upload className="h-4 w-4 mr-2" />
-        Upload Files
-      </Button>
-      <Button onClick={handleDirectorySelect} variant="outline" size="sm">
-        <FolderOpen className="h-4 w-4 mr-2" />
-        Select Folder
-      </Button>
-    </div>
+    <Button onClick={handleDirectorySelect} variant={variant} size={size} className={className}>
+      <FolderOpen className="h-4 w-4 mr-2" />
+      Select Folder
+    </Button>
   );
 };

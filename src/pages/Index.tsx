@@ -28,6 +28,7 @@ const Index = () => {
   const [hasScanCompleted, setHasScanCompleted] = useState(false);
   const [progress, setProgress] = useState<{ current: number; total: number; filename: string }>();
   const [severityFilter, setSeverityFilter] = useState<SeverityLevel | "all">("all");
+  const [showManualInput, setShowManualInput] = useState(false);
   const workerRef = useRef<Worker>();
   const { toast } = useToast();
 
@@ -128,6 +129,7 @@ const Index = () => {
     setHasScanCompleted(false);
     setProgress(undefined);
     setSeverityFilter("all");
+    setShowManualInput(false);
   };
 
   const handleExportJSON = () => {
@@ -165,6 +167,7 @@ const Index = () => {
     setFiles(selectedFiles);
     setIsDirectory(isDir);
     setHasScanCompleted(false);
+    setShowManualInput(false);
     
     // If single file, show its content in the editor
     if (!isDir && selectedFiles.length === 1) {
@@ -203,19 +206,38 @@ const Index = () => {
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left: Code Editor */}
+          {/* Left: Input Section */}
           <div className="flex flex-col h-[calc(100vh-240px)]">
             <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-medium">Input</h2>
-                <FileUpload onFilesSelected={handleFilesSelected} />
+              <div className="mb-6">
+                <h2 className="text-xl font-medium mb-1">Input</h2>
+                <p className="text-sm text-muted-foreground">Select a folder to scan for secrets</p>
               </div>
               
               <div className="flex-1 min-h-0 mb-6">
-                {isDirectory && files.length > 0 ? (
-                  <FileTree files={files} />
-                ) : (
+                {files.length > 0 ? (
+                  isDirectory ? (
+                    <FileTree files={files} />
+                  ) : (
+                    <CodeEditor value={code} onChange={setCode} />
+                  )
+                ) : showManualInput ? (
                   <CodeEditor value={code} onChange={setCode} />
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full gap-4">
+                    <FileUpload 
+                      onFilesSelected={handleFilesSelected} 
+                      variant="default"
+                      size="lg"
+                      className="h-12 px-8 text-base"
+                    />
+                    <button
+                      onClick={() => setShowManualInput(true)}
+                      className="text-sm text-primary hover:underline font-medium"
+                    >
+                      or enter code manually
+                    </button>
+                  </div>
                 )}
               </div>
 
