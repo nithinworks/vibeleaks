@@ -6,6 +6,18 @@
 All colors MUST be HSL.
 */
 
+@font-face {
+  font-family: "Cooper Black";
+  src: url("https://db.onlinewebfonts.com/t/28f2bcb7049a1e0f3598e59fc74840b5.eot");
+  src: url("https://db.onlinewebfonts.com/t/28f2bcb7049a1e0f3598e59fc74840b5.eot?#iefix") format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/28f2bcb7049a1e0f3598e59fc74840b5.woff2") format("woff2"),
+    url("https://db.onlinewebfonts.com/t/28f2bcb7049a1e0f3598e59fc74840b5.woff") format("woff"),
+    url("https://db.onlinewebfonts.com/t/28f2bcb7049a1e0f3598e59fc74840b5.ttf") format("truetype"),
+    url("https://db.onlinewebfonts.com/t/28f2bcb7049a1e0f3598e59fc74840b5.svg#Cooper Lt BT W08 Regular") format("svg");
+  font-weight: 400;
+  font-style: normal;
+}
+
 @layer base {
   :root {
     --background: 0 0% 98%;
@@ -108,11 +120,11 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-mono;
+    @apply bg-background text-foreground font-sans;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-sans;
+    @apply font-display;
   }
 }
 
