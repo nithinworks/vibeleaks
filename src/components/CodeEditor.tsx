@@ -1,11 +1,5 @@
 import { Label } from "@/components/ui/label";
-import Editor from "react-simple-code-editor";
-import Prism from "prismjs";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-jsx";
-import "prismjs/components/prism-python";
-import "prismjs/themes/prism-tomorrow.css";
+import CodeEditorComponent from "@uiw/react-textarea-code-editor";
 
 interface CodeEditorProps {
   value: string;
@@ -13,30 +7,27 @@ interface CodeEditorProps {
 }
 
 export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
-  const highlight = (code: string) => {
-    return Prism.highlight(code, Prism.languages.javascript, "javascript");
-  };
-
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       <Label htmlFor="code-input" className="text-sm font-medium mb-2">
         Code Input
       </Label>
-      <div className="h-[500px] overflow-auto border border-border rounded-md bg-[#1e1e1e]">
-        <Editor
+      <div className="h-[500px] overflow-auto border border-border rounded-md">
+        <CodeEditorComponent
           value={value}
-          onValueChange={onChange}
-          highlight={highlight}
-          padding={16}
+          language="javascript"
           placeholder="Paste your code here or upload files..."
+          onChange={(e) => onChange(e.target.value)}
+          padding={16}
+          data-color-mode="dark"
           style={{
-            fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
             fontSize: 13,
-            minHeight: "500px",
-            counterReset: "line",
+            fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+            backgroundColor: 'hsl(var(--code-bg))',
+            minHeight: '100%',
+            counterReset: 'line',
           }}
-          textareaClassName="focus:outline-none"
-          className="editor-with-line-numbers"
+          className="font-mono [&>textarea]:!outline-none [&_.token-line]:before:content-[counter(line)] [&_.token-line]:before:counter-increment-[line] [&_.token-line]:before:mr-4 [&_.token-line]:before:text-muted-foreground [&_.token-line]:before:inline-block [&_.token-line]:before:w-8 [&_.token-line]:before:text-right"
         />
       </div>
     </div>

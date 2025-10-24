@@ -136,26 +136,4 @@ All colors MUST be HSL.
   .code-text {
     color: hsl(var(--code-text));
   }
-  
-  /* Code Editor Line Numbers */
-  .editor-with-line-numbers .npm__react-simple-code-editor__textarea,
-  .editor-with-line-numbers .npm__react-simple-code-editor__textarea:focus,
-  .editor-with-line-numbers pre {
-    outline: none !important;
-  }
-
-  .editor-with-line-numbers pre {
-    counter-reset: line;
-  }
-
-  .editor-with-line-numbers pre .token-line::before {
-    counter-increment: line;
-    content: counter(line);
-    display: inline-block;
-    width: 2.5em;
-    margin-right: 1em;
-    text-align: right;
-    color: #858585;
-    user-select: none;
-  }
 }
