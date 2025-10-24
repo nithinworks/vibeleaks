@@ -79,6 +79,11 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
       // Check each rule
       for (const rule of rules) {
         try {
+          // Skip rules without regex (path-only rules)
+          if (!rule.regex) {
+            continue;
+          }
+
           // First check if keywords exist (if defined)
           if (rule.keywords && rule.keywords.length > 0) {
             const hasKeyword = rule.keywords.some(keyword =>
