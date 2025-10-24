@@ -6,6 +6,10 @@ interface ScanMessage {
   files: { name: string; content: string }[];
 }
 
+interface CancelMessage {
+  type: 'cancel';
+}
+
 // Pre-compiled rule with regex and metadata
 interface CompiledRule {
   id: string;
@@ -15,6 +19,13 @@ interface CompiledRule {
   entropy?: number;
   isGeneric: boolean;
 }
+
+// Constants for batch processing
+const CHUNK_SIZE = 1000; // Process 1000 lines at a time
+const YIELD_INTERVAL = 50; // Yield control every 50ms
+
+// Cancellation flag
+let isCancelled = false;
 
 interface ProgressMessage {
   type: 'progress';
@@ -225,13 +236,39 @@ function getSeverityLevel(ruleId: string): 'critical' | 'high' | 'medium' | 'low
   return 'low';
 }
 
-self.onmessage = async (e: MessageEvent<ScanMessage>) => {
+// Utility function to yield control to prevent UI freeze
+async function yieldControl(): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, 0));
+}
+
+self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
+  // Handle cancellation
+  if (e.data.type === 'cancel') {
+    isCancelled = true;
+    return;
+  }
+
+  // Reset cancellation flag
+  isCancelled = false;
+  
   const { files } = e.data;
   const startTime = performance.now();
   const matches: ScanMatch[] = [];
   let totalLines = 0;
+  let lastYieldTime = performance.now();
 
   for (let i = 0; i < files.length; i++) {
+    // Check for cancellation
+    if (isCancelled) {
+      self.postMessage({
+        type: 'result',
+        matches: [],
+        filesScanned: 0,
+        totalLines: 0,
+        duration: performance.now() - startTime,
+      } as ResultMessage);
+      return;
+    }
     const file = files[i];
     
     // Send progress update
@@ -283,7 +320,27 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
     const lines = file.content.split('\n');
     totalLines += lines.length;
 
-    for (let lineNum = 0; lineNum < lines.length; lineNum++) {
+    // Process lines in chunks for large files
+    const totalChunks = Math.ceil(lines.length / CHUNK_SIZE);
+    
+    for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+      // Check for cancellation
+      if (isCancelled) {
+        return;
+      }
+
+      const startLine = chunkIndex * CHUNK_SIZE;
+      const endLine = Math.min(startLine + CHUNK_SIZE, lines.length);
+      
+      // Send more granular progress updates
+      self.postMessage({
+        type: 'progress',
+        current: i + (chunkIndex / totalChunks),
+        total: files.length,
+        filename: `${file.name} (${Math.round((chunkIndex / totalChunks) * 100)}%)`,
+      } as ProgressMessage);
+
+      for (let lineNum = startLine; lineNum < endLine; lineNum++) {
       const line = lines[lineNum];
 
       // Skip empty or very short lines
@@ -377,19 +434,36 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
         }
       }
 
-      // If multiple matches found on this line, prioritize specific rules over generic ones
-      if (lineMatches.length > 0) {
-        // Check if there are both specific and generic matches
-        const specificMatches = lineMatches.filter(m => !m.ruleId.includes('generic'));
-        
-        // If we have specific matches, use only those; otherwise use all matches
-        if (specificMatches.length > 0) {
-          matches.push(...specificMatches);
-        } else {
-          matches.push(...lineMatches);
+        // If multiple matches found on this line, prioritize specific rules over generic ones
+        if (lineMatches.length > 0) {
+          // Check if there are both specific and generic matches
+          const specificMatches = lineMatches.filter(m => !m.ruleId.includes('generic'));
+          
+          // If we have specific matches, use only those; otherwise use all matches
+          if (specificMatches.length > 0) {
+            matches.push(...specificMatches);
+          } else {
+            matches.push(...lineMatches);
+          }
         }
       }
+
+      // Yield control between chunks to prevent UI freeze
+      const now = performance.now();
+      if (now - lastYieldTime > YIELD_INTERVAL) {
+        await yieldControl();
+        lastYieldTime = now;
+      }
+      
+      // Memory optimization: Clear chunk data
+      // @ts-ignore - Force garbage collection hint
+      if (typeof gc !== 'undefined') {
+        gc();
+      }
     }
+
+    // Clear file content from memory after processing
+    file.content = '';
   }
 
   const duration = performance.now() - startTime;

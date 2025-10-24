@@ -103,6 +103,18 @@ const Index = () => {
     });
   };
 
+  const handleCancel = () => {
+    workerRef.current?.postMessage({ type: "cancel" });
+    setIsScanning(false);
+    setProgress(undefined);
+    setLogs((prev) => [...prev, "Scan cancelled by user"]);
+    
+    toast({
+      title: "Scan cancelled",
+      description: "The scanning process has been stopped",
+    });
+  };
+
   const handleClear = () => {
     setCode("");
     setFiles([]);
@@ -204,14 +216,23 @@ const Index = () => {
               <Separator className="mb-6" />
 
               <div className="flex gap-3">
-                <Button
-                  onClick={handleScan}
-                  disabled={isScanning}
-                  className="flex-1 h-11 font-medium"
-                >
-                  <Search className="h-4 w-4 mr-2" />
-                  {isScanning ? "Scanning..." : "Scan for Secrets"}
-                </Button>
+                {isScanning ? (
+                  <Button
+                    onClick={handleCancel}
+                    variant="destructive"
+                    className="flex-1 h-11 font-medium"
+                  >
+                    Cancel Scan
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleScan}
+                    className="flex-1 h-11 font-medium"
+                  >
+                    <Search className="h-4 w-4 mr-2" />
+                    Scan for Secrets
+                  </Button>
+                )}
                 <Button onClick={handleClear} variant="outline" size="icon" className="h-11 w-11">
                   <Trash2 className="h-4 w-4" />
                 </Button>
