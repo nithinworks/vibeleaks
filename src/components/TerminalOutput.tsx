@@ -1,6 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, CheckCircle2, XCircle } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 import type { ScanMatch } from "@/types/scanner";
 
 interface TerminalOutputProps {
@@ -12,83 +13,78 @@ interface TerminalOutputProps {
 
 export const TerminalOutput = ({ logs, matches, isScanning, progress }: TerminalOutputProps) => {
   return (
-    <div className="flex flex-col h-[580px] terminal-bg rounded-lg border terminal-border">
-      <div className="flex items-center gap-2 px-4 py-2 border-b terminal-border">
-        <div className="flex gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-destructive" />
-          <div className="w-3 h-3 rounded-full bg-yellow-500" />
-          <div className="w-3 h-3 rounded-full bg-primary" />
-        </div>
-        <span className="text-xs terminal-text opacity-70 ml-2">
-          {isScanning ? "Scanning..." : "Terminal Output"}
-        </span>
-      </div>
-
+    <div className="flex flex-col h-[580px]">
       <ScrollArea className="flex-1">
-        <div className="p-4 space-y-2 font-mono text-sm">{/* ... keep existing code */}
+        <div className="space-y-3 pr-4">
           {isScanning && progress && (
-            <div className="terminal-text opacity-90 mb-4">
-              <div className="flex items-center gap-2">
-                <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
-                <span>
-                  Scanning {progress.current}/{progress.total}: {progress.filename}
-                </span>
+            <Card className="p-4 border-border/50">
+              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-normal truncate">
+                    Scanning {progress.current}/{progress.total}
+                  </p>
+                  <p className="text-xs truncate mt-0.5">{progress.filename}</p>
+                </div>
               </div>
-            </div>
+            </Card>
           )}
 
-          {logs.map((log, idx) => (
-            <div key={idx} className="terminal-text opacity-80">
-              <span className="opacity-50">$</span> {log}
-            </div>
-          ))}
-
           {matches.length > 0 && (
-            <div className="mt-4 space-y-3">
+            <div className="space-y-3">
               {matches.map((match, idx) => (
-                <div
-                  key={idx}
-                  className="border terminal-border rounded p-3 bg-terminal-bg/50"
-                >
-                  <div className="flex items-start gap-2 mb-2">
-                    <AlertCircle className="h-4 w-4 text-destructive mt-0.5" />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <Badge variant="destructive" className="text-xs">
+                <Card key={idx} className="p-4 border-destructive/20 bg-destructive/5">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-2">
+                        <Badge variant="destructive" className="text-xs font-normal">
                           {match.ruleId}
                         </Badge>
-                        <span className="text-xs terminal-text opacity-70">
+                        <span className="text-xs text-muted-foreground truncate">
                           {match.filename}:{match.lineNumber}
                         </span>
                       </div>
-                      <p className="text-sm terminal-text mt-1">
+                      <p className="text-sm font-normal text-foreground mb-3 break-words">
                         {match.description}
                       </p>
+                      <div className="space-y-2">
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1 font-normal">
+                            Matched snippet:
+                          </p>
+                          <code className="text-xs font-mono bg-muted px-2 py-1.5 rounded block overflow-x-auto break-all">
+                            {match.snippet}
+                          </code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1 font-normal">
+                            Full line:
+                          </p>
+                          <code className="text-xs font-mono bg-muted px-2 py-1.5 rounded block overflow-x-auto break-all">
+                            {match.line}
+                          </code>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="ml-6 mt-2">
-                    <div className="text-xs terminal-text opacity-50 mb-1">
-                      Matched snippet:
-                    </div>
-                    <code className="text-xs terminal-text bg-code-bg px-2 py-1 rounded block overflow-x-auto">
-                      {match.snippet}
-                    </code>
-                    <div className="text-xs terminal-text opacity-50 mt-1">
-                      Full line:
-                    </div>
-                    <code className="text-xs code-text bg-code-bg px-2 py-1 rounded block overflow-x-auto">
-                      {match.line}
-                    </code>
-                  </div>
-                </div>
+                </Card>
               ))}
             </div>
           )}
 
           {!isScanning && matches.length === 0 && logs.length > 0 && (
-            <div className="flex items-center gap-2 text-primary mt-4">
-              <CheckCircle2 className="h-4 w-4" />
-              <span>No secrets detected</span>
+            <Card className="p-6 border-primary/20 bg-primary/5">
+              <div className="flex items-center gap-3 text-primary">
+                <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
+                <span className="text-sm font-normal">No secrets detected</span>
+              </div>
+            </Card>
+          )}
+
+          {!isScanning && logs.length === 0 && (
+            <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
+              <p className="font-normal">Results will appear here</p>
             </div>
           )}
         </div>
