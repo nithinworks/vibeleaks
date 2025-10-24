@@ -29,6 +29,7 @@ const Index = () => {
   const [progress, setProgress] = useState<{ current: number; total: number; filename: string }>();
   const [severityFilter, setSeverityFilter] = useState<SeverityLevel | "all">("all");
   const [showManualInput, setShowManualInput] = useState(false);
+  const [viewMode, setViewMode] = useState<'input' | 'ready' | 'results'>('input');
   const workerRef = useRef<Worker>();
   const { toast } = useToast();
 
@@ -100,6 +101,7 @@ const Index = () => {
     setHasScanCompleted(false);
     setMatches([]);
     setLogs([`Starting scan with Gitleaks rules...`]);
+    setViewMode('results');
 
     workerRef.current?.postMessage({
       type: "scan",
@@ -130,6 +132,7 @@ const Index = () => {
     setProgress(undefined);
     setSeverityFilter("all");
     setShowManualInput(false);
+    setViewMode('input');
   };
 
   const handleExportJSON = () => {
@@ -168,6 +171,7 @@ const Index = () => {
     setIsDirectory(isDir);
     setHasScanCompleted(false);
     setShowManualInput(false);
+    setViewMode('ready');
     
     // If single file, show its content in the editor
     if (!isDir && selectedFiles.length === 1) {
@@ -203,56 +207,62 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-8 py-8">
-
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left: Input Section */}
-          <div className="flex flex-col h-[calc(100vh-240px)]">
-            <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
-              <div className="mb-6">
-                <h2 className="text-xl font-medium mb-1">Input</h2>
-                <p className="text-sm text-muted-foreground">Select a folder to scan for secrets</p>
-              </div>
-              
-              <div className="flex-1 min-h-0 mb-6">
-                {files.length > 0 ? (
-                  isDirectory ? (
-                    <FileTree files={files} />
-                  ) : (
-                    <CodeEditor value={code} onChange={setCode} />
-                  )
-                ) : showManualInput ? (
-                  <CodeEditor value={code} onChange={setCode} />
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full gap-4">
-                    <FileUpload 
-                      onFilesSelected={handleFilesSelected} 
-                      variant="default"
-                      size="lg"
-                      className="h-12 px-8 text-base"
-                    />
-                    <button
-                      onClick={() => setShowManualInput(true)}
-                      className="text-sm text-primary hover:underline font-medium"
-                    >
-                      or enter code manually
-                    </button>
+        <div className="max-w-7xl mx-auto">
+          {viewMode === 'input' && (
+            <div className="flex items-center justify-center min-h-[calc(100vh-240px)]">
+              <Card className="p-12 border-border/50 shadow-sm max-w-md w-full">
+                <div className="flex flex-col items-center gap-6">
+                  <div className="text-center mb-2">
+                    <h2 className="text-2xl font-medium mb-2">Get Started</h2>
+                    <p className="text-sm text-muted-foreground">Select a folder to scan for secrets</p>
                   </div>
-                )}
-              </div>
-
-              <Separator className="mb-6" />
-
-              <div className="flex gap-3">
-                {isScanning ? (
-                  <Button
-                    onClick={handleCancel}
-                    variant="destructive"
-                    className="flex-1 h-11 font-medium"
+                  <FileUpload 
+                    onFilesSelected={handleFilesSelected} 
+                    variant="default"
+                    size="lg"
+                    className="h-12 px-8 text-base w-full"
+                  />
+                  <button
+                    onClick={() => {
+                      setShowManualInput(true);
+                      setViewMode('ready');
+                    }}
+                    className="text-sm text-primary hover:underline font-medium"
                   >
-                    Cancel Scan
-                  </Button>
-                ) : (
+                    or enter code manually
+                  </button>
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {viewMode === 'ready' && (
+            <div className="flex items-center justify-center min-h-[calc(100vh-240px)]">
+              <Card className="p-8 border-border/50 shadow-sm max-w-2xl w-full">
+                <div className="mb-6">
+                  <h2 className="text-xl font-medium mb-1">Ready to Scan</h2>
+                  <p className="text-sm text-muted-foreground">
+                    {files.length} file(s) loaded
+                  </p>
+                </div>
+                
+                <div className="mb-6 max-h-[400px] overflow-auto border border-border/50 rounded-lg">
+                  {isDirectory ? (
+                    <FileTree files={files} />
+                  ) : showManualInput ? (
+                    <div className="h-[400px]">
+                      <CodeEditor value={code} onChange={setCode} />
+                    </div>
+                  ) : (
+                    <div className="h-[400px]">
+                      <CodeEditor value={code} onChange={setCode} />
+                    </div>
+                  )}
+                </div>
+
+                <Separator className="mb-6" />
+
+                <div className="flex gap-3">
                   <Button
                     onClick={handleScan}
                     className="flex-1 h-11 font-medium"
@@ -260,54 +270,59 @@ const Index = () => {
                     <Search className="h-4 w-4 mr-2" />
                     Scan for Secrets
                   </Button>
-                )}
-                <Button onClick={handleClear} variant="outline" size="icon" className="h-11 w-11">
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </Card>
-          </div>
-
-          {/* Right: Terminal Output */}
-          <div className="flex flex-col h-[calc(100vh-240px)]">
-            <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-medium">Output</h2>
-                <div className="flex items-center gap-2">
-                  {matches.length > 0 && (
-                    <>
-                      <Select value={severityFilter} onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}>
-                        <SelectTrigger className="w-[140px] h-9">
-                          <Filter className="h-3.5 w-3.5 mr-2" />
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All ({matches.length})</SelectItem>
-                          <SelectItem value="critical">Critical ({severityCounts.critical})</SelectItem>
-                          <SelectItem value="high">High ({severityCounts.high})</SelectItem>
-                          <SelectItem value="medium">Medium ({severityCounts.medium})</SelectItem>
-                          <SelectItem value="low">Low ({severityCounts.low})</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Button onClick={handleExportJSON} variant="outline" size="sm" className="h-9">
-                        <Download className="h-3.5 w-3.5 mr-2" />
-                        Export JSON
-                      </Button>
-                    </>
-                  )}
+                  <Button onClick={handleClear} variant="outline" size="icon" className="h-11 w-11">
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
-              </div>
-              <div className="flex-1 min-h-0">
-                <TerminalOutput
-                  logs={logs}
-                  matches={filteredMatches}
-                  isScanning={isScanning}
-                  hasScanCompleted={hasScanCompleted}
-                  progress={progress}
-                />
-              </div>
-            </Card>
-          </div>
+              </Card>
+            </div>
+          )}
+
+          {viewMode === 'results' && (
+            <div className="flex flex-col h-[calc(100vh-240px)]">
+              <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-medium">Scan Results</h2>
+                  <div className="flex items-center gap-2">
+                    <Button onClick={handleClear} variant="outline" size="sm" className="h-9">
+                      <Search className="h-3.5 w-3.5 mr-2" />
+                      New Scan
+                    </Button>
+                    {matches.length > 0 && (
+                      <>
+                        <Select value={severityFilter} onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}>
+                          <SelectTrigger className="w-[140px] h-9">
+                            <Filter className="h-3.5 w-3.5 mr-2" />
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All ({matches.length})</SelectItem>
+                            <SelectItem value="critical">Critical ({severityCounts.critical})</SelectItem>
+                            <SelectItem value="high">High ({severityCounts.high})</SelectItem>
+                            <SelectItem value="medium">Medium ({severityCounts.medium})</SelectItem>
+                            <SelectItem value="low">Low ({severityCounts.low})</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button onClick={handleExportJSON} variant="outline" size="sm" className="h-9">
+                          <Download className="h-3.5 w-3.5 mr-2" />
+                          Export JSON
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="flex-1 min-h-0">
+                  <TerminalOutput
+                    logs={logs}
+                    matches={filteredMatches}
+                    isScanning={isScanning}
+                    hasScanCompleted={hasScanCompleted}
+                    progress={progress}
+                  />
+                </div>
+              </Card>
+            </div>
+          )}
         </div>
       </main>
     </div>
