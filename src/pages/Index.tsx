@@ -2,13 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Search, Trash2, Settings } from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CodeEditor } from "@/components/CodeEditor";
 import { FileUpload } from "@/components/FileUpload";
 import { TerminalOutput } from "@/components/TerminalOutput";
-import { ConfigPanel } from "@/components/ConfigPanel";
-import type { ScanMatch, TOMLConfig } from "@/types/scanner";
+import type { ScanMatch } from "@/types/scanner";
 
 const Index = () => {
   const [code, setCode] = useState("");
@@ -16,8 +15,6 @@ const Index = () => {
   const [logs, setLogs] = useState<string[]>([]);
   const [matches, setMatches] = useState<ScanMatch[]>([]);
   const [isScanning, setIsScanning] = useState(false);
-  const [showConfig, setShowConfig] = useState(false);
-  const [config, setConfig] = useState<TOMLConfig>();
   const [progress, setProgress] = useState<{ current: number; total: number; filename: string }>();
   const workerRef = useRef<Worker>();
   const { toast } = useToast();
@@ -57,15 +54,6 @@ const Index = () => {
   }, [toast]);
 
   const handleScan = () => {
-    if (!config?.rules || config.rules.length === 0) {
-      toast({
-        title: "No rules configured",
-        description: "Please load a TOML configuration first",
-        variant: "destructive",
-      });
-      return;
-    }
-
     const filesToScan = files.length > 0 
       ? files 
       : code.trim() 
@@ -83,13 +71,11 @@ const Index = () => {
 
     setIsScanning(true);
     setMatches([]);
-    setLogs([`Starting scan of ${filesToScan.length} file(s)...`]);
+    setLogs([`Starting scan with Gitleaks rules...`]);
 
     workerRef.current?.postMessage({
       type: "scan",
       files: filesToScan,
-      rules: config.rules,
-      allowlist: config.allowlist,
     });
   };
 
@@ -106,44 +92,23 @@ const Index = () => {
     setLogs((prev) => [...prev, `Loaded ${selectedFiles.length} file(s)`]);
   };
 
-  const handleConfigLoad = (newConfig: TOMLConfig) => {
-    setConfig(newConfig);
-    setLogs((prev) => [...prev, `Configuration loaded: ${newConfig.rules?.length || 0} rules`]);
-  };
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold flex items-center gap-2">
-                <span className="text-primary">$</span> SecretScan Playground
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                Client-side code secret scanner with TOML-configurable rules
-              </p>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowConfig(!showConfig)}
-            >
-              <Settings className="h-4 w-4 mr-2" />
-              {showConfig ? "Hide" : "Show"} Config
-            </Button>
+          <div>
+            <h1 className="text-2xl font-bold flex items-center gap-2">
+              <span className="text-primary">$</span> SecretScan Playground
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Client-side secret scanner powered by Gitleaks rules
+            </p>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-6">
-        {/* Config Panel */}
-        {showConfig && (
-          <div className="mb-6">
-            <ConfigPanel onConfigLoad={handleConfigLoad} currentConfig={config} />
-          </div>
-        )}
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-240px)]">

@@ -8,6 +8,7 @@ export interface ScanRule {
 export interface AllowList {
   regexes?: string[];
   paths?: string[];
+  stopwords?: string[];
 }
 
 export interface TOMLConfig {

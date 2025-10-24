@@ -1,10 +1,9 @@
 import type { ScanRule, AllowList, ScanMatch } from '../types/scanner';
+import rulesConfig from '../config/gitleaks-rules.json';
 
 interface ScanMessage {
   type: 'scan';
   files: { name: string; content: string }[];
-  rules: ScanRule[];
-  allowlist?: AllowList;
 }
 
 interface ProgressMessage {
@@ -23,10 +22,13 @@ interface ResultMessage {
 }
 
 self.onmessage = async (e: MessageEvent<ScanMessage>) => {
-  const { files, rules, allowlist } = e.data;
+  const { files } = e.data;
   const startTime = performance.now();
   const matches: ScanMatch[] = [];
   let totalLines = 0;
+
+  const rules = rulesConfig.rules as ScanRule[];
+  const allowlist = rulesConfig.allowlist as AllowList;
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
@@ -39,8 +41,14 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
       filename: file.name,
     } as ProgressMessage);
 
-    // Check if file is in allowlist paths
-    if (allowlist?.paths?.some(path => file.name.includes(path))) {
+    // Check if file path matches allowlist paths
+    if (allowlist?.paths?.some(pathPattern => {
+      try {
+        return new RegExp(pathPattern).test(file.name);
+      } catch {
+        return false;
+      }
+    })) {
       continue;
     }
 
@@ -50,29 +58,66 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
     for (let lineNum = 0; lineNum < lines.length; lineNum++) {
       const line = lines[lineNum];
 
+      // Skip empty or very short lines
+      if (line.trim().length < 3) {
+        continue;
+      }
+
+      // Check if entire line matches any allowlist pattern
+      const lineIsAllowed = allowlist?.regexes?.some(allowRegex => {
+        try {
+          return new RegExp(allowRegex).test(line);
+        } catch {
+          return false;
+        }
+      });
+
+      if (lineIsAllowed) {
+        continue;
+      }
+
       // Check each rule
       for (const rule of rules) {
         try {
-          const regex = new RegExp(rule.regex, 'gi');
+          // First check if keywords exist (if defined)
+          if (rule.keywords && rule.keywords.length > 0) {
+            const hasKeyword = rule.keywords.some(keyword =>
+              line.toLowerCase().includes(keyword.toLowerCase())
+            );
+            if (!hasKeyword) {
+              continue;
+            }
+          }
+
+          const regex = new RegExp(rule.regex);
           const match = regex.exec(line);
 
           if (match) {
-            // Check if match is in allowlist
-            const isAllowed = allowlist?.regexes?.some(allowRegex => {
+            const matchedText = match[1] || match[0];
+            
+            // Check if matched text is a stopword
+            if (allowlist?.stopwords?.some(word => 
+              matchedText.toLowerCase().includes(word.toLowerCase())
+            )) {
+              continue;
+            }
+
+            // Check if matched text matches allowlist patterns
+            const matchIsAllowed = allowlist?.regexes?.some(allowRegex => {
               try {
-                return new RegExp(allowRegex, 'i').test(match[0]);
+                return new RegExp(allowRegex).test(matchedText);
               } catch {
                 return false;
               }
             });
 
-            if (!isAllowed) {
+            if (!matchIsAllowed) {
               matches.push({
                 ruleId: rule.id,
                 description: rule.description,
                 filename: file.name,
                 lineNumber: lineNum + 1,
-                snippet: match[0],
+                snippet: matchedText,
                 line: line.trim(),
               });
             }
