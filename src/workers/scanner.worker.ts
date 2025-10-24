@@ -21,6 +21,91 @@ interface ResultMessage {
   duration: number;
 }
 
+// Calculate Shannon entropy for a string
+function calculateEntropy(str: string): number {
+  if (!str || str.length === 0) return 0;
+  
+  const frequencies = new Map<string, number>();
+  for (const char of str) {
+    frequencies.set(char, (frequencies.get(char) || 0) + 1);
+  }
+  
+  let entropy = 0;
+  const len = str.length;
+  for (const freq of frequencies.values()) {
+    const p = freq / len;
+    entropy -= p * Math.log2(p);
+  }
+  
+  return entropy;
+}
+
+// Check if file is a test/example/demo file (context-aware)
+function isTestOrExampleFile(filename: string): boolean {
+  const patterns = [
+    /\.test\./,
+    /\.spec\./,
+    /__tests__\//,
+    /__mocks__\//,
+    /\/tests?\//,
+    /\/examples?\//,
+    /\/demo\//,
+    /\/samples?\//,
+    /\/fixtures?\//,
+    /\.fixture\./,
+    /\.mock\./,
+  ];
+  
+  return patterns.some(pattern => pattern.test(filename.toLowerCase()));
+}
+
+// Check if line contains secret-related variable names (context-aware)
+function hasSecretVariableName(line: string): boolean {
+  const secretPatterns = [
+    /\b(api[_-]?key|apikey)\b/i,
+    /\b(secret|password|passwd|pwd)\b/i,
+    /\b(token|auth)\b/i,
+    /\b(access[_-]?key|private[_-]?key)\b/i,
+    /\b(credential|cred)\b/i,
+  ];
+  
+  return secretPatterns.some(pattern => pattern.test(line));
+}
+
+// Enhanced allowlist patterns for common false positives
+const enhancedAllowlistPatterns = [
+  // UUIDs (v4 format)
+  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+  
+  // Color codes
+  /^#[0-9a-f]{3,8}$/i,
+  
+  // Common placeholder/example values
+  /AKIA[0-9A-Z]{16}EXAMPLE/i,
+  /your[_-]?(api[_-]?)?key[_-]?here/i,
+  /replace[_-]?with[_-]?your/i,
+  /example[_-]?(key|token|secret)/i,
+  /\btest[_-]?(key|token|secret)/i,
+  /\bdemo[_-]?(key|token|secret)/i,
+  /\bsample[_-]?(key|token|secret)/i,
+  /\bplaceholder/i,
+  /\bxxx+/i,
+  /\b000+/i,
+  /\b111+/i,
+  /\b123+/i,
+  
+  // Base64 encoded images
+  /^data:image\//,
+  
+  // Common non-secret patterns
+  /^(true|false|null|undefined)$/i,
+  /^(localhost|127\.0\.0\.1)/,
+  /^https?:\/\//,
+  
+  // Very short strings (likely not secrets)
+  /^.{1,6}$/,
+];
+
 self.onmessage = async (e: MessageEvent<ScanMessage>) => {
   const { files } = e.data;
   const startTime = performance.now();
@@ -50,6 +135,11 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
     ];
 
     if (excludePatterns.some(pattern => pattern.test(file.name))) {
+      continue;
+    }
+
+    // Context-aware filtering: Skip test and example files
+    if (isTestOrExampleFile(file.name)) {
       continue;
     }
 
@@ -144,16 +234,42 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
               }
             });
 
-            if (!matchIsAllowed) {
-              lineMatches.push({
-                ruleId: rule.id,
-                description: rule.description,
-                filename: file.name,
-                lineNumber: lineNum + 1,
-                snippet: matchedText,
-                line: line.trim(),
-              });
+            if (matchIsAllowed) {
+              continue;
             }
+
+            // Enhanced allowlist: Check common false positive patterns
+            const isEnhancedAllowlisted = enhancedAllowlistPatterns.some(pattern => 
+              pattern.test(matchedText.trim())
+            );
+
+            if (isEnhancedAllowlisted) {
+              continue;
+            }
+
+            // Entropy check: If rule has entropy threshold, calculate and verify
+            if (rule.entropy !== undefined) {
+              const entropy = calculateEntropy(matchedText);
+              if (entropy < rule.entropy) {
+                continue; // Skip low-entropy matches
+              }
+            }
+
+            // Context-aware: For generic rules, require secret-related variable names
+            if (rule.id.includes('generic')) {
+              if (!hasSecretVariableName(line)) {
+                continue; // Skip generic matches without proper context
+              }
+            }
+
+            lineMatches.push({
+              ruleId: rule.id,
+              description: rule.description,
+              filename: file.name,
+              lineNumber: lineNum + 1,
+              snippet: matchedText,
+              line: line.trim(),
+            });
           }
         } catch (error) {
           console.error(`Error processing rule ${rule.id}:`, error);

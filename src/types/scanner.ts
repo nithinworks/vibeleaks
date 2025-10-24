@@ -3,6 +3,7 @@ export interface ScanRule {
   regex: string;
   description: string;
   keywords?: string[];
+  entropy?: number;
 }
 
 export interface AllowList {
