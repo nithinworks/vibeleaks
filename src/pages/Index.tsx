@@ -129,19 +129,21 @@ const Index = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left: Code Editor */}
-          <Card className="p-8 flex flex-col border-border/50 shadow-sm">
+          <Card className="p-8 border-border/50 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-lora font-medium">Input</h2>
               <FileUpload onFilesSelected={handleFilesSelected} />
             </div>
             
-            {isDirectory && files.length > 0 ? (
-              <FileTree files={files} />
-            ) : (
-              <CodeEditor value={code} onChange={setCode} />
-            )}
+            <div className="mb-6">
+              {isDirectory && files.length > 0 ? (
+                <FileTree files={files} />
+              ) : (
+                <CodeEditor value={code} onChange={setCode} />
+              )}
+            </div>
 
-            <Separator className="my-6" />
+            <Separator className="mb-6" />
 
             <div className="flex gap-3">
               <Button
@@ -159,7 +161,7 @@ const Index = () => {
           </Card>
 
           {/* Right: Terminal Output */}
-          <Card className="p-8 flex flex-col border-border/50 shadow-sm">
+          <Card className="p-8 border-border/50 shadow-sm">
             <h2 className="text-xl font-lora font-medium mb-6">Output</h2>
             <TerminalOutput
               logs={logs}

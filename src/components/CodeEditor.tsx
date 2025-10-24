@@ -1,5 +1,11 @@
 import { Label } from "@/components/ui/label";
-import CodeEditorComponent from "@uiw/react-textarea-code-editor";
+import Editor from "react-simple-code-editor";
+import Prism from "prismjs";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-python";
+import "prismjs/themes/prism-tomorrow.css";
 
 interface CodeEditorProps {
   value: string;
@@ -7,27 +13,30 @@ interface CodeEditorProps {
 }
 
 export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
+  const highlight = (code: string) => {
+    return Prism.highlight(code, Prism.languages.javascript, "javascript");
+  };
+
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col">
       <Label htmlFor="code-input" className="text-sm font-medium mb-2">
         Code Input
       </Label>
-      <div className="h-[500px] overflow-auto border border-border rounded-md">
-        <CodeEditorComponent
+      <div className="h-[500px] overflow-auto border border-border rounded-md bg-[#1e1e1e]">
+        <Editor
           value={value}
-          language="javascript"
-          placeholder="Paste your code here or upload files..."
-          onChange={(e) => onChange(e.target.value)}
+          onValueChange={onChange}
+          highlight={highlight}
           padding={16}
-          data-color-mode="dark"
+          placeholder="Paste your code here or upload files..."
           style={{
-            fontSize: 13,
             fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
-            backgroundColor: 'hsl(var(--code-bg))',
-            minHeight: '100%',
-            counterReset: 'line',
+            fontSize: 13,
+            minHeight: "500px",
+            counterReset: "line",
           }}
-          className="font-mono [&>textarea]:!outline-none [&_.token-line]:before:content-[counter(line)] [&_.token-line]:before:counter-increment-[line] [&_.token-line]:before:mr-4 [&_.token-line]:before:text-muted-foreground [&_.token-line]:before:inline-block [&_.token-line]:before:w-8 [&_.token-line]:before:text-right"
+          textareaClassName="focus:outline-none"
+          className="editor-with-line-numbers"
         />
       </div>
     </div>
