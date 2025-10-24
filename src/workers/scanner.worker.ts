@@ -76,8 +76,11 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
         continue;
       }
 
-      // Check each rule
+      // Check each rule - stop after first match to avoid duplicates
+      let foundMatch = false;
       for (const rule of rules) {
+        if (foundMatch) break; // Skip remaining rules if we already found a match on this line
+        
         try {
           // Skip rules without regex (path-only rules)
           if (!rule.regex) {
@@ -139,6 +142,7 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
                 snippet: matchedText,
                 line: line.trim(),
               });
+              foundMatch = true; // Mark that we found a match, stop checking other rules
             }
           }
         } catch (error) {
