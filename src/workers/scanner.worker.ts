@@ -94,7 +94,21 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
             }
           }
 
-          const regex = new RegExp(rule.regex);
+          // Convert Go regex to JavaScript regex
+          let jsRegex = rule.regex;
+          let flags = '';
+          
+          // Handle case-insensitive flag (?i) at the start
+          if (jsRegex.startsWith('(?i)')) {
+            flags += 'i';
+            jsRegex = jsRegex.substring(4);
+          }
+          
+          // Remove inline case modifiers that JS doesn't support
+          jsRegex = jsRegex.replace(/\(\?-i:/g, '(?:');
+          jsRegex = jsRegex.replace(/\(\?i:/g, '(?:');
+          
+          const regex = new RegExp(jsRegex, flags);
           const match = regex.exec(line);
 
           if (match) {
