@@ -114,10 +114,10 @@ const Index = () => {
       <header className="border-b border-border/50 backdrop-blur-sm bg-background/80">
         <div className="container mx-auto px-8 py-6">
           <div className="max-w-3xl">
-            <h1 className="text-4xl font-lora font-semibold tracking-tight">
+            <h1 className="text-4xl font-semibold tracking-tight">
               SecretScan <span className="text-primary">Playground</span>
             </h1>
-            <p className="text-base text-muted-foreground mt-3 font-light">
+            <p className="text-sm text-muted-foreground mt-3 font-light">
               Client-side secret scanner powered by Gitleaks rules
             </p>
           </div>
@@ -129,45 +129,53 @@ const Index = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left: Code Editor */}
-          <Card className="p-8 flex flex-col border-border/50 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-lora font-medium">Input</h2>
-              <FileUpload onFilesSelected={handleFilesSelected} />
-            </div>
-            
-            {isDirectory && files.length > 0 ? (
-              <FileTree files={files} />
-            ) : (
-              <CodeEditor value={code} onChange={setCode} />
-            )}
+          <div className="flex flex-col h-[calc(100vh-240px)]">
+            <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-medium">Input</h2>
+                <FileUpload onFilesSelected={handleFilesSelected} />
+              </div>
+              
+              <div className="flex-1 min-h-0 mb-6">
+                {isDirectory && files.length > 0 ? (
+                  <FileTree files={files} />
+                ) : (
+                  <CodeEditor value={code} onChange={setCode} />
+                )}
+              </div>
 
-            <Separator className="my-6" />
+              <Separator className="mb-6" />
 
-            <div className="flex gap-3">
-              <Button
-                onClick={handleScan}
-                disabled={isScanning}
-                className="flex-1 h-11 font-medium"
-              >
-                <Search className="h-4 w-4 mr-2" />
-                {isScanning ? "Scanning..." : "Scan for Secrets"}
-              </Button>
-              <Button onClick={handleClear} variant="outline" size="icon" className="h-11 w-11">
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-          </Card>
+              <div className="flex gap-3">
+                <Button
+                  onClick={handleScan}
+                  disabled={isScanning}
+                  className="flex-1 h-11 font-medium"
+                >
+                  <Search className="h-4 w-4 mr-2" />
+                  {isScanning ? "Scanning..." : "Scan for Secrets"}
+                </Button>
+                <Button onClick={handleClear} variant="outline" size="icon" className="h-11 w-11">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </Card>
+          </div>
 
           {/* Right: Terminal Output */}
-          <Card className="p-8 flex flex-col border-border/50 shadow-sm">
-            <h2 className="text-xl font-lora font-medium mb-6">Output</h2>
-            <TerminalOutput
-              logs={logs}
-              matches={matches}
-              isScanning={isScanning}
-              progress={progress}
-            />
-          </Card>
+          <div className="flex flex-col h-[calc(100vh-240px)]">
+            <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
+              <h2 className="text-xl font-medium mb-6">Output</h2>
+              <div className="flex-1 min-h-0">
+                <TerminalOutput
+                  logs={logs}
+                  matches={matches}
+                  isScanning={isScanning}
+                  progress={progress}
+                />
+              </div>
+            </Card>
+          </div>
         </div>
       </main>
     </div>

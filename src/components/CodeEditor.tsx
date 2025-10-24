@@ -12,7 +12,7 @@ export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       <Label htmlFor="code-input" className="text-sm font-medium mb-2">
         Code Input
       </Label>
-      <div className="h-[500px] overflow-auto border border-border rounded-md">
+      <div className="h-full overflow-auto border border-border rounded-md">
         <CodeEditorComponent
           value={value}
           language="javascript"
@@ -22,7 +22,7 @@ export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
           data-color-mode="dark"
           style={{
             fontSize: 13,
-            fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+            fontFamily: 'IBM Plex Mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
             backgroundColor: 'hsl(var(--code-bg))',
             minHeight: '100%',
             counterReset: 'line',

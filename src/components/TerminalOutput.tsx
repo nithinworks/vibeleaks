@@ -13,7 +13,7 @@ interface TerminalOutputProps {
 
 export const TerminalOutput = ({ logs, matches, isScanning, progress }: TerminalOutputProps) => {
   return (
-    <div className="flex flex-col h-[580px]">
+    <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
         <div className="space-y-3 pr-4">
           {isScanning && progress && (
