@@ -12,7 +12,7 @@ export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       <Label htmlFor="code-input" className="text-sm font-medium mb-2">
         Code Input
       </Label>
-      <div className="flex-1 min-h-0 border border-border rounded-md overflow-hidden">
+      <div className="flex-1 min-h-0 border border-border rounded-md overflow-hidden relative">
         <CodeEditorComponent
           value={value}
           language="javascript"
@@ -24,11 +24,11 @@ export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
             fontSize: 13,
             fontFamily: 'IBM Plex Mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
             backgroundColor: 'hsl(var(--code-bg))',
-            counterReset: 'line',
             height: '100%',
             overflow: 'auto',
+            maxHeight: '100%',
           }}
-          className="font-mono [&>textarea]:!outline-none [&>textarea]:resize-none [&>textarea]:!h-full [&_.token-line]:before:content-[counter(line)] [&_.token-line]:before:counter-increment-[line] [&_.token-line]:before:mr-4 [&_.token-line]:before:text-muted-foreground [&_.token-line]:before:inline-block [&_.token-line]:before:w-8 [&_.token-line]:before:text-right"
+          className="font-mono [&>textarea]:!outline-none [&>textarea]:!resize-none [&>textarea]:!overflow-auto [&>textarea]:!h-full [&>textarea]:!max-h-full [&>pre]:!overflow-visible"
         />
       </div>
     </div>
