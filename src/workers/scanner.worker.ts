@@ -1,5 +1,15 @@
 import type { ScanRule, AllowList, ScanMatch } from '../types/scanner';
-import rulesConfig from '../config/gitleaks-rules.json';
+
+// Lazy load rules config only when needed
+let rulesConfig: any = null;
+
+async function loadRulesConfig() {
+  if (!rulesConfig) {
+    const module = await import('../config/gitleaks-rules.json');
+    rulesConfig = module.default;
+  }
+  return rulesConfig;
+}
 
 interface ScanMessage {
   type: 'scan';
@@ -162,39 +172,48 @@ function compileGoRegex(goRegex: string): RegExp | null {
   }
 }
 
-// Pre-compile all rules at module initialization (runs once)
-const compiledRules: CompiledRule[] = (rulesConfig.rules as ScanRule[]).map(rule => ({
-  id: rule.id,
-  description: rule.description,
-  regex: rule.regex ? compileGoRegex(rule.regex) : null,
-  keywords: new Set((rule.keywords || []).map(k => k.toLowerCase())),
-  entropy: rule.entropy,
-  isGeneric: rule.id.includes('generic'),
-  severity: rule.severity || 'low', // Use severity from JSON, fallback to 'low' for safety
-})).filter(rule => rule.regex !== null); // Only keep rules with valid regex
+// Lazy-initialized compiled rules
+let compiledRules: CompiledRule[] = [];
+let compiledAllowlistRegexes: RegExp[] = [];
+let compiledAllowlistPaths: RegExp[] = [];
+let stopwordsSet: Set<string> = new Set();
 
-// Pre-compile allowlist regexes
-const compiledAllowlistRegexes: RegExp[] = (rulesConfig.allowlist as AllowList)?.regexes?.map(pattern => {
-  try {
-    return new RegExp(pattern);
-  } catch {
-    return null;
-  }
-}).filter((r): r is RegExp => r !== null) || [];
+// Initialize rules asynchronously
+async function initializeRules() {
+  if (compiledRules.length > 0) return; // Already initialized
+  
+  const config = await loadRulesConfig();
+  
+  compiledRules = (config.rules as ScanRule[]).map((rule: ScanRule) => ({
+    id: rule.id,
+    description: rule.description,
+    regex: rule.regex ? compileGoRegex(rule.regex) : null,
+    keywords: new Set((rule.keywords || []).map(k => k.toLowerCase())),
+    entropy: rule.entropy,
+    isGeneric: rule.id.includes('generic'),
+    severity: rule.severity || 'low',
+  })).filter(rule => rule.regex !== null);
 
-// Pre-compile allowlist paths
-const compiledAllowlistPaths: RegExp[] = (rulesConfig.allowlist as AllowList)?.paths?.map(pattern => {
-  try {
-    return new RegExp(pattern);
-  } catch {
-    return null;
-  }
-}).filter((r): r is RegExp => r !== null) || [];
+  compiledAllowlistRegexes = (config.allowlist as AllowList)?.regexes?.map((pattern: string) => {
+    try {
+      return new RegExp(pattern);
+    } catch {
+      return null;
+    }
+  }).filter((r: RegExp | null): r is RegExp => r !== null) || [];
 
-// Cache stopwords as a Set for O(1) lookup
-const stopwordsSet = new Set(
-  ((rulesConfig.allowlist as AllowList)?.stopwords || []).map(w => w.toLowerCase())
-);
+  compiledAllowlistPaths = (config.allowlist as AllowList)?.paths?.map((pattern: string) => {
+    try {
+      return new RegExp(pattern);
+    } catch {
+      return null;
+    }
+  }).filter((r: RegExp | null): r is RegExp => r !== null) || [];
+
+  stopwordsSet = new Set(
+    ((config.allowlist as AllowList)?.stopwords || []).map(w => w.toLowerCase())
+  );
+}
 
 
 // Utility function to yield control to prevent UI freeze
@@ -208,6 +227,9 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
     isCancelled = true;
     return;
   }
+
+  // Initialize rules on first scan
+  await initializeRules();
 
   // Reset cancellation flag
   isCancelled = false;

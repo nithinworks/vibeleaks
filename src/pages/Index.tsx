@@ -47,13 +47,15 @@ const Index = () => {
   };
 
   useEffect(() => {
-    // Initialize Web Worker
-    workerRef.current = new Worker(
-      new URL("../workers/scanner.worker.ts", import.meta.url),
-      { type: "module" }
-    );
+    // Lazy initialize Web Worker only when needed
+    const initWorker = () => {
+      if (!workerRef.current) {
+        workerRef.current = new Worker(
+          new URL("../workers/scanner.worker.ts", import.meta.url),
+          { type: "module" }
+        );
 
-    workerRef.current.onmessage = (e) => {
+        workerRef.current.onmessage = (e) => {
       if (e.data.type === "progress") {
         setProgress(e.data);
       } else if (e.data.type === "result") {
@@ -74,12 +76,48 @@ const Index = () => {
           variant: foundMatches.length > 0 ? "destructive" : "default",
         });
       }
+        };
+      }
     };
 
+    // Don't initialize worker on mount, wait until first scan
     return () => {
       workerRef.current?.terminate();
     };
   }, [toast]);
+
+  // Initialize worker before scanning
+  const ensureWorkerReady = () => {
+    if (!workerRef.current) {
+      workerRef.current = new Worker(
+        new URL("../workers/scanner.worker.ts", import.meta.url),
+        { type: "module" }
+      );
+
+      workerRef.current.onmessage = (e) => {
+        if (e.data.type === "progress") {
+          setProgress(e.data);
+        } else if (e.data.type === "result") {
+          const { matches: foundMatches, filesScanned, totalLines, duration } = e.data;
+          setMatches(foundMatches);
+          setLogs((prev) => [
+            ...prev,
+            `Scan complete: ${filesScanned} files, ${totalLines} lines in ${duration.toFixed(2)}ms`,
+            `Found ${foundMatches.length} potential secret(s)`,
+          ]);
+          setIsScanning(false);
+          setHasScanCompleted(true);
+          setProgress(undefined);
+
+          toast({
+            title: "Scan complete",
+            description: `Found ${foundMatches.length} potential secret(s)`,
+            variant: foundMatches.length > 0 ? "destructive" : "default",
+          });
+        }
+      };
+    }
+  };
 
   const handleScan = () => {
     const filesToScan = files.length > 0 
@@ -96,6 +134,9 @@ const Index = () => {
       });
       return;
     }
+
+    // Initialize worker on first scan
+    ensureWorkerReady();
 
     setIsScanning(true);
     setHasScanCompleted(false);
