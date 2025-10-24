@@ -6,6 +6,16 @@ interface ScanMessage {
   files: { name: string; content: string }[];
 }
 
+// Pre-compiled rule with regex and metadata
+interface CompiledRule {
+  id: string;
+  description: string;
+  regex: RegExp | null;
+  keywords: Set<string>; // Use Set for O(1) lookup
+  entropy?: number;
+  isGeneric: boolean;
+}
+
 interface ProgressMessage {
   type: 'progress';
   current: number;
@@ -106,6 +116,62 @@ const enhancedAllowlistPatterns = [
   /^.{1,6}$/,
 ];
 
+// Convert Go regex to JavaScript regex and compile
+function compileGoRegex(goRegex: string): RegExp | null {
+  try {
+    let jsRegex = goRegex;
+    let flags = '';
+    
+    // Handle case-insensitive flag (?i) at the start
+    if (jsRegex.startsWith('(?i)')) {
+      flags += 'i';
+      jsRegex = jsRegex.substring(4);
+    }
+    
+    // Remove inline case modifiers that JS doesn't support
+    jsRegex = jsRegex.replace(/\(\?-i:/g, '(?:');
+    jsRegex = jsRegex.replace(/\(\?i:/g, '(?:');
+    
+    return new RegExp(jsRegex, flags);
+  } catch (error) {
+    console.error(`Failed to compile regex: ${goRegex}`, error);
+    return null;
+  }
+}
+
+// Pre-compile all rules at module initialization (runs once)
+const compiledRules: CompiledRule[] = (rulesConfig.rules as ScanRule[]).map(rule => ({
+  id: rule.id,
+  description: rule.description,
+  regex: rule.regex ? compileGoRegex(rule.regex) : null,
+  keywords: new Set((rule.keywords || []).map(k => k.toLowerCase())),
+  entropy: rule.entropy,
+  isGeneric: rule.id.includes('generic'),
+})).filter(rule => rule.regex !== null); // Only keep rules with valid regex
+
+// Pre-compile allowlist regexes
+const compiledAllowlistRegexes: RegExp[] = (rulesConfig.allowlist as AllowList)?.regexes?.map(pattern => {
+  try {
+    return new RegExp(pattern);
+  } catch {
+    return null;
+  }
+}).filter((r): r is RegExp => r !== null) || [];
+
+// Pre-compile allowlist paths
+const compiledAllowlistPaths: RegExp[] = (rulesConfig.allowlist as AllowList)?.paths?.map(pattern => {
+  try {
+    return new RegExp(pattern);
+  } catch {
+    return null;
+  }
+}).filter((r): r is RegExp => r !== null) || [];
+
+// Cache stopwords as a Set for O(1) lookup
+const stopwordsSet = new Set(
+  ((rulesConfig.allowlist as AllowList)?.stopwords || []).map(w => w.toLowerCase())
+);
+
 // Determine severity level based on rule ID
 function getSeverityLevel(ruleId: string): 'critical' | 'high' | 'medium' | 'low' {
   const id = ruleId.toLowerCase();
@@ -165,9 +231,6 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
   const matches: ScanMatch[] = [];
   let totalLines = 0;
 
-  const rules = rulesConfig.rules as ScanRule[];
-  const allowlist = rulesConfig.allowlist as AllowList;
-
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     
@@ -212,14 +275,8 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
       continue;
     }
 
-    // Check if file path matches allowlist paths
-    if (allowlist?.paths?.some(pathPattern => {
-      try {
-        return new RegExp(pathPattern).test(file.name);
-      } catch {
-        return false;
-      }
-    })) {
+    // Check if file path matches pre-compiled allowlist paths
+    if (compiledAllowlistPaths.some(regex => regex.test(file.name))) {
       continue;
     }
 
@@ -234,76 +291,52 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
         continue;
       }
 
-      // Check if entire line matches any allowlist pattern
-      const lineIsAllowed = allowlist?.regexes?.some(allowRegex => {
-        try {
-          return new RegExp(allowRegex).test(line);
-        } catch {
-          return false;
-        }
-      });
-
-      if (lineIsAllowed) {
+      // Check if entire line matches any pre-compiled allowlist pattern
+      if (compiledAllowlistRegexes.some(regex => regex.test(line))) {
         continue;
       }
 
-      // Check each rule and collect all matches for this line
+      // Check each pre-compiled rule and collect all matches for this line
       const lineMatches: ScanMatch[] = [];
+      const lineLower = line.toLowerCase(); // Cache lowercase version
       
-      for (const rule of rules) {
+      for (const rule of compiledRules) {
         try {
-          // Skip rules without regex (path-only rules)
-          if (!rule.regex) {
-            continue;
-          }
-
-          // First check if keywords exist (if defined)
-          if (rule.keywords && rule.keywords.length > 0) {
-            const hasKeyword = rule.keywords.some(keyword =>
-              line.toLowerCase().includes(keyword.toLowerCase())
-            );
+          // Fast keyword check using cached Set (O(1) lookup)
+          if (rule.keywords.size > 0) {
+            let hasKeyword = false;
+            for (const keyword of rule.keywords) {
+              if (lineLower.includes(keyword)) {
+                hasKeyword = true;
+                break;
+              }
+            }
             if (!hasKeyword) {
               continue;
             }
           }
 
-          // Convert Go regex to JavaScript regex
-          let jsRegex = rule.regex;
-          let flags = '';
-          
-          // Handle case-insensitive flag (?i) at the start
-          if (jsRegex.startsWith('(?i)')) {
-            flags += 'i';
-            jsRegex = jsRegex.substring(4);
-          }
-          
-          // Remove inline case modifiers that JS doesn't support
-          jsRegex = jsRegex.replace(/\(\?-i:/g, '(?:');
-          jsRegex = jsRegex.replace(/\(\?i:/g, '(?:');
-          
-          const regex = new RegExp(jsRegex, flags);
-          const match = regex.exec(line);
+          // Use pre-compiled regex
+          const match = rule.regex!.exec(line);
 
           if (match) {
             const matchedText = match[1] || match[0];
+            const matchedLower = matchedText.toLowerCase();
             
-            // Check if matched text is a stopword
-            if (allowlist?.stopwords?.some(word => 
-              matchedText.toLowerCase().includes(word.toLowerCase())
-            )) {
+            // Fast stopword check using cached Set
+            let isStopword = false;
+            for (const word of stopwordsSet) {
+              if (matchedLower.includes(word)) {
+                isStopword = true;
+                break;
+              }
+            }
+            if (isStopword) {
               continue;
             }
 
-            // Check if matched text matches allowlist patterns
-            const matchIsAllowed = allowlist?.regexes?.some(allowRegex => {
-              try {
-                return new RegExp(allowRegex).test(matchedText);
-              } catch {
-                return false;
-              }
-            });
-
-            if (matchIsAllowed) {
+            // Check if matched text matches pre-compiled allowlist patterns
+            if (compiledAllowlistRegexes.some(regex => regex.test(matchedText))) {
               continue;
             }
 
@@ -325,10 +358,8 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
             }
 
             // Context-aware: For generic rules, require secret-related variable names
-            if (rule.id.includes('generic')) {
-              if (!hasSecretVariableName(line)) {
-                continue; // Skip generic matches without proper context
-              }
+            if (rule.isGeneric && !hasSecretVariableName(line)) {
+              continue; // Skip generic matches without proper context
             }
 
             lineMatches.push({
