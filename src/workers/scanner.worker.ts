@@ -76,11 +76,10 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
         continue;
       }
 
-      // Check each rule - stop after first match to avoid duplicates
-      let foundMatch = false;
+      // Check each rule and collect all matches for this line
+      const lineMatches: ScanMatch[] = [];
+      
       for (const rule of rules) {
-        if (foundMatch) break; // Skip remaining rules if we already found a match on this line
-        
         try {
           // Skip rules without regex (path-only rules)
           if (!rule.regex) {
@@ -134,7 +133,7 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
             });
 
             if (!matchIsAllowed) {
-              matches.push({
+              lineMatches.push({
                 ruleId: rule.id,
                 description: rule.description,
                 filename: file.name,
@@ -142,11 +141,23 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
                 snippet: matchedText,
                 line: line.trim(),
               });
-              foundMatch = true; // Mark that we found a match, stop checking other rules
             }
           }
         } catch (error) {
           console.error(`Error processing rule ${rule.id}:`, error);
+        }
+      }
+
+      // If multiple matches found on this line, prioritize specific rules over generic ones
+      if (lineMatches.length > 0) {
+        // Check if there are both specific and generic matches
+        const specificMatches = lineMatches.filter(m => !m.ruleId.includes('generic'));
+        
+        // If we have specific matches, use only those; otherwise use all matches
+        if (specificMatches.length > 0) {
+          matches.push(...specificMatches);
+        } else {
+          matches.push(...lineMatches);
         }
       }
     }
