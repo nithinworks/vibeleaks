@@ -8,13 +8,7 @@ import { CodeEditor } from "@/components/CodeEditor";
 import { FileUpload } from "@/components/FileUpload";
 import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 import numbersLeft from "@/assets/numbers-img.webp";
 import numbersLeftReversed from "@/assets/numbers-reversed-img.webp";
@@ -32,29 +26,24 @@ const Index = () => {
   const [progress, setProgress] = useState<{ current: number; total: number; filename: string }>();
   const [severityFilter, setSeverityFilter] = useState<SeverityLevel | "all">("all");
   const [showManualInput, setShowManualInput] = useState(false);
-  const [viewMode, setViewMode] = useState<'input' | 'ready' | 'results'>('input');
+  const [viewMode, setViewMode] = useState<"input" | "ready" | "results">("input");
   const workerRef = useRef<Worker>();
   const { toast } = useToast();
 
   // Filter matches based on severity
-  const filteredMatches = severityFilter === "all" 
-    ? matches 
-    : matches.filter(m => m.severity === severityFilter);
+  const filteredMatches = severityFilter === "all" ? matches : matches.filter((m) => m.severity === severityFilter);
 
   // Count by severity
   const severityCounts = {
-    critical: matches.filter(m => m.severity === 'critical').length,
-    high: matches.filter(m => m.severity === 'high').length,
-    medium: matches.filter(m => m.severity === 'medium').length,
-    low: matches.filter(m => m.severity === 'low').length,
+    critical: matches.filter((m) => m.severity === "critical").length,
+    high: matches.filter((m) => m.severity === "high").length,
+    medium: matches.filter((m) => m.severity === "medium").length,
+    low: matches.filter((m) => m.severity === "low").length,
   };
 
   useEffect(() => {
     // Initialize Web Worker
-    workerRef.current = new Worker(
-      new URL("../workers/scanner.worker.ts", import.meta.url),
-      { type: "module" }
-    );
+    workerRef.current = new Worker(new URL("../workers/scanner.worker.ts", import.meta.url), { type: "module" });
 
     workerRef.current.onmessage = (e) => {
       if (e.data.type === "progress") {
@@ -85,11 +74,7 @@ const Index = () => {
   }, [toast]);
 
   const handleScan = () => {
-    const filesToScan = files.length > 0 
-      ? files 
-      : code.trim() 
-        ? [{ name: "input.txt", content: code }]
-        : [];
+    const filesToScan = files.length > 0 ? files : code.trim() ? [{ name: "input.txt", content: code }] : [];
 
     if (filesToScan.length === 0) {
       toast({
@@ -104,7 +89,7 @@ const Index = () => {
     setHasScanCompleted(false);
     setMatches([]);
     setLogs([`Starting scan with Gitleaks rules...`]);
-    setViewMode('results');
+    setViewMode("results");
 
     workerRef.current?.postMessage({
       type: "scan",
@@ -118,7 +103,7 @@ const Index = () => {
     setHasScanCompleted(false);
     setProgress(undefined);
     setLogs((prev) => [...prev, "Scan cancelled by user"]);
-    
+
     toast({
       title: "Scan cancelled",
       description: "The scanning process has been stopped",
@@ -135,7 +120,7 @@ const Index = () => {
     setProgress(undefined);
     setSeverityFilter("all");
     setShowManualInput(false);
-    setViewMode('input');
+    setViewMode("input");
   };
 
   const handleExportJSON = () => {
@@ -174,40 +159,40 @@ const Index = () => {
     setIsDirectory(isDir);
     setHasScanCompleted(false);
     setShowManualInput(false);
-    setViewMode('ready');
-    
+    setViewMode("ready");
+
     // If single file, show its content in the editor
     if (!isDir && selectedFiles.length === 1) {
       setCode(selectedFiles[0].content);
     } else if (!isDir && selectedFiles.length > 1) {
       // Multiple files, show combined content
-      setCode(selectedFiles.map(f => `// File: ${f.name}\n${f.content}`).join("\n\n"));
+      setCode(selectedFiles.map((f) => `// File: ${f.name}\n${f.content}`).join("\n\n"));
     } else {
       // Directory, clear code editor
       setCode("");
     }
-    
+
     setLogs((prev) => [...prev, `Loaded ${selectedFiles.length} file(s)`]);
   };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Animated binary backgrounds - Left side */}
-      <div className="fixed left-0 top-0 w-24 md:w-32 h-screen opacity-[0.08] pointer-events-none z-0 overflow-hidden">
+      <div className="fixed left-0 top-0 w-24 md:w-32 h-screen opacity-[2.08] pointer-events-none z-0 overflow-hidden">
         <div className="animate-scroll-up h-[200vh]">
           <img src={numbersLeft} alt="" className="w-full h-screen object-cover" />
           <img src={numbersLeftReversed} alt="" className="w-full h-screen object-cover" />
         </div>
       </div>
-      
+
       {/* Animated binary backgrounds - Right side */}
-      <div className="fixed right-0 top-0 w-24 md:w-32 h-screen opacity-[0.08] pointer-events-none z-0 overflow-hidden">
+      <div className="fixed right-0 top-0 w-24 md:w-32 h-screen opacity-[2.08] pointer-events-none z-0 overflow-hidden">
         <div className="animate-scroll-down h-[200vh]">
           <img src={numbersRight} alt="" className="w-full h-screen object-cover" />
           <img src={numbersRightReversed} alt="" className="w-full h-screen object-cover" />
         </div>
       </div>
-      
+
       {/* Header */}
       <header className="border-b border-border/50 backdrop-blur-sm bg-background/80 relative z-10">
         <div className="container mx-auto px-8 py-6">
@@ -226,7 +211,7 @@ const Index = () => {
 
       <main className="container mx-auto px-8 py-8 relative z-10">
         <div className="max-w-7xl mx-auto">
-          {viewMode === 'input' && (
+          {viewMode === "input" && (
             <div className="flex items-center justify-center min-h-[calc(100vh-240px)]">
               <Card className="p-12 border-border/50 shadow-sm max-w-md w-full">
                 <div className="flex flex-col items-center gap-6">
@@ -234,8 +219,8 @@ const Index = () => {
                     <h2 className="text-2xl font-medium mb-2">Get Started</h2>
                     <p className="text-sm text-muted-foreground">Select a folder to scan for secrets</p>
                   </div>
-                  <FileUpload 
-                    onFilesSelected={handleFilesSelected} 
+                  <FileUpload
+                    onFilesSelected={handleFilesSelected}
                     variant="default"
                     size="lg"
                     className="h-12 px-8 text-base w-full"
@@ -243,7 +228,7 @@ const Index = () => {
                   <button
                     onClick={() => {
                       setShowManualInput(true);
-                      setViewMode('ready');
+                      setViewMode("ready");
                     }}
                     className="text-sm text-primary hover:underline font-medium"
                   >
@@ -254,16 +239,14 @@ const Index = () => {
             </div>
           )}
 
-          {viewMode === 'ready' && (
+          {viewMode === "ready" && (
             <div className="flex items-center justify-center min-h-[calc(100vh-240px)]">
               <Card className="p-8 border-border/50 shadow-sm max-w-2xl w-full">
                 <div className="mb-6">
                   <h2 className="text-xl font-medium mb-1">Ready to Scan</h2>
-                  <p className="text-sm text-muted-foreground">
-                    {files.length} file(s) loaded
-                  </p>
+                  <p className="text-sm text-muted-foreground">{files.length} file(s) loaded</p>
                 </div>
-                
+
                 <div className="mb-6 max-h-[400px] overflow-auto border border-border/50 rounded-lg">
                   {isDirectory ? (
                     <FileTree files={files} />
@@ -281,10 +264,7 @@ const Index = () => {
                 <Separator className="mb-6" />
 
                 <div className="flex gap-3">
-                  <Button
-                    onClick={handleScan}
-                    className="flex-1 h-11 font-medium"
-                  >
+                  <Button onClick={handleScan} className="flex-1 h-11 font-medium">
                     <Search className="h-4 w-4 mr-2" />
                     Scan for Secrets
                   </Button>
@@ -296,7 +276,7 @@ const Index = () => {
             </div>
           )}
 
-          {viewMode === 'results' && (
+          {viewMode === "results" && (
             <div className="flex flex-col h-[calc(100vh-240px)]">
               <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
                 <div className="flex items-center justify-between mb-6">
@@ -308,7 +288,10 @@ const Index = () => {
                     </Button>
                     {matches.length > 0 && (
                       <>
-                        <Select value={severityFilter} onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}>
+                        <Select
+                          value={severityFilter}
+                          onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}
+                        >
                           <SelectTrigger className="w-[140px] h-9">
                             <Filter className="h-3.5 w-3.5 mr-2" />
                             <SelectValue />
