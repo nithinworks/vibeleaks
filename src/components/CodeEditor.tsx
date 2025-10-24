@@ -12,7 +12,7 @@ export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       <Label htmlFor="code-input" className="text-sm font-medium mb-2">
         Code Input
       </Label>
-      <div className="h-[500px] min-h-0 border border-border rounded-md overflow-hidden relative">
+      <div className="h-[400px] min-h-0 border border-border rounded-md overflow-hidden relative">
         <CodeEditorComponent
           value={value}
           language="javascript"
