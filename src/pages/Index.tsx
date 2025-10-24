@@ -138,10 +138,16 @@ const Index = () => {
     // Initialize worker on first scan
     ensureWorkerReady();
 
+    // Set initial state with progress
     setIsScanning(true);
     setHasScanCompleted(false);
     setMatches([]);
     setLogs([`Starting scan with Gitleaks rules...`]);
+    setProgress({
+      current: 0,
+      total: filesToScan.length,
+      filename: "Initializing scanner..."
+    });
     setViewMode('results');
 
     workerRef.current?.postMessage({
@@ -325,10 +331,16 @@ const Index = () => {
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-medium">Scan Results</h2>
                   <div className="flex items-center gap-2">
-                    <Button onClick={handleClear} variant="outline" size="sm" className="h-9">
-                      <Search className="h-3.5 w-3.5 mr-2" />
-                      New Scan
-                    </Button>
+                    {isScanning ? (
+                      <Button onClick={handleCancel} variant="destructive" size="sm" className="h-9">
+                        Cancel Scan
+                      </Button>
+                    ) : (
+                      <Button onClick={handleClear} variant="outline" size="sm" className="h-9">
+                        <Search className="h-3.5 w-3.5 mr-2" />
+                        New Scan
+                      </Button>
+                    )}
                     {matches.length > 0 && (
                       <>
                         <Select value={severityFilter} onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}>

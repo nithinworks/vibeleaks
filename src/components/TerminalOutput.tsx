@@ -1,6 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { AlertCircle, CheckCircle2, Loader2, Shield, ShieldAlert, AlertTriangle, Info } from "lucide-react";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 
@@ -59,15 +60,23 @@ export const TerminalOutput = ({
   return <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
         <div className="space-y-3 pr-4">
-          {isScanning && progress && <Card className="p-4 border-border/50">
-              <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-normal truncate">
-                    Scanning {progress.current}/{progress.total}
-                  </p>
-                  <p className="text-xs truncate mt-0.5">{progress.filename}</p>
+          {isScanning && progress && <Card className="p-5 border-primary/20 bg-primary/5">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <Loader2 className="h-5 w-5 animate-spin text-primary flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground">
+                      Scanning files... {progress.current}/{progress.total}
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate mt-1">
+                      {progress.filename}
+                    </p>
+                  </div>
                 </div>
+                <Progress 
+                  value={(progress.current / progress.total) * 100} 
+                  className="h-2"
+                />
               </div>
             </Card>}
 
@@ -124,9 +133,9 @@ export const TerminalOutput = ({
               </div>
             </Card>}
 
-          {!isScanning && !hasScanCompleted && <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
+          {!isScanning && !hasScanCompleted && logs.length === 0 && <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
               <p className="font-normal">
-                {logs.length > 0 ? "Ready to scan — click 'Scan for Secrets' to begin" : "No scan yet — upload files or enter code to start"}
+                No scan yet — upload files or enter code to start
               </p>
             </div>}
         </div>
