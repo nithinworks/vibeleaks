@@ -14,6 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
+        lora: ['Lora', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {

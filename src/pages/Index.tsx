@@ -95,34 +95,34 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2">
-              <span className="text-primary">$</span> SecretScan Playground
+      <header className="border-b border-border/50 backdrop-blur-sm bg-background/80">
+        <div className="container mx-auto px-8 py-6">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl font-lora font-semibold tracking-tight">
+              SecretScan <span className="text-primary">Playground</span>
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-base text-muted-foreground mt-3 font-light">
               Client-side secret scanner powered by Gitleaks rules
             </p>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6">
+      <main className="container mx-auto px-8 py-8">
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-240px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[calc(100vh-240px)]">
           {/* Left: Code Editor */}
-          <Card className="p-6 flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Input</h2>
+          <Card className="p-8 flex flex-col border-border/50 shadow-sm">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-lora font-medium">Input</h2>
               <FileUpload onFilesSelected={handleFilesSelected} />
             </div>
             
             {files.length > 0 && (
-              <div className="mb-4 p-3 bg-muted rounded text-sm">
-                <div className="font-medium mb-1">Loaded files:</div>
-                <div className="text-muted-foreground">
+              <div className="mb-4 p-4 bg-muted/50 rounded-lg text-sm border border-border/30">
+                <div className="font-medium mb-1.5">Loaded files:</div>
+                <div className="text-muted-foreground font-light">
                   {files.map((f) => f.name).join(", ")}
                 </div>
               </div>
@@ -132,26 +132,26 @@ const Index = () => {
               <CodeEditor value={code} onChange={setCode} />
             </div>
 
-            <Separator className="my-4" />
+            <Separator className="my-6" />
 
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Button
                 onClick={handleScan}
                 disabled={isScanning}
-                className="flex-1"
+                className="flex-1 h-11 font-medium"
               >
                 <Search className="h-4 w-4 mr-2" />
                 {isScanning ? "Scanning..." : "Scan for Secrets"}
               </Button>
-              <Button onClick={handleClear} variant="outline" size="icon">
+              <Button onClick={handleClear} variant="outline" size="icon" className="h-11 w-11">
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>
           </Card>
 
           {/* Right: Terminal Output */}
-          <Card className="p-6 flex flex-col">
-            <h2 className="text-lg font-semibold mb-4">Output</h2>
+          <Card className="p-8 flex flex-col border-border/50 shadow-sm">
+            <h2 className="text-xl font-lora font-medium mb-6">Output</h2>
             <div className="flex-1 min-h-0">
               <TerminalOutput
                 logs={logs}
