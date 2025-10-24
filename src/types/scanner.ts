@@ -4,6 +4,7 @@ export interface ScanRule {
   description: string;
   keywords?: string[];
   entropy?: number;
+  severity: 'critical' | 'high' | 'medium' | 'low';
 }
 
 export interface AllowList {

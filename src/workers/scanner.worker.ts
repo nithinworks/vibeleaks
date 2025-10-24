@@ -18,6 +18,7 @@ interface CompiledRule {
   keywords: Set<string>; // Use Set for O(1) lookup
   entropy?: number;
   isGeneric: boolean;
+  severity: 'critical' | 'high' | 'medium' | 'low';
 }
 
 // Constants for batch processing
@@ -169,6 +170,7 @@ const compiledRules: CompiledRule[] = (rulesConfig.rules as ScanRule[]).map(rule
   keywords: new Set((rule.keywords || []).map(k => k.toLowerCase())),
   entropy: rule.entropy,
   isGeneric: rule.id.includes('generic'),
+  severity: rule.severity || 'low', // Use severity from JSON, fallback to 'low' for safety
 })).filter(rule => rule.regex !== null); // Only keep rules with valid regex
 
 // Pre-compile allowlist regexes
@@ -194,58 +196,6 @@ const stopwordsSet = new Set(
   ((rulesConfig.allowlist as AllowList)?.stopwords || []).map(w => w.toLowerCase())
 );
 
-// Determine severity level based on rule ID
-function getSeverityLevel(ruleId: string): 'critical' | 'high' | 'medium' | 'low' {
-  const id = ruleId.toLowerCase();
-  
-  // Critical: Private keys, database credentials, root credentials
-  if (
-    id.includes('private-key') ||
-    id.includes('private_key') ||
-    id.includes('database') ||
-    id.includes('postgres') ||
-    id.includes('mysql') ||
-    id.includes('mongodb') ||
-    id.includes('aws-secret-access-key') ||
-    id.includes('root') ||
-    id.includes('master') ||
-    id.includes('admin-password')
-  ) {
-    return 'critical';
-  }
-  
-  // High: Service API keys, OAuth secrets
-  if (
-    id.includes('aws-access-key') ||
-    id.includes('github') ||
-    id.includes('gitlab') ||
-    id.includes('stripe') ||
-    id.includes('paypal') ||
-    id.includes('openai') ||
-    id.includes('anthropic') ||
-    id.includes('google') ||
-    id.includes('azure') ||
-    id.includes('oauth') ||
-    id.includes('client-secret') ||
-    id.includes('api-key') && !id.includes('generic')
-  ) {
-    return 'high';
-  }
-  
-  // Medium: Service tokens, less critical keys
-  if (
-    id.includes('token') ||
-    id.includes('bearer') ||
-    id.includes('jwt') ||
-    id.includes('session') ||
-    id.includes('cookie')
-  ) {
-    return 'medium';
-  }
-  
-  // Low: Generic patterns
-  return 'low';
-}
 
 // Utility function to yield control to prevent UI freeze
 async function yieldControl(): Promise<void> {
@@ -437,7 +387,7 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
               lineNumber: lineNum + 1,
               snippet: matchedText,
               line: line.trim(),
-              severity: getSeverityLevel(rule.id),
+              severity: rule.severity,
             });
           }
         } catch (error) {
