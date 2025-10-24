@@ -7,11 +7,13 @@ import { useToast } from "@/hooks/use-toast";
 import { CodeEditor } from "@/components/CodeEditor";
 import { FileUpload } from "@/components/FileUpload";
 import { TerminalOutput } from "@/components/TerminalOutput";
+import { FileTree } from "@/components/FileTree";
 import type { ScanMatch } from "@/types/scanner";
 
 const Index = () => {
   const [code, setCode] = useState("");
   const [files, setFiles] = useState<{ name: string; content: string }[]>([]);
+  const [isDirectory, setIsDirectory] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [matches, setMatches] = useState<ScanMatch[]>([]);
   const [isScanning, setIsScanning] = useState(false);
@@ -82,13 +84,27 @@ const Index = () => {
   const handleClear = () => {
     setCode("");
     setFiles([]);
+    setIsDirectory(false);
     setLogs([]);
     setMatches([]);
     setProgress(undefined);
   };
 
-  const handleFilesSelected = (selectedFiles: { name: string; content: string }[]) => {
+  const handleFilesSelected = (selectedFiles: { name: string; content: string }[], isDir: boolean) => {
     setFiles(selectedFiles);
+    setIsDirectory(isDir);
+    
+    // If single file, show its content in the editor
+    if (!isDir && selectedFiles.length === 1) {
+      setCode(selectedFiles[0].content);
+    } else if (!isDir && selectedFiles.length > 1) {
+      // Multiple files, show combined content
+      setCode(selectedFiles.map(f => `// File: ${f.name}\n${f.content}`).join("\n\n"));
+    } else {
+      // Directory, clear code editor
+      setCode("");
+    }
+    
     setLogs((prev) => [...prev, `Loaded ${selectedFiles.length} file(s)`]);
   };
 
@@ -119,17 +135,12 @@ const Index = () => {
               <FileUpload onFilesSelected={handleFilesSelected} />
             </div>
             
-            {files.length > 0 && (
-              <div className="mb-4 p-4 bg-muted/50 rounded-lg text-sm border border-border/30">
-                <div className="font-medium mb-1.5">Loaded files:</div>
-                <div className="text-muted-foreground font-light">
-                  {files.map((f) => f.name).join(", ")}
-                </div>
-              </div>
-            )}
-
             <div className="flex-1 min-h-0">
-              <CodeEditor value={code} onChange={setCode} />
+              {isDirectory && files.length > 0 ? (
+                <FileTree files={files} />
+              ) : (
+                <CodeEditor value={code} onChange={setCode} />
+              )}
             </div>
 
             <Separator className="my-6" />

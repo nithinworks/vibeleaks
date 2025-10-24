@@ -1,5 +1,5 @@
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import CodeEditorComponent from "@uiw/react-textarea-code-editor";
 
 interface CodeEditorProps {
   value: string;
@@ -12,13 +12,22 @@ export const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       <Label htmlFor="code-input" className="text-sm font-medium mb-2">
         Code Input
       </Label>
-      <Textarea
-        id="code-input"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="Paste your code here or upload files..."
-        className="flex-1 resize-none code-bg code-text border-terminal-border font-mono text-sm focus-visible:ring-primary"
-      />
+      <div className="flex-1 overflow-auto border border-border rounded-md">
+        <CodeEditorComponent
+          value={value}
+          language="javascript"
+          placeholder="Paste your code here or upload files..."
+          onChange={(e) => onChange(e.target.value)}
+          padding={16}
+          style={{
+            fontSize: 13,
+            fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+            backgroundColor: 'hsl(var(--code-bg))',
+            minHeight: '100%',
+          }}
+          className="font-mono"
+        />
+      </div>
     </div>
   );
 };

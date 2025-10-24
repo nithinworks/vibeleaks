@@ -3,7 +3,7 @@ import { Upload, FolderOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface FileUploadProps {
-  onFilesSelected: (files: { name: string; content: string }[]) => void;
+  onFilesSelected: (files: { name: string; content: string }[], isDirectory: boolean) => void;
 }
 
 export const FileUpload = ({ onFilesSelected }: FileUploadProps) => {
@@ -32,7 +32,7 @@ export const FileUpload = ({ onFilesSelected }: FileUploadProps) => {
         })
       );
 
-      onFilesSelected(files);
+      onFilesSelected(files, false);
       
       toast({
         title: "Files loaded",
@@ -73,7 +73,7 @@ export const FileUpload = ({ onFilesSelected }: FileUploadProps) => {
       };
 
       await readDirectory(handle);
-      onFilesSelected(files);
+      onFilesSelected(files, true);
 
       toast({
         title: "Directory loaded",
