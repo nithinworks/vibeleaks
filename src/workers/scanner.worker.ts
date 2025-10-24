@@ -185,9 +185,25 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
       /\.(?:min|bundle|chunk)\.(js|css)$/,
       /\.map$/,
       /^public\/assets\//,
+      // Lock files
+      /(?:^|\/)(?:package-lock\.json|yarn\.lock|pnpm-lock\.yaml|bun\.lockb)$/,
+      // Log files
+      /\.log$/i,
+      // Binary and media files
+      /\.(?:jpg|jpeg|png|gif|bmp|ico|webp|svg|tiff|psd)$/i,
+      /\.(?:mp3|mp4|wav|flac|avi|mov|wmv|flv|webm|ogg)$/i,
+      /\.(?:zip|rar|tar|gz|7z|bz2|dmg|iso)$/i,
+      /\.(?:exe|dll|so|dylib|bin|dat)$/i,
+      /\.(?:woff|woff2|ttf|eot|otf)$/i,
+      /\.(?:pdf|doc|docx|xls|xlsx|ppt|pptx)$/i,
     ];
 
     if (excludePatterns.some(pattern => pattern.test(file.name))) {
+      continue;
+    }
+
+    // Binary file detection using null byte check
+    if (file.content.includes('\0')) {
       continue;
     }
 
