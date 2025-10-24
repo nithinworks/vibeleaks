@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Upload, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import * as TOML from "@iarna/toml";
+import { parse as parseTOML } from "smol-toml";
 import type { TOMLConfig } from "@/types/scanner";
 
 interface ConfigPanelProps {
@@ -20,7 +20,7 @@ export const ConfigPanel = ({ onConfigLoad, currentConfig }: ConfigPanelProps) =
 
   const handleLoadConfig = () => {
     try {
-      const parsed = TOML.parse(tomlContent) as any;
+      const parsed = parseTOML(tomlContent) as any;
       const config: TOMLConfig = {
         rules: parsed.rules || [],
         allowlist: parsed.allowlist || {},
