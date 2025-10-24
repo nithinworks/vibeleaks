@@ -8,7 +8,6 @@ import { CodeEditor } from "@/components/CodeEditor";
 import { FileUpload } from "@/components/FileUpload";
 import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   Select,
   SelectContent,
@@ -201,7 +200,6 @@ const Index = () => {
                 Client-side secret scanner powered by Gitleaks rules
               </p>
             </div>
-            <ThemeToggle />
           </div>
         </div>
       </header>

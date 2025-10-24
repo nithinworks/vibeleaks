@@ -8,97 +8,52 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 60 3% 17%;
+    /* Vercel-inspired dark theme */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 60 3% 17%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 60 3% 17%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 220 93% 42%;
+    --primary: 210 100% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 92%;
-    --secondary-foreground: 60 3% 17%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 60 3% 45%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 220 93% 42%;
+    --accent: 210 100% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 70% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 220 93% 42%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 210 100% 60%;
 
-    --radius: 0.375rem;
+    --radius: 0.5rem;
 
-    --terminal-bg: 200 15% 14%;
-    --terminal-text: 145 100% 70%;
-    --terminal-border: 200 10% 25%;
+    --terminal-bg: 0 0% 4%;
+    --terminal-text: 145 70% 65%;
+    --terminal-border: 0 0% 18%;
     
-    --code-bg: 210 15% 16%;
-    --code-text: 210 10% 85%;
+    --code-bg: 0 0% 6%;
+    --code-text: 0 0% 90%;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 60 3% 12%;
-    --foreground: 0 0% 95%;
-
-    --card: 60 3% 15%;
-    --card-foreground: 0 0% 95%;
-
-    --popover: 60 3% 15%;
-    --popover-foreground: 0 0% 95%;
-
-    --primary: 220 93% 42%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 60 3% 20%;
-    --secondary-foreground: 0 0% 95%;
-
-    --muted: 60 3% 18%;
-    --muted-foreground: 0 0% 65%;
-
-    --accent: 220 93% 42%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 62.8% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 60 3% 22%;
-    --input: 60 3% 22%;
-    --ring: 220 93% 42%;
-
-    --terminal-bg: 200 15% 8%;
-    --terminal-text: 145 100% 70%;
-    --terminal-border: 200 10% 20%;
-    
-    --code-bg: 200 15% 10%;
-    --code-text: 210 10% 85%;
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 210 100% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 210 100% 60%;
   }
 }
 
