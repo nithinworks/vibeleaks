@@ -192,17 +192,19 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Animated binary backgrounds */}
-      <div className="fixed left-0 top-0 w-32 h-[200%] opacity-[0.03] pointer-events-none z-0">
-        <div className="animate-scroll-up">
-          <img src={numbersLeft} alt="" className="w-full" />
-          <img src={numbersLeftReversed} alt="" className="w-full" />
+      {/* Animated binary backgrounds - Left side */}
+      <div className="fixed left-0 top-0 w-24 md:w-32 h-screen opacity-[0.08] pointer-events-none z-0 overflow-hidden">
+        <div className="animate-scroll-up h-[200vh]">
+          <img src={numbersLeft} alt="" className="w-full h-screen object-cover" />
+          <img src={numbersLeftReversed} alt="" className="w-full h-screen object-cover" />
         </div>
       </div>
-      <div className="fixed right-0 top-0 w-32 h-[200%] opacity-[0.03] pointer-events-none z-0">
-        <div className="animate-scroll-down">
-          <img src={numbersRight} alt="" className="w-full" />
-          <img src={numbersRightReversed} alt="" className="w-full" />
+      
+      {/* Animated binary backgrounds - Right side */}
+      <div className="fixed right-0 top-0 w-24 md:w-32 h-screen opacity-[0.08] pointer-events-none z-0 overflow-hidden">
+        <div className="animate-scroll-down h-[200vh]">
+          <img src={numbersRight} alt="" className="w-full h-screen object-cover" />
+          <img src={numbersRightReversed} alt="" className="w-full h-screen object-cover" />
         </div>
       </div>
       
