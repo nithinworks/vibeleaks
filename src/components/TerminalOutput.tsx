@@ -42,6 +42,7 @@ interface TerminalOutputProps {
   logs: string[];
   matches: ScanMatch[];
   isScanning: boolean;
+  hasScanCompleted: boolean;
   progress?: {
     current: number;
     total: number;
@@ -52,6 +53,7 @@ export const TerminalOutput = ({
   logs,
   matches,
   isScanning,
+  hasScanCompleted,
   progress
 }: TerminalOutputProps) => {
   return <div className="flex flex-col h-full">
@@ -115,15 +117,17 @@ export const TerminalOutput = ({
               })}
             </div>}
 
-          {!isScanning && matches.length === 0 && logs.length > 0 && <Card className="p-6 border-primary/20 bg-primary/5">
+          {!isScanning && hasScanCompleted && matches.length === 0 && <Card className="p-6 border-primary/20 bg-primary/5">
               <div className="flex items-center gap-3 text-primary">
                 <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
                 <span className="text-sm font-normal">No secrets detected</span>
               </div>
             </Card>}
 
-          {!isScanning && logs.length === 0 && <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
-              <p className="font-normal">No scan yet — run a scan to see secret findings.</p>
+          {!isScanning && !hasScanCompleted && <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
+              <p className="font-normal">
+                {logs.length > 0 ? "Ready to scan — click 'Scan for Secrets' to begin" : "No scan yet — upload files or enter code to start"}
+              </p>
             </div>}
         </div>
       </ScrollArea>

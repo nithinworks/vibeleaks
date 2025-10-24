@@ -25,6 +25,7 @@ const Index = () => {
   const [logs, setLogs] = useState<string[]>([]);
   const [matches, setMatches] = useState<ScanMatch[]>([]);
   const [isScanning, setIsScanning] = useState(false);
+  const [hasScanCompleted, setHasScanCompleted] = useState(false);
   const [progress, setProgress] = useState<{ current: number; total: number; filename: string }>();
   const [severityFilter, setSeverityFilter] = useState<SeverityLevel | "all">("all");
   const workerRef = useRef<Worker>();
@@ -62,6 +63,7 @@ const Index = () => {
           `Found ${foundMatches.length} potential secret(s)`,
         ]);
         setIsScanning(false);
+        setHasScanCompleted(true);
         setProgress(undefined);
 
         toast({
@@ -94,6 +96,7 @@ const Index = () => {
     }
 
     setIsScanning(true);
+    setHasScanCompleted(false);
     setMatches([]);
     setLogs([`Starting scan with Gitleaks rules...`]);
 
@@ -106,6 +109,7 @@ const Index = () => {
   const handleCancel = () => {
     workerRef.current?.postMessage({ type: "cancel" });
     setIsScanning(false);
+    setHasScanCompleted(false);
     setProgress(undefined);
     setLogs((prev) => [...prev, "Scan cancelled by user"]);
     
@@ -121,6 +125,7 @@ const Index = () => {
     setIsDirectory(false);
     setLogs([]);
     setMatches([]);
+    setHasScanCompleted(false);
     setProgress(undefined);
     setSeverityFilter("all");
   };
@@ -159,6 +164,7 @@ const Index = () => {
   const handleFilesSelected = (selectedFiles: { name: string; content: string }[], isDir: boolean) => {
     setFiles(selectedFiles);
     setIsDirectory(isDir);
+    setHasScanCompleted(false);
     
     // If single file, show its content in the editor
     if (!isDir && selectedFiles.length === 1) {
@@ -274,6 +280,7 @@ const Index = () => {
                   logs={logs}
                   matches={filteredMatches}
                   isScanning={isScanning}
+                  hasScanCompleted={hasScanCompleted}
                   progress={progress}
                 />
               </div>
