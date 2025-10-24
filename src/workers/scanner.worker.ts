@@ -41,6 +41,18 @@ self.onmessage = async (e: MessageEvent<ScanMessage>) => {
       filename: file.name,
     } as ProgressMessage);
 
+    // Skip build output folders and common false positive files
+    const excludePatterns = [
+      /^(?:dist|build|\.next|\.nuxt|out|\.cache|\.vite|\.turbo|node_modules)\//,
+      /\.(?:min|bundle|chunk)\.(js|css)$/,
+      /\.map$/,
+      /^public\/assets\//,
+    ];
+
+    if (excludePatterns.some(pattern => pattern.test(file.name))) {
+      continue;
+    }
+
     // Check if file path matches allowlist paths
     if (allowlist?.paths?.some(pathPattern => {
       try {
