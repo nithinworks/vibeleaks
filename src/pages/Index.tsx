@@ -270,11 +270,7 @@ const Index = () => {
             <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center overflow-hidden">
               {/* Background Pattern */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <img
-                  src="/hero-pattern.png"
-                  alt=""
-                  className="w-full h-full opacity-[0.06] object-cover"
-                />
+                <img src="/hero-pattern.png" alt="" className="w-full h-full opacity-[0.56] object-cover" />
               </div>
 
               {/* Content */}
