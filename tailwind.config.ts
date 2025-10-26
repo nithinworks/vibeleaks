@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Geist Mono', 'monospace'],
-        mono: ['Geist Mono', 'monospace'],
-        display: ['Cooper Black', 'serif'],
+        sans: ['Hanken Grotesk', 'system-ui', 'sans-serif'],
+        mono: ['Hanken Grotesk', 'system-ui', 'sans-serif'],
+        display: ['Hanken Grotesk', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
