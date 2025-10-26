@@ -276,56 +276,30 @@ const Index = () => {
       <main className="container mx-auto px-8 py-8">
         <div className="max-w-7xl mx-auto">
           {viewMode === 'input' && (
-            <div className="relative flex flex-col items-center justify-center min-h-[70vh] text-center overflow-hidden">
-              {/* Animated Background */}
-              <div className="absolute inset-0 -z-10 opacity-30">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-              </div>
-
-              <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <div className="space-y-4">
-                  {/* Main Headline */}
-                  <h2 className="text-5xl md:text-6xl font-display font-semibold tracking-tight leading-tight">
-                    Catch leaks before they{" "}
-                    <span className="relative inline-block">
-                      <span className="bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
-                        kill your vibe
-                      </span>
-                      <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-primary to-accent" />
-                    </span>
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center">
+              <div className="max-w-2xl mx-auto space-y-8">
+                <div className="space-y-3">
+                  <h2 className="text-3xl font-display font-medium tracking-tight">
+                    Catch leaks before they kill your vibe.
                   </h2>
-                  
-                  {/* Tagline */}
-                  <p className="text-base md:text-lg text-foreground/70 max-w-xl mx-auto font-normal">
+                  <p className="text-sm text-muted-foreground max-w-lg mx-auto">
                     A simple browser secret scanner for vibe coders, devs who keep things real.
                   </p>
-
-                  {/* Feature Pills */}
-                  <div className="flex items-center justify-center gap-3 pt-2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
-                      ✨ 100% Client-side
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
-                      🔒 No uploads
-                    </span>
-                  </div>
                 </div>
                 
-                {/* CTA Section */}
-                <div className="flex flex-col items-center gap-4 pt-6">
+                <div className="flex flex-col items-center gap-4 pt-4">
                   <FileUpload 
                     onFilesSelected={handleFilesSelected} 
                     variant="default"
                     size="lg"
-                    className="h-12 px-10 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 transition-all duration-300 border border-primary/20"
+                    className="h-11 px-8 text-sm w-auto"
                   />
                   <button
                     onClick={() => {
                       setShowManualInput(true);
                       setViewMode('ready');
                     }}
-                    className="text-sm text-foreground/60 hover:text-primary transition-colors font-normal hover:translate-y-[-1px] transition-transform"
+                    className="text-xs text-muted-foreground hover:text-primary transition-colors font-light"
                   >
                     or enter code manually
                   </button>
@@ -335,13 +309,11 @@ const Index = () => {
           )}
 
           {viewMode === 'ready' && (
-            <div className="flex items-center justify-center min-h-[calc(100vh-240px)] animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <Card className="p-8 border-border/50 shadow-lg hover:shadow-xl transition-shadow duration-300 max-w-2xl w-full relative overflow-hidden">
-                {/* Accent border */}
-                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-accent" />
+            <div className="flex items-center justify-center min-h-[calc(100vh-240px)]">
+              <Card className="p-8 border-border/50 shadow-sm max-w-2xl w-full">
                 <div className="mb-6">
-                  <h2 className="text-2xl font-display font-semibold mb-1">Ready to Scan</h2>
-                  <p className="text-sm text-foreground/60">
+                  <h2 className="text-xl font-medium mb-1">Ready to Scan</h2>
+                  <p className="text-sm text-muted-foreground">
                     {files.length} file(s) loaded
                   </p>
                 </div>
@@ -365,12 +337,12 @@ const Index = () => {
                 <div className="flex gap-3">
                   <Button
                     onClick={handleScan}
-                    className="flex-1 h-12 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all duration-300"
+                    className="flex-1 h-11 font-medium"
                   >
                     <Search className="h-4 w-4 mr-2" />
                     Scan for Secrets
                   </Button>
-                  <Button onClick={handleClear} variant="outline" size="icon" className="h-12 w-12 hover:scale-105 transition-transform">
+                  <Button onClick={handleClear} variant="outline" size="icon" className="h-11 w-11">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -379,32 +351,10 @@ const Index = () => {
           )}
 
           {viewMode === 'results' && (
-            <div className="flex flex-col h-[calc(100vh-240px)] animate-in fade-in duration-500">
-              <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-lg relative overflow-hidden">
-                {/* Summary Stats Section */}
-                {hasScanCompleted && matches.length > 0 && (
-                  <div className="grid grid-cols-4 gap-4 mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '200ms' }}>
-                    <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 hover:scale-105 transition-transform">
-                      <div className="text-2xl font-bold text-destructive">{severityCounts.critical}</div>
-                      <div className="text-xs text-foreground/60 font-medium">Critical</div>
-                    </div>
-                    <div className="p-4 rounded-lg bg-accent/10 border border-accent/20 hover:scale-105 transition-transform">
-                      <div className="text-2xl font-bold text-accent">{severityCounts.high}</div>
-                      <div className="text-xs text-foreground/60 font-medium">High</div>
-                    </div>
-                    <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 hover:scale-105 transition-transform">
-                      <div className="text-2xl font-bold text-primary">{severityCounts.medium}</div>
-                      <div className="text-xs text-foreground/60 font-medium">Medium</div>
-                    </div>
-                    <div className="p-4 rounded-lg bg-muted border border-border hover:scale-105 transition-transform">
-                      <div className="text-2xl font-bold text-foreground">{severityCounts.low}</div>
-                      <div className="text-xs text-foreground/60 font-medium">Low</div>
-                    </div>
-                  </div>
-                )}
-                
+            <div className="flex flex-col h-[calc(100vh-240px)]">
+              <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-display font-semibold">Scan Results</h2>
+                  <h2 className="text-xl font-medium">Scan Results</h2>
                   <div className="flex items-center gap-2">
                     {isScanning ? (
                       <Button onClick={handleCancel} variant="destructive" size="sm" className="h-9">
