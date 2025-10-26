@@ -273,8 +273,7 @@ const Index = () => {
                 <img
                   src="/hero-pattern.png"
                   alt=""
-                  className="w-full h-full opacity-[1.95] object-cover"
-                  onError={(e) => console.error("Hero pattern failed to load:", e)}
+                  className="w-full h-full opacity-[0.06] object-cover"
                 />
               </div>
 
