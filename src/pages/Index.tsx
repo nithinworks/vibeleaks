@@ -10,13 +10,7 @@ import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IconButton } from "@/components/IconButton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 
 const Index = () => {
@@ -30,53 +24,48 @@ const Index = () => {
   const [progress, setProgress] = useState<{ current: number; total: number; filename: string }>();
   const [severityFilter, setSeverityFilter] = useState<SeverityLevel | "all">("all");
   const [showManualInput, setShowManualInput] = useState(false);
-  const [viewMode, setViewMode] = useState<'input' | 'ready' | 'results'>('input');
+  const [viewMode, setViewMode] = useState<"input" | "ready" | "results">("input");
   const workerRef = useRef<Worker>();
   const { toast } = useToast();
 
   // Filter matches based on severity
-  const filteredMatches = severityFilter === "all" 
-    ? matches 
-    : matches.filter(m => m.severity === severityFilter);
+  const filteredMatches = severityFilter === "all" ? matches : matches.filter((m) => m.severity === severityFilter);
 
   // Count by severity
   const severityCounts = {
-    critical: matches.filter(m => m.severity === 'critical').length,
-    high: matches.filter(m => m.severity === 'high').length,
-    medium: matches.filter(m => m.severity === 'medium').length,
-    low: matches.filter(m => m.severity === 'low').length,
+    critical: matches.filter((m) => m.severity === "critical").length,
+    high: matches.filter((m) => m.severity === "high").length,
+    medium: matches.filter((m) => m.severity === "medium").length,
+    low: matches.filter((m) => m.severity === "low").length,
   };
 
   useEffect(() => {
     // Lazy initialize Web Worker only when needed
     const initWorker = () => {
       if (!workerRef.current) {
-        workerRef.current = new Worker(
-          new URL("../workers/scanner.worker.ts", import.meta.url),
-          { type: "module" }
-        );
+        workerRef.current = new Worker(new URL("../workers/scanner.worker.ts", import.meta.url), { type: "module" });
 
         workerRef.current.onmessage = (e) => {
-      if (e.data.type === "progress") {
-        setProgress(e.data);
-      } else if (e.data.type === "result") {
-        const { matches: foundMatches, filesScanned, totalLines, duration } = e.data;
-        setMatches(foundMatches);
-        setLogs((prev) => [
-          ...prev,
-          `Scan complete: ${filesScanned} files, ${totalLines} lines in ${duration.toFixed(2)}ms`,
-          `Found ${foundMatches.length} potential secret(s)`,
-        ]);
-        setIsScanning(false);
-        setHasScanCompleted(true);
-        setProgress(undefined);
+          if (e.data.type === "progress") {
+            setProgress(e.data);
+          } else if (e.data.type === "result") {
+            const { matches: foundMatches, filesScanned, totalLines, duration } = e.data;
+            setMatches(foundMatches);
+            setLogs((prev) => [
+              ...prev,
+              `Scan complete: ${filesScanned} files, ${totalLines} lines in ${duration.toFixed(2)}ms`,
+              `Found ${foundMatches.length} potential secret(s)`,
+            ]);
+            setIsScanning(false);
+            setHasScanCompleted(true);
+            setProgress(undefined);
 
-        toast({
-          title: "Scan complete",
-          description: `Found ${foundMatches.length} potential secret(s)`,
-          variant: foundMatches.length > 0 ? "destructive" : "default",
-        });
-      }
+            toast({
+              title: "Scan complete",
+              description: `Found ${foundMatches.length} potential secret(s)`,
+              variant: foundMatches.length > 0 ? "destructive" : "default",
+            });
+          }
         };
       }
     };
@@ -90,10 +79,7 @@ const Index = () => {
   // Initialize worker before scanning
   const ensureWorkerReady = () => {
     if (!workerRef.current) {
-      workerRef.current = new Worker(
-        new URL("../workers/scanner.worker.ts", import.meta.url),
-        { type: "module" }
-      );
+      workerRef.current = new Worker(new URL("../workers/scanner.worker.ts", import.meta.url), { type: "module" });
 
       workerRef.current.onmessage = (e) => {
         if (e.data.type === "progress") {
@@ -121,11 +107,7 @@ const Index = () => {
   };
 
   const handleScan = () => {
-    const filesToScan = files.length > 0 
-      ? files 
-      : code.trim() 
-        ? [{ name: "input.txt", content: code }]
-        : [];
+    const filesToScan = files.length > 0 ? files : code.trim() ? [{ name: "input.txt", content: code }] : [];
 
     if (filesToScan.length === 0) {
       toast({
@@ -147,9 +129,9 @@ const Index = () => {
     setProgress({
       current: 0,
       total: filesToScan.length,
-      filename: "Initializing scanner..."
+      filename: "Initializing scanner...",
     });
-    setViewMode('results');
+    setViewMode("results");
 
     workerRef.current?.postMessage({
       type: "scan",
@@ -163,7 +145,7 @@ const Index = () => {
     setHasScanCompleted(false);
     setProgress(undefined);
     setLogs((prev) => [...prev, "Scan cancelled by user"]);
-    
+
     toast({
       title: "Scan cancelled",
       description: "The scanning process has been stopped",
@@ -180,7 +162,7 @@ const Index = () => {
     setProgress(undefined);
     setSeverityFilter("all");
     setShowManualInput(false);
-    setViewMode('input');
+    setViewMode("input");
   };
 
   const handleExportJSON = () => {
@@ -219,19 +201,19 @@ const Index = () => {
     setIsDirectory(isDir);
     setHasScanCompleted(false);
     setShowManualInput(false);
-    setViewMode('ready');
-    
+    setViewMode("ready");
+
     // If single file, show its content in the editor
     if (!isDir && selectedFiles.length === 1) {
       setCode(selectedFiles[0].content);
     } else if (!isDir && selectedFiles.length > 1) {
       // Multiple files, show combined content
-      setCode(selectedFiles.map(f => `// File: ${f.name}\n${f.content}`).join("\n\n"));
+      setCode(selectedFiles.map((f) => `// File: ${f.name}\n${f.content}`).join("\n\n"));
     } else {
       // Directory, clear code editor
       setCode("");
     }
-    
+
     setLogs((prev) => [...prev, `Loaded ${selectedFiles.length} file(s)`]);
   };
 
@@ -242,28 +224,23 @@ const Index = () => {
         <div className="container mx-auto px-8 py-4">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div className="flex items-center gap-2">
-              <svg 
-                width="24" 
-                height="24" 
-                viewBox="0 0 24 24" 
-                fill="none" 
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className="text-primary"
               >
-                <path 
-                  d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z" 
-                  stroke="currentColor" 
-                  strokeWidth="1.5" 
-                  strokeLinecap="round" 
+                <path
+                  d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 />
                 <circle cx="12" cy="11" r="3" fill="currentColor" opacity="0.2" />
-                <path 
-                  d="M12 8V11M12 14V14.01" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round"
-                />
+                <path d="M12 8V11M12 14V14.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
               <h1 className="text-lg font-display font-medium tracking-tight">
                 Vibe<span className="text-primary">Leaks</span>
@@ -276,7 +253,7 @@ const Index = () => {
 
       <main className="container mx-auto px-8 py-8">
         <div className="max-w-7xl mx-auto">
-          {viewMode === 'input' && (
+          {viewMode === "input" && (
             <div className="flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center">
               <div className="max-w-2xl mx-auto space-y-8">
                 <div className="space-y-3">
@@ -284,19 +261,17 @@ const Index = () => {
                     Catch leaks before they kill your vibe.
                   </h2>
                   <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-                    Scan your code instantly for secrets—lightweight, client-side, and built for vibe coders who value speed and security.
+                    Scan your code instantly for secrets - Simple tool built for vibe coders who value speed and
+                    security.
                   </p>
                 </div>
-                
+
                 <div className="flex flex-col items-center gap-4 pt-4">
-                  <FileUpload 
-                    onFilesSelected={handleFilesSelected} 
-                    size="lg"
-                  />
+                  <FileUpload onFilesSelected={handleFilesSelected} size="lg" />
                   <button
                     onClick={() => {
                       setShowManualInput(true);
-                      setViewMode('ready');
+                      setViewMode("ready");
                     }}
                     className="text-xs text-muted-foreground hover:text-primary transition-colors font-light"
                   >
@@ -307,16 +282,14 @@ const Index = () => {
             </div>
           )}
 
-          {viewMode === 'ready' && (
+          {viewMode === "ready" && (
             <div className="flex items-center justify-center min-h-[calc(100vh-240px)]">
               <Card className="p-8 border-border/50 shadow-sm max-w-2xl w-full">
                 <div className="mb-6">
                   <h2 className="text-xl font-medium mb-1">Ready to Scan</h2>
-                  <p className="text-sm text-muted-foreground">
-                    {files.length} file(s) loaded
-                  </p>
+                  <p className="text-sm text-muted-foreground">{files.length} file(s) loaded</p>
                 </div>
-                
+
                 <div className="mb-6 max-h-[400px] overflow-auto border border-border/50 rounded-lg">
                   {isDirectory ? (
                     <FileTree files={files} />
@@ -334,12 +307,7 @@ const Index = () => {
                 <Separator className="mb-6" />
 
                 <div className="flex gap-3">
-                  <IconButton
-                    onClick={handleScan}
-                    icon={Search}
-                    className="flex-1"
-                    size="default"
-                  >
+                  <IconButton onClick={handleScan} icon={Search} className="flex-1" size="default">
                     Scan for Secrets
                   </IconButton>
                   <Button onClick={handleClear} variant="outline" size="icon" className="h-12 w-12">
@@ -350,7 +318,7 @@ const Index = () => {
             </div>
           )}
 
-          {viewMode === 'results' && (
+          {viewMode === "results" && (
             <div className="flex flex-col h-[calc(100vh-240px)]">
               <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
                 <div className="flex items-center justify-between mb-6">
@@ -368,7 +336,10 @@ const Index = () => {
                     )}
                     {matches.length > 0 && (
                       <>
-                        <Select value={severityFilter} onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}>
+                        <Select
+                          value={severityFilter}
+                          onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}
+                        >
                           <SelectTrigger className="w-[140px] h-9">
                             <Filter className="h-3.5 w-3.5 mr-2" />
                             <SelectValue />
