@@ -291,7 +291,6 @@ const Index = () => {
                 <div className="flex flex-col items-center gap-4 pt-4">
                   <FileUpload 
                     onFilesSelected={handleFilesSelected} 
-                    variant="default"
                     size="lg"
                   />
                   <button

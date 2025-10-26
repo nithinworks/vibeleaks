@@ -1,70 +1,70 @@
-import { Button } from "@/components/ui/button";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { FolderOpen } from "lucide-react";
 
 interface IconButtonProps {
-  icon: LucideIcon;
+  icon?: LucideIcon;
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
-  variant?: "default" | "outline";
-  size?: "default" | "sm" | "lg";
+  size?: "default" | "lg";
 }
 
 export const IconButton = ({ 
-  icon: Icon, 
+  icon: Icon = FolderOpen, 
   children, 
   onClick, 
   className,
-  variant = "default",
   size = "default" 
 }: IconButtonProps) => {
-  const iconSize = size === "lg" ? "w-16 h-16" : size === "sm" ? "w-10 h-10" : "w-12 h-12";
-  const iconInnerSize = size === "lg" ? "h-8 w-8" : size === "sm" ? "h-5 w-5" : "h-6 w-6";
-  const buttonHeight = size === "lg" ? "h-16" : size === "sm" ? "h-10" : "h-12";
-  const textSize = size === "lg" ? "text-lg" : size === "sm" ? "text-sm" : "text-base";
+  const iconSize = size === "lg" ? "w-[68px] h-[68px]" : "w-[68px] h-[68px]";
+  const buttonPadding = size === "lg" ? "pl-5 pr-10 py-4" : "pl-5 pr-10 py-4";
+  const textSize = size === "lg" ? "text-[28px]" : "text-[28px]";
   
   return (
-    <Button 
+    <button 
       onClick={onClick} 
-      variant={variant}
       className={cn(
-        "group relative overflow-hidden px-6",
-        buttonHeight,
+        "inline-flex items-center gap-4 bg-primary border-4 border-[#3d3d3d] rounded-[50px]",
+        "cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
+        "hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(0,0,0,0.2)]",
+        buttonPadding,
         className
       )}
     >
-      <div className="flex items-center gap-4">
-        <div className={cn(
-          "rounded-2xl flex items-center justify-center transition-all duration-300 shrink-0",
-          "bg-primary-hover group-hover:scale-105",
-          iconSize
-        )}>
-          <div className="relative">
-            <Icon className={cn(
-              "text-primary-foreground",
-              iconInnerSize
-            )} strokeWidth={1.5} />
-            {/* Dotted pattern overlay */}
-            <div className="absolute inset-0 opacity-20">
-              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <pattern id={`dots-${size}`} x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="1" fill="white" />
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill={`url(#dots-${size})`} />
-              </svg>
-            </div>
-          </div>
+      <div className={cn(
+        "flex items-center justify-center flex-shrink-0 rounded-2xl",
+        "bg-gradient-to-br from-primary-hover to-[#d4654a]",
+        iconSize
+      )}>
+        {/* Dotted Folder Icon */}
+        <div className="relative w-[44px] h-[38px]">
+          {/* Folder Tab */}
+          <div 
+            className="absolute top-[2px] left-[2px] w-[18px] h-[10px] rounded-t-[5px]"
+            style={{
+              border: '3px dotted white',
+              borderBottom: 'none',
+              boxSizing: 'border-box'
+            }}
+          />
+          {/* Folder Body */}
+          <div 
+            className="absolute top-[10px] left-[2px] w-[40px] h-[26px]"
+            style={{
+              border: '3px dotted white',
+              borderRadius: '0 5px 5px 5px',
+              boxSizing: 'border-box'
+            }}
+          />
         </div>
-        <span className={cn(
-          "font-medium tracking-tight",
-          textSize
-        )}>
-          {children}
-        </span>
       </div>
-    </Button>
+      <span className={cn(
+        "text-white font-normal tracking-[0.3px] whitespace-nowrap",
+        textSize
+      )}>
+        {children}
+      </span>
+    </button>
   );
 };
