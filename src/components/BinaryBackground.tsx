@@ -10,12 +10,19 @@ export const BinaryBackground = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Set canvas size
+    // Set canvas size to match parent container
     const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
     };
+    
+    // Initial size
     resizeCanvas();
+    // Small delay to ensure parent is rendered
+    setTimeout(resizeCanvas, 100);
+    
     window.addEventListener("resize", resizeCanvas);
 
     // Binary rain effect
@@ -61,8 +68,8 @@ export const BinaryBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-      style={{ opacity: 0.6 }}
+      className="absolute inset-0 w-full h-full block"
+      style={{ opacity: 0.6, background: 'transparent' }}
     />
   );
 };
