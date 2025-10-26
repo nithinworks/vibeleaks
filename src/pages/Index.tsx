@@ -245,14 +245,17 @@ const Index = () => {
       <main className="container mx-auto px-8 py-8">
         <div className="max-w-7xl mx-auto">
           {viewMode === "input" && <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center overflow-hidden">
-              {/* Background Pattern */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <img 
-                  src="/hero-pattern.png" 
-                  alt="" 
-                  className="w-[600px] h-auto opacity-30 object-contain"
-                  onError={(e) => console.error('Failed to load hero pattern:', e)}
-                />
+              {/* Background Video */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+                <video 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  className="w-[500px] h-auto opacity-20 object-contain"
+                >
+                  <source src="/hero-bg.mp4" type="video/mp4" />
+                </video>
               </div>
 
               {/* Content */}
