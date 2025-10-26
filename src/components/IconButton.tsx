@@ -17,15 +17,16 @@ export const IconButton = ({
   className,
   size = "default" 
 }: IconButtonProps) => {
-  const iconSize = size === "lg" ? "w-[68px] h-[68px]" : "w-[68px] h-[68px]";
-  const buttonPadding = size === "lg" ? "pl-5 pr-10 py-4" : "pl-5 pr-10 py-4";
-  const textSize = size === "lg" ? "text-[28px]" : "text-[28px]";
+  const iconSize = size === "lg" ? "w-[52px] h-[52px]" : "w-[48px] h-[48px]";
+  const buttonPadding = size === "lg" ? "pl-4 pr-8 py-3" : "pl-3 pr-7 py-2.5";
+  const textSize = size === "lg" ? "text-lg" : "text-base";
+  const folderScale = size === "lg" ? "scale-90" : "scale-75";
   
   return (
     <button 
       onClick={onClick} 
       className={cn(
-        "inline-flex items-center gap-4 bg-primary border-4 border-[#3d3d3d] rounded-[50px]",
+        "inline-flex items-center gap-3 bg-primary border-[3px] border-[#3d3d3d] rounded-[32px]",
         "cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
         "hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(0,0,0,0.2)]",
         buttonPadding,
@@ -33,12 +34,12 @@ export const IconButton = ({
       )}
     >
       <div className={cn(
-        "flex items-center justify-center flex-shrink-0 rounded-2xl",
+        "flex items-center justify-center flex-shrink-0 rounded-xl",
         "bg-gradient-to-br from-primary-hover to-[#d4654a]",
         iconSize
       )}>
         {/* Dotted Folder Icon */}
-        <div className="relative w-[44px] h-[38px]">
+        <div className={cn("relative w-[44px] h-[38px]", folderScale)}>
           {/* Folder Tab */}
           <div 
             className="absolute top-[2px] left-[2px] w-[18px] h-[10px] rounded-t-[5px]"
