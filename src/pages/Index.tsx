@@ -247,13 +247,7 @@ const Index = () => {
           {viewMode === "input" && <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center overflow-hidden">
               {/* Background Video */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <video 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline
-                  className="w-[400px] h-auto opacity-20"
-                >
+                <video autoPlay loop muted playsInline className="w-[400px] h-auto opacity-20">
                   <source src="/hero-bg.mp4" type="video/mp4" />
                 </video>
               </div>
@@ -261,10 +255,10 @@ const Index = () => {
               {/* Content */}
               <div className="relative z-10 max-w-2xl mx-auto space-y-8">
                 <div className="space-y-3">
-                  <h2 className="text-5xl font-display font-medium tracking-tight">
+                  <h2 className="font-display font-medium tracking-tight text-4xl">
                     Sniff Out <span className="text-primary-hover font-semibold">Secrets</span>. Locally. Fast.
                   </h2>
-                  <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+                  <p className="text-muted-foreground max-w-lg mx-auto text-sm px-[58px]">
                     Scan your code instantly for secrets - Simple tool built for vibe coders who value speed and
                     security.
                   </p>
