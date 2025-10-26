@@ -10,6 +10,7 @@ import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IconButton } from "@/components/IconButton";
+import { BinaryBackground } from "@/components/BinaryBackground";
 import {
   Select,
   SelectContent,
@@ -277,8 +278,9 @@ const Index = () => {
       <main className="container mx-auto px-8 py-8">
         <div className="max-w-7xl mx-auto">
           {viewMode === 'input' && (
-            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center">
-              <div className="max-w-2xl mx-auto space-y-8">
+            <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center overflow-hidden">
+              <BinaryBackground />
+              <div className="relative z-10 max-w-2xl mx-auto space-y-8">
                 <div className="space-y-3">
                   <h2 className="text-3xl font-display font-medium tracking-tight">
                     Catch leaks before they kill your vibe.
