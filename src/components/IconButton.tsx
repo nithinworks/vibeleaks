@@ -26,7 +26,7 @@ export const IconButton = ({
     <button 
       onClick={onClick} 
       className={cn(
-        "inline-flex items-center gap-3 bg-primary border-[3px] border-[#3d3d3d] rounded-[32px]",
+        "inline-flex items-center gap-3 bg-primary border-[3px] border-[#3d3d3d] rounded-[18px]",
         "cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
         "hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(0,0,0,0.2)]",
         buttonPadding,

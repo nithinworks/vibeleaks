@@ -90,7 +90,7 @@ export const FileUpload = ({ onFilesSelected, size = "default", className = "" }
       size={size} 
       className={className}
     >
-      Select Folder
+      Select Project
     </IconButton>
   );
 };
