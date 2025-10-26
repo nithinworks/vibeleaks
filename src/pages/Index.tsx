@@ -10,6 +10,7 @@ import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IconButton } from "@/components/IconButton";
+import { BinaryBackground } from "@/components/BinaryBackground";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 const Index = () => {
@@ -268,9 +269,9 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           {viewMode === "input" && (
             <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center overflow-hidden">
-              {/* Background Pattern */}
+              {/* Binary Background Animation */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <img src="/hero-pattern.png" alt="" className="w-full h-full opacity-[0.56] object-cover" />
+                <BinaryBackground />
               </div>
 
               {/* Content */}
