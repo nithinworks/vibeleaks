@@ -87,10 +87,10 @@ export const FileUpload = ({ onFilesSelected, size = "default", className = "" }
   return (
     <IconButton 
       onClick={handleDirectorySelect}
-      size={size}
+      size={size} 
       className={className}
     >
-      Select Project
+      Select Folder
     </IconButton>
   );
 };

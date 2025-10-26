@@ -17,10 +17,10 @@ export const IconButton = ({
   className,
   size = "default" 
 }: IconButtonProps) => {
-  const iconSize = size === "lg" ? "w-[40px] h-[40px]" : "w-[36px] h-[36px]";
-  const buttonPadding = size === "lg" ? "pl-3 pr-6 py-2" : "pl-2.5 pr-5 py-2";
-  const textSize = size === "lg" ? "text-base" : "text-sm";
-  const folderScale = size === "lg" ? "scale-75" : "scale-65";
+  const iconSize = size === "lg" ? "w-[52px] h-[52px]" : "w-[48px] h-[48px]";
+  const buttonPadding = size === "lg" ? "pl-4 pr-8 py-3" : "pl-3 pr-7 py-2.5";
+  const textSize = size === "lg" ? "text-lg" : "text-base";
+  const folderScale = size === "lg" ? "scale-90" : "scale-75";
   
   return (
     <button 
@@ -34,27 +34,27 @@ export const IconButton = ({
       )}
     >
       <div className={cn(
-        "flex items-center justify-center flex-shrink-0 rounded-lg",
+        "flex items-center justify-center flex-shrink-0 rounded-xl",
         "bg-gradient-to-br from-primary-hover to-[#d4654a]",
         iconSize
       )}>
         {/* Dotted Folder Icon */}
-        <div className={cn("relative w-[36px] h-[32px]", folderScale)}>
+        <div className={cn("relative w-[44px] h-[38px]", folderScale)}>
           {/* Folder Tab */}
           <div 
-            className="absolute top-[1px] left-[1px] w-[14px] h-[8px] rounded-t-[4px]"
+            className="absolute top-[2px] left-[2px] w-[18px] h-[10px] rounded-t-[5px]"
             style={{
-              border: '2.5px dotted white',
+              border: '3px dotted white',
               borderBottom: 'none',
               boxSizing: 'border-box'
             }}
           />
           {/* Folder Body */}
           <div 
-            className="absolute top-[8px] left-[1px] w-[34px] h-[22px]"
+            className="absolute top-[10px] left-[2px] w-[40px] h-[26px]"
             style={{
-              border: '2.5px dotted white',
-              borderRadius: '0 4px 4px 4px',
+              border: '3px dotted white',
+              borderRadius: '0 5px 5px 5px',
               boxSizing: 'border-box'
             }}
           />
