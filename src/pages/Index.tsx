@@ -293,7 +293,6 @@ const Index = () => {
                     onFilesSelected={handleFilesSelected} 
                     variant="default"
                     size="lg"
-                    className="h-11 px-8 text-sm w-auto"
                   />
                   <button
                     onClick={() => {
@@ -339,12 +338,12 @@ const Index = () => {
                   <IconButton
                     onClick={handleScan}
                     icon={Search}
-                    className="flex-1 h-11"
+                    className="flex-1"
                     size="default"
                   >
                     Scan for Secrets
                   </IconButton>
-                  <Button onClick={handleClear} variant="outline" size="icon" className="h-11 w-11">
+                  <Button onClick={handleClear} variant="outline" size="icon" className="h-12 w-12">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>

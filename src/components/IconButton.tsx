@@ -19,42 +19,48 @@ export const IconButton = ({
   variant = "default",
   size = "default" 
 }: IconButtonProps) => {
+  const iconSize = size === "lg" ? "w-16 h-16" : size === "sm" ? "w-10 h-10" : "w-12 h-12";
+  const iconInnerSize = size === "lg" ? "h-8 w-8" : size === "sm" ? "h-5 w-5" : "h-6 w-6";
+  const buttonHeight = size === "lg" ? "h-16" : size === "sm" ? "h-10" : "h-12";
+  const textSize = size === "lg" ? "text-lg" : size === "sm" ? "text-sm" : "text-base";
+  
   return (
     <Button 
       onClick={onClick} 
       variant={variant}
-      size={size}
-      className={cn("group relative overflow-hidden", className)}
+      className={cn(
+        "group relative overflow-hidden px-6",
+        buttonHeight,
+        className
+      )}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         <div className={cn(
-          "rounded-xl flex items-center justify-center transition-all duration-300",
-          variant === "default" 
-            ? "bg-primary-hover group-hover:bg-primary group-hover:scale-110" 
-            : "bg-primary group-hover:bg-primary-hover",
-          size === "lg" ? "w-10 h-10" : size === "sm" ? "w-7 h-7" : "w-8 h-8"
+          "rounded-2xl flex items-center justify-center transition-all duration-300 shrink-0",
+          "bg-primary-hover group-hover:scale-105",
+          iconSize
         )}>
           <div className="relative">
             <Icon className={cn(
               "text-primary-foreground",
-              size === "lg" ? "h-5 w-5" : size === "sm" ? "h-3.5 w-3.5" : "h-4 w-4"
-            )} />
+              iconInnerSize
+            )} strokeWidth={1.5} />
             {/* Dotted pattern overlay */}
-            <div className="absolute inset-0 opacity-30">
+            <div className="absolute inset-0 opacity-20">
               <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                  <pattern id="dots" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
-                    <circle cx="1" cy="1" r="0.5" fill="white" />
+                  <pattern id={`dots-${size}`} x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="white" />
                   </pattern>
                 </defs>
-                <rect width="100%" height="100%" fill="url(#dots)" />
+                <rect width="100%" height="100%" fill={`url(#dots-${size})`} />
               </svg>
             </div>
           </div>
         </div>
         <span className={cn(
-          "font-medium",
-          size === "lg" ? "text-base" : size === "sm" ? "text-xs" : "text-sm"
+          "font-medium tracking-tight",
+          textSize
         )}>
           {children}
         </span>
