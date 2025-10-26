@@ -237,16 +237,36 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border/50 backdrop-blur-sm bg-background/80">
-        <div className="container mx-auto px-8 py-6">
+      <header className="border-b border-border/50">
+        <div className="container mx-auto px-8 py-4">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
-            <div>
-              <h1 className="text-4xl font-semibold tracking-tight">
+            <div className="flex items-center gap-2">
+              <svg 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-primary"
+              >
+                <path 
+                  d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z" 
+                  stroke="currentColor" 
+                  strokeWidth="1.5" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                />
+                <circle cx="12" cy="11" r="3" fill="currentColor" opacity="0.2" />
+                <path 
+                  d="M12 8V11M12 14V14.01" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round"
+                />
+              </svg>
+              <h1 className="text-lg font-normal tracking-tight">
                 Vibe<span className="text-primary">Leaks</span>
               </h1>
-              <p className="text-sm text-muted-foreground mt-3 font-light">
-                Client-side secret scanner powered by Gitleaks rules
-              </p>
             </div>
             <ThemeToggle />
           </div>
@@ -256,30 +276,35 @@ const Index = () => {
       <main className="container mx-auto px-8 py-8">
         <div className="max-w-7xl mx-auto">
           {viewMode === 'input' && (
-            <div className="flex items-center justify-center min-h-[calc(100vh-240px)]">
-              <Card className="p-12 border-border/50 shadow-sm max-w-md w-full">
-                <div className="flex flex-col items-center gap-6">
-                  <div className="text-center mb-2">
-                    <h2 className="text-2xl font-medium mb-2">Get Started</h2>
-                    <p className="text-sm text-muted-foreground">Select a folder to scan for secrets</p>
-                  </div>
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center">
+              <div className="max-w-2xl mx-auto space-y-8">
+                <div className="space-y-3">
+                  <h2 className="text-3xl font-light tracking-tight">
+                    Catch leaks before they kill your vibe.
+                  </h2>
+                  <p className="text-sm font-light text-muted-foreground max-w-lg mx-auto">
+                    A simple browser secret scanner for vibe coders, devs who keep things real.
+                  </p>
+                </div>
+                
+                <div className="flex flex-col items-center gap-4 pt-4">
                   <FileUpload 
                     onFilesSelected={handleFilesSelected} 
                     variant="default"
                     size="lg"
-                    className="h-12 px-8 text-base w-full"
+                    className="h-11 px-8 text-sm w-auto"
                   />
                   <button
                     onClick={() => {
                       setShowManualInput(true);
                       setViewMode('ready');
                     }}
-                    className="text-sm text-primary hover:underline font-medium"
+                    className="text-xs text-muted-foreground hover:text-primary transition-colors font-light"
                   >
                     or enter code manually
                   </button>
                 </div>
-              </Card>
+              </div>
             </div>
           )}
 
