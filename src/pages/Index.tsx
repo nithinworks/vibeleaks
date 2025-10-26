@@ -9,6 +9,7 @@ import { FileUpload } from "@/components/FileUpload";
 import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { IconButton } from "@/components/IconButton";
 import {
   Select,
   SelectContent,
@@ -335,13 +336,14 @@ const Index = () => {
                 <Separator className="mb-6" />
 
                 <div className="flex gap-3">
-                  <Button
+                  <IconButton
                     onClick={handleScan}
-                    className="flex-1 h-11 font-medium"
+                    icon={Search}
+                    className="flex-1 h-11"
+                    size="default"
                   >
-                    <Search className="h-4 w-4 mr-2" />
                     Scan for Secrets
-                  </Button>
+                  </IconButton>
                   <Button onClick={handleClear} variant="outline" size="icon" className="h-11 w-11">
                     <Trash2 className="h-4 w-4" />
                   </Button>

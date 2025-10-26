@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { IconButton } from "@/components/IconButton";
 import { FolderOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -86,9 +86,14 @@ export const FileUpload = ({ onFilesSelected, variant = "outline", size = "sm", 
   };
 
   return (
-    <Button onClick={handleDirectorySelect} variant={variant} size={size} className={className}>
-      <FolderOpen className="h-4 w-4 mr-2" />
+    <IconButton 
+      onClick={handleDirectorySelect} 
+      icon={FolderOpen}
+      variant={variant} 
+      size={size} 
+      className={className}
+    >
       Select Folder
-    </Button>
+    </IconButton>
   );
 };
