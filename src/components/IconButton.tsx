@@ -17,10 +17,10 @@ export const IconButton = ({
   className,
   size = "default" 
 }: IconButtonProps) => {
-  const iconSize = size === "lg" ? "w-[52px] h-[52px]" : "w-[48px] h-[48px]";
-  const buttonPadding = size === "lg" ? "pl-4 pr-8 py-3" : "pl-3 pr-7 py-2.5";
-  const textSize = size === "lg" ? "text-lg" : "text-base";
-  const folderScale = size === "lg" ? "scale-90" : "scale-75";
+  const iconSize = size === "lg" ? "w-[42px] h-[42px]" : "w-[38px] h-[38px]";
+  const buttonPadding = size === "lg" ? "pl-3 pr-6 py-2.5" : "pl-2.5 pr-5 py-2";
+  const textSize = size === "lg" ? "text-base" : "text-sm";
+  const folderScale = size === "lg" ? "scale-75" : "scale-[0.65]";
   
   return (
     <button 
