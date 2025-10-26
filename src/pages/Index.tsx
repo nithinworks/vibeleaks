@@ -264,7 +264,7 @@ const Index = () => {
                   strokeLinecap="round"
                 />
               </svg>
-              <h1 className="text-lg font-normal tracking-tight">
+              <h1 className="text-lg font-display font-medium tracking-tight">
                 Vibe<span className="text-primary">Leaks</span>
               </h1>
             </div>
@@ -279,10 +279,10 @@ const Index = () => {
             <div className="flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center">
               <div className="max-w-2xl mx-auto space-y-8">
                 <div className="space-y-3">
-                  <h2 className="text-3xl font-light tracking-tight">
+                  <h2 className="text-3xl font-display font-medium tracking-tight">
                     Catch leaks before they kill your vibe.
                   </h2>
-                  <p className="text-sm font-light text-muted-foreground max-w-lg mx-auto">
+                  <p className="text-sm text-muted-foreground max-w-lg mx-auto">
                     A simple browser secret scanner for vibe coders, devs who keep things real.
                   </p>
                 </div>
