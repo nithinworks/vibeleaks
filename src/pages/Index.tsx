@@ -270,7 +270,7 @@ const Index = () => {
           {viewMode === "input" && (
             <>
               {/* PixelBlast Pattern Animation - Full Viewport - Light Mode Only */}
-              <div className="fixed inset-0 pointer-events-none dark:hidden" style={{ zIndex: 0 }}>
+              <div className="fixed inset-0 pointer-events-none dark:hidden" style={{ zIndex: 0, opacity: 0.3 }}>
                 <PixelBlast
                   variant="circle"
                   pixelSize={4}
