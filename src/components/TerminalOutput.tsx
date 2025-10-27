@@ -2,7 +2,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { AlertCircle, CheckCircle2, Loader2, Shield, ShieldAlert, AlertTriangle, Info, FileText, ShieldCheck, Sparkles, Lock } from "lucide-react";
+import { AlertCircle, Loader2, Shield, ShieldAlert, AlertTriangle, Info, FileText, ShieldCheck } from "lucide-react";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 
@@ -155,55 +155,17 @@ export const TerminalOutput = ({
             </div>}
 
           {!isScanning && hasScanCompleted && matches.length === 0 && 
-            <Card className="relative overflow-hidden border-success/30 bg-gradient-to-br from-success/10 via-success/5 to-transparent backdrop-blur-sm">
-              {/* Animated background elements */}
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-4 right-8 w-32 h-32 bg-success/5 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-8 left-8 w-24 h-24 bg-success/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }} />
-              </div>
-              
-              <div className="relative p-12 flex flex-col items-center text-center space-y-6">
-                {/* Animated Shield Icon */}
-                <div className="relative">
-                  <div className="absolute inset-0 bg-success/20 blur-xl rounded-full animate-pulse" />
-                  <div className="relative bg-success/10 p-6 rounded-2xl border-2 border-success/30 animate-scale-in">
-                    <ShieldCheck className="h-16 w-16 text-success animate-[scale-in_0.5s_ease-out]" strokeWidth={1.5} />
-                  </div>
-                  {/* Sparkles */}
-                  <Sparkles className="absolute -top-2 -right-2 h-6 w-6 text-success animate-pulse" />
-                  <Sparkles className="absolute -bottom-1 -left-1 h-5 w-5 text-success animate-pulse" style={{ animationDelay: '0.5s' }} />
-                </div>
-
-                {/* Success Message */}
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-semibold text-success">
-                    All Clear! 🎉
+            <Card className="p-8 border-success/30 bg-success/5">
+              <div className="flex flex-col items-center text-center space-y-3">
+                <ShieldCheck className="h-12 w-12 text-success" strokeWidth={1.5} />
+                <div className="space-y-1">
+                  <h3 className="text-lg font-semibold text-foreground">
+                    No secrets detected
                   </h3>
-                  <p className="text-foreground/80 text-base max-w-md">
-                    No secrets detected in your code. Your application is secure!
+                  <p className="text-sm text-muted-foreground">
+                    Your code is secure
                   </p>
                 </div>
-
-                {/* Security Stats */}
-                <div className="flex items-center gap-6 pt-4">
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-success/10 border border-success/20">
-                    <Lock className="h-4 w-4 text-success" />
-                    <span className="text-sm font-medium text-foreground/90">Secure</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-success/10 border border-success/20">
-                    <Shield className="h-4 w-4 text-success" />
-                    <span className="text-sm font-medium text-foreground/90">Protected</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-success/10 border border-success/20">
-                    <CheckCircle2 className="h-4 w-4 text-success" />
-                    <span className="text-sm font-medium text-foreground/90">Verified</span>
-                  </div>
-                </div>
-
-                {/* Subtle message */}
-                <p className="text-xs text-muted-foreground pt-2">
-                  Keep up the great work maintaining secure coding practices
-                </p>
               </div>
             </Card>
           }
