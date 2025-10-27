@@ -10,7 +10,7 @@ import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IconButton } from "@/components/IconButton";
-import { FallingPattern } from "@/components/ui/falling-pattern";
+import PixelBlast from "@/components/ui/PixelBlast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 const Index = () => {
@@ -269,15 +269,23 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           {viewMode === "input" && (
             <>
-              {/* Falling Pattern Animation - Full Viewport - Light Mode Only */}
+              {/* PixelBlast Pattern Animation - Full Viewport - Light Mode Only */}
               <div className="fixed inset-0 pointer-events-none dark:hidden" style={{ zIndex: 0 }}>
-                <FallingPattern 
-                  color="hsl(12 78% 55%)"
-                  backgroundColor="hsl(48 25% 93%)"
+                <PixelBlast
+                  variant="circle"
+                  pixelSize={4}
+                  color="#E07A5F"
+                  patternScale={2.5}
+                  patternDensity={1.1}
+                  pixelSizeJitter={0.3}
+                  enableRipples={true}
+                  rippleSpeed={0.4}
+                  rippleThickness={0.12}
+                  rippleIntensityScale={1.2}
+                  speed={0.5}
+                  edgeFade={0.3}
+                  transparent={true}
                   className="w-full h-full"
-                  blurIntensity="0.1em"
-                  duration={80}
-                  density={2}
                 />
               </div>
 
