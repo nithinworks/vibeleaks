@@ -19,16 +19,16 @@ export const IconButton = ({
   size = "default",
   variant = "folder",
 }: IconButtonProps) => {
-  const iconSize = size === "lg" ? "w-[42px] h-[42px]" : "w-[38px] h-[38px]";
-  const buttonPadding = size === "lg" ? "pl-3 pr-6 py-2.5" : "pl-2.5 pr-5 py-2";
-  const textSize = size === "lg" ? "text-base" : "text-sm";
-  const folderScale = size === "lg" ? "scale-75" : "scale-[0.65]";
+  const iconSize = size === "lg" ? "w-[36px] h-[36px] sm:w-[42px] sm:h-[42px]" : "w-[32px] h-[32px] sm:w-[38px] sm:h-[38px]";
+  const buttonPadding = size === "lg" ? "pl-2.5 pr-4 py-2 sm:pl-3 sm:pr-6 sm:py-2.5" : "pl-2 pr-3 py-1.5 sm:pl-2.5 sm:pr-5 sm:py-2";
+  const textSize = size === "lg" ? "text-sm sm:text-base" : "text-xs sm:text-sm";
+  const folderScale = size === "lg" ? "scale-[0.6] sm:scale-75" : "scale-[0.5] sm:scale-[0.65]";
 
   return (
     <button
       onClick={onClick}
       className={cn(
-        "inline-flex items-center gap-3 bg-primary border-[3px] border-[#3d3d3d] rounded-[24px]",
+        "inline-flex items-center gap-2 sm:gap-3 bg-primary border-2 sm:border-[3px] border-[#3d3d3d] rounded-[20px] sm:rounded-[24px]",
         "cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
         "hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(0,0,0,0.2)]",
         buttonPadding,

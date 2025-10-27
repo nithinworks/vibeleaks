@@ -10,6 +10,7 @@ import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IconButton } from "@/components/IconButton";
+import { MobileWarning } from "@/components/MobileWarning";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 
@@ -217,9 +218,11 @@ const Index = () => {
   }, []);
   return (
     <div className="min-h-screen bg-background">
+      <MobileWarning />
+      
       {/* Header */}
       <header className="border-b border-border/50">
-        <div className="container mx-auto px-8 py-4">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div className="flex items-center gap-2">
               <svg
@@ -240,7 +243,7 @@ const Index = () => {
                 <circle cx="12" cy="11" r="3" fill="currentColor" opacity="0.2" />
                 <path d="M12 8V11M12 14V14.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
-              <h1 className="text-lg font-display font-medium tracking-tight">
+              <h1 className="text-base sm:text-lg font-display font-medium tracking-tight">
                 Vibe<span className="text-primary">Leaks</span>
               </h1>
             </div>
@@ -249,7 +252,7 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-8 py-8">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="max-w-7xl mx-auto">
           {viewMode === "input" && (
             <>
@@ -297,30 +300,30 @@ const Index = () => {
                 </Suspense>
               </div>
 
-              <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center" style={{ zIndex: 1 }}>
+              <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-180px)] sm:min-h-[calc(100vh-240px)] text-center px-4" style={{ zIndex: 1 }}>
                 {/* Content */}
-                <div className="relative max-w-2xl mx-auto space-y-8">
+                <div className="relative max-w-2xl mx-auto space-y-6 sm:space-y-8">
                   {/* Chrome Badge */}
-                  <div className="flex justify-center mb-4">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-primary-hover/10 border border-primary-hover/20">
+                  <div className="flex justify-center mb-3 sm:mb-4">
+                    <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-md bg-primary-hover/10 border border-primary-hover/20">
                       <svg 
                         viewBox="0 0 24 24" 
-                        className="w-4 h-4 text-primary-hover" 
+                        className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-hover flex-shrink-0" 
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
                       >
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                       </svg>
-                      <span className="text-xs font-medium text-primary-hover">For better experience use Chrome browser</span>
+                      <span className="text-[10px] sm:text-xs font-medium text-primary-hover">For better experience use Chrome browser</span>
                     </div>
                   </div>
 
-                <div className="space-y-3">
-                  <h2 className="font-display font-medium tracking-tight text-4xl">
+                <div className="space-y-2 sm:space-y-3">
+                  <h2 className="font-display font-medium tracking-tight text-2xl sm:text-3xl lg:text-4xl px-4">
                     Sniff Out <span className="text-primary-hover font-semibold">Secrets</span>. Locally. Fast.
                   </h2>
-                  <p className="text-muted-foreground max-w-lg mx-auto text-sm px-[58px]">
+                  <p className="text-muted-foreground max-w-lg mx-auto text-xs sm:text-sm px-6 sm:px-12 lg:px-[58px]">
                     Scan your code instantly for secrets - Simple tool built for vibe coders who value speed and
                     security.
                   </p>
@@ -380,24 +383,25 @@ const Index = () => {
                 </Suspense>
               </div>
 
-              <div className="relative flex items-center justify-center min-h-[calc(100vh-240px)]" style={{ zIndex: 1 }}>
-                <Card className="p-10 border-border/30 backdrop-blur-sm bg-background/95 shadow-2xl max-w-2xl w-full rounded-2xl">
-                  <div className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-2 tracking-tight">Ready to Scan</h2>
-                    <p className="text-sm text-muted-foreground">{files.length} file(s) loaded</p>
+              <div className="relative flex items-center justify-center min-h-[calc(100vh-180px)] sm:min-h-[calc(100vh-240px)] px-4" style={{ zIndex: 1 }}>
+                <Card className="p-6 sm:p-8 lg:p-10 border-border/30 backdrop-blur-sm bg-background/95 shadow-2xl max-w-2xl w-full rounded-2xl">
+                  <div className="mb-6 sm:mb-8">
+                    <h2 className="text-xl sm:text-2xl font-semibold mb-2 tracking-tight">Ready to Scan</h2>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{files.length} file(s) loaded</p>
                   </div>
 
-                  <div className="mb-8 max-h-[400px] overflow-auto border border-border/40 rounded-xl bg-muted/30 backdrop-blur-sm">
+                  <div className="mb-6 sm:mb-8 max-h-[300px] sm:max-h-[400px] overflow-auto border border-border/40 rounded-xl bg-muted/30 backdrop-blur-sm">
                     <FileTree files={files} />
                   </div>
 
-                  <Separator className="mb-8 bg-border/40" />
+                  <Separator className="mb-6 sm:mb-8 bg-border/40" />
 
-                  <div className="flex gap-3">
+                  <div className="flex gap-2 sm:gap-3">
                     <IconButton onClick={handleScan} variant="key" className="flex-1" size="default">
-                      Start Security Scan
+                      <span className="hidden sm:inline">Start Security Scan</span>
+                      <span className="sm:hidden">Scan</span>
                     </IconButton>
-                    <Button onClick={handleClear} variant="outline" size="icon" className="h-12 w-12 border-border/40 hover:bg-muted/50">
+                    <Button onClick={handleClear} variant="outline" size="icon" className="h-10 w-10 sm:h-12 sm:w-12 border-border/40 hover:bg-muted/50">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -407,19 +411,20 @@ const Index = () => {
           )}
 
           {viewMode === "results" && (
-            <div className="flex flex-col h-[calc(100vh-240px)]">
-              <Card className="p-6 flex flex-col flex-1 border-border/40 shadow-lg rounded-xl bg-card/50 backdrop-blur-sm">
-                <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-xl font-semibold tracking-tight">Scan Results</h2>
-                  <div className="flex items-center gap-2">
+            <div className="flex flex-col h-[calc(100vh-180px)] sm:h-[calc(100vh-240px)]">
+              <Card className="p-4 sm:p-6 flex flex-col flex-1 border-border/40 shadow-lg rounded-xl bg-card/50 backdrop-blur-sm">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-5">
+                  <h2 className="text-lg sm:text-xl font-semibold tracking-tight">Scan Results</h2>
+                  <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
                     {isScanning ? (
-                      <Button onClick={handleCancel} variant="destructive" size="sm" className="h-9 rounded-lg">
-                        Cancel Scan
+                      <Button onClick={handleCancel} variant="destructive" size="sm" className="h-8 sm:h-9 rounded-lg text-xs sm:text-sm">
+                        Cancel
                       </Button>
                     ) : (
-                      <Button onClick={handleClear} variant="outline" size="sm" className="h-9 rounded-lg border-border/50 hover:bg-muted/80">
-                        <Search className="h-3.5 w-3.5 mr-2" />
-                        New Scan
+                      <Button onClick={handleClear} variant="outline" size="sm" className="h-8 sm:h-9 rounded-lg border-border/50 hover:bg-muted/80 text-xs sm:text-sm">
+                        <Search className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1.5 sm:mr-2" />
+                        <span className="hidden sm:inline">New Scan</span>
+                        <span className="sm:hidden">New</span>
                       </Button>
                     )}
                     {matches.length > 0 && (
@@ -428,8 +433,8 @@ const Index = () => {
                           value={severityFilter}
                           onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}
                         >
-                          <SelectTrigger className="w-[140px] h-9 rounded-lg border-border/50">
-                            <Filter className="h-3.5 w-3.5 mr-2" />
+                          <SelectTrigger className="w-[110px] sm:w-[140px] h-8 sm:h-9 rounded-lg border-border/50 text-xs sm:text-sm">
+                            <Filter className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1.5 sm:mr-2" />
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -440,8 +445,8 @@ const Index = () => {
                             <SelectItem value="low">Low ({severityCounts.low})</SelectItem>
                           </SelectContent>
                         </Select>
-                        <Button onClick={handleExportJSON} variant="outline" size="sm" className="h-9 rounded-lg border-border/50 hover:bg-muted/80">
-                          <Download className="h-3.5 w-3.5 mr-2" />
+                        <Button onClick={handleExportJSON} variant="outline" size="sm" className="h-8 sm:h-9 rounded-lg border-border/50 hover:bg-muted/80 text-xs sm:text-sm">
+                          <Download className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1.5 sm:mr-2" />
                           Export
                         </Button>
                       </>

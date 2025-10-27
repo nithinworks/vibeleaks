@@ -60,19 +60,19 @@ export const TerminalOutput = ({
 }: TerminalOutputProps) => {
   return <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
-        <div className="space-y-2.5 pr-4">
+        <div className="space-y-2 sm:space-y-2.5 pr-2 sm:pr-4">
           {/* Scan Configuration Info */}
           {hasScanCompleted && (
-            <Card className="p-3 border-border/40 bg-muted/20">
-              <div className="flex items-start gap-3">
-                <Info className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                <div className="flex-1 space-y-1.5 text-xs text-muted-foreground">
+            <Card className="p-2.5 sm:p-3 border-border/40 bg-muted/20">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <Info className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                <div className="flex-1 space-y-1 sm:space-y-1.5 text-[10px] sm:text-xs text-muted-foreground">
                   <p>
                     <span className="font-medium text-foreground">206 patterns</span> scanned across 
                     <span className="font-medium text-foreground"> 80+ services</span> (AWS, GitHub, Stripe, Google, etc.)
                   </p>
-                  <div className="flex items-start gap-1.5">
-                    <FileX className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                  <div className="flex items-start gap-1 sm:gap-1.5">
+                    <FileX className="h-3 w-3 sm:h-3.5 sm:w-3.5 mt-0.5 flex-shrink-0" />
                     <p className="flex-1">
                       <span className="font-medium text-foreground">Excluded:</span> Build artifacts (dist, node_modules), 
                       lock files, media files, test/demo files, and binary formats
@@ -82,58 +82,58 @@ export const TerminalOutput = ({
               </div>
             </Card>
           )}
-          {isScanning && progress && <Card className="p-4 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur-sm">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Loader2 className="h-4 w-4 animate-spin text-primary flex-shrink-0" />
+          {isScanning && progress && <Card className="p-3 sm:p-4 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur-sm">
+              <div className="space-y-2 sm:space-y-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin text-primary flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <TextShimmer 
-                      className="text-sm font-medium"
+                      className="text-xs sm:text-sm font-medium"
                       duration={1.5}
                     >
                       Scanning files...
                     </TextShimmer>
-                    <p className="text-xs text-muted-foreground mt-1.5">
+                    <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 sm:mt-1.5">
                       {progress.current}/{progress.total} files
                     </p>
                   </div>
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <FileText className="h-3.5 w-3.5 text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground truncate">
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+                    <FileText className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted-foreground flex-shrink-0" />
+                    <p className="text-[10px] sm:text-xs text-muted-foreground truncate">
                       {progress.filename}
                     </p>
                   </div>
                   <Progress 
                     value={(progress.current / progress.total) * 100} 
-                    className="h-1.5"
+                    className="h-1 sm:h-1.5"
                   />
                 </div>
               </div>
             </Card>}
 
-          {matches.length > 0 && <div className="space-y-2.5">
+          {matches.length > 0 && <div className="space-y-2 sm:space-y-2.5">
               {matches.map((match, idx) => {
                 const config = severityConfig[match.severity];
                 const Icon = config.icon;
-                return <Card key={idx} className={`p-3.5 border ${config.borderColor} ${config.bgColor}`}>
-                  <div className="flex items-start gap-3">
-                    <Icon className={`h-4 w-4 ${config.color} mt-0.5 flex-shrink-0`} />
-                    <div className="flex-1 min-w-0 space-y-2.5">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-center gap-2 flex-wrap min-w-0">
-                          <Badge className={`text-xs font-medium px-2 py-0.5 border ${config.badgeColor}`}>
+                return <Card key={idx} className={`p-3 sm:p-3.5 border ${config.borderColor} ${config.bgColor}`}>
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <Icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${config.color} mt-0.5 flex-shrink-0`} />
+                    <div className="flex-1 min-w-0 space-y-2 sm:space-y-2.5">
+                      <div className="flex items-start justify-between gap-2 sm:gap-3">
+                        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap min-w-0">
+                          <Badge className={`text-[10px] sm:text-xs font-medium px-1.5 sm:px-2 py-0.5 border ${config.badgeColor}`}>
                             {config.label}
                           </Badge>
-                          <Badge variant="outline" className="text-xs font-medium px-2 py-0.5 bg-muted/50">
+                          <Badge variant="outline" className="text-[10px] sm:text-xs font-medium px-1.5 sm:px-2 py-0.5 bg-muted/50">
                             {match.ruleId}
                           </Badge>
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-2 text-xs">
-                        <FileText className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                      <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs flex-wrap">
+                        <FileText className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted-foreground flex-shrink-0" />
                         <span className="font-mono text-foreground/90 font-medium truncate">
                           {match.filename}
                         </span>
@@ -143,28 +143,28 @@ export const TerminalOutput = ({
                         </span>
                       </div>
 
-                      <p className="text-sm text-foreground/80 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed">
                         {match.description}
                       </p>
 
-                      <div className="space-y-2">
+                      <div className="space-y-1.5 sm:space-y-2">
                         <div className="rounded-md overflow-hidden border border-border/60">
-                          <div className="bg-muted/70 dark:bg-muted/40 px-2.5 py-1.5 border-b border-border/60">
-                            <p className="text-xs font-semibold text-foreground/70">
+                          <div className="bg-muted/70 dark:bg-muted/40 px-2 sm:px-2.5 py-1 sm:py-1.5 border-b border-border/60">
+                            <p className="text-[10px] sm:text-xs font-semibold text-foreground/70">
                               Matched snippet
                             </p>
                           </div>
-                          <code className="text-xs font-mono bg-code-bg text-code-text px-2.5 py-2.5 block overflow-x-auto break-all leading-relaxed">
+                          <code className="text-[10px] sm:text-xs font-mono bg-code-bg text-code-text px-2 sm:px-2.5 py-2 sm:py-2.5 block overflow-x-auto break-all leading-relaxed">
                             {match.snippet}
                           </code>
                         </div>
                         <div className="rounded-md overflow-hidden border border-border/60">
-                          <div className="bg-muted/70 dark:bg-muted/40 px-2.5 py-1.5 border-b border-border/60">
-                            <p className="text-xs font-semibold text-foreground/70">
+                          <div className="bg-muted/70 dark:bg-muted/40 px-2 sm:px-2.5 py-1 sm:py-1.5 border-b border-border/60">
+                            <p className="text-[10px] sm:text-xs font-semibold text-foreground/70">
                               Full line context
                             </p>
                           </div>
-                          <code className="text-xs font-mono bg-code-bg text-code-text px-2.5 py-2.5 block overflow-x-auto break-all leading-relaxed">
+                          <code className="text-[10px] sm:text-xs font-mono bg-code-bg text-code-text px-2 sm:px-2.5 py-2 sm:py-2.5 block overflow-x-auto break-all leading-relaxed">
                             {match.line}
                           </code>
                         </div>
@@ -176,14 +176,14 @@ export const TerminalOutput = ({
             </div>}
 
           {!isScanning && hasScanCompleted && matches.length === 0 && 
-            <Card className="p-8 border-success/30 bg-success/5">
-              <div className="flex flex-col items-center text-center space-y-3">
-                <ShieldCheck className="h-12 w-12 text-success" strokeWidth={1.5} />
-                <div className="space-y-1">
-                  <h3 className="text-lg font-semibold text-foreground">
+            <Card className="p-6 sm:p-8 border-success/30 bg-success/5">
+              <div className="flex flex-col items-center text-center space-y-2 sm:space-y-3">
+                <ShieldCheck className="h-10 w-10 sm:h-12 sm:w-12 text-success" strokeWidth={1.5} />
+                <div className="space-y-0.5 sm:space-y-1">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground">
                     No secrets detected
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Your code is secure
                   </p>
                 </div>
@@ -191,7 +191,7 @@ export const TerminalOutput = ({
             </Card>
           }
 
-          {!isScanning && !hasScanCompleted && logs.length === 0 && <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
+          {!isScanning && !hasScanCompleted && logs.length === 0 && <div className="flex items-center justify-center h-full text-xs sm:text-sm text-muted-foreground">
               <p className="font-normal">
                 No scan yet — upload files or enter code to start
               </p>
