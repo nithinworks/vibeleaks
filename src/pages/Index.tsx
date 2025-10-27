@@ -272,10 +272,10 @@ const Index = () => {
               {/* Falling Pattern Animation - Full Viewport - Light Mode Only */}
               <div className="fixed inset-0 pointer-events-none dark:hidden" style={{ zIndex: 0 }}>
                 <FallingPattern 
-                  color="hsl(12 78% 55% / 0.6)"
+                  color="hsl(12 78% 55%)"
                   backgroundColor="hsl(48 25% 93%)"
                   className="w-full h-full"
-                  blurIntensity="0.5em"
+                  blurIntensity="0.1em"
                   duration={80}
                   density={2}
                 />
