@@ -61,13 +61,13 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 0 0% 8%;
+    --background: 0 0% 4%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 12%;
+    --card: 0 0% 7%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 12%;
+    --popover: 0 0% 7%;
     --popover-foreground: 0 0% 98%;
 
     --primary: 0 64% 6%;
@@ -75,10 +75,10 @@ All colors MUST be HSL.
     
     --primary-hover: 12 78% 55%;
 
-    --secondary: 210 11% 18%;
+    --secondary: 210 11% 15%;
     --secondary-foreground: 210 17% 98%;
 
-    --muted: 210 11% 18%;
+    --muted: 210 11% 15%;
     --muted-foreground: 0 0% 60%;
 
     --accent: 0 100% 76%;
@@ -90,15 +90,15 @@ All colors MUST be HSL.
     --success: 145 63% 49%;
     --success-foreground: 0 0% 100%;
 
-    --border: 210 11% 22%;
-    --input: 210 11% 22%;
+    --border: 210 11% 18%;
+    --input: 210 11% 18%;
     --ring: 182 53% 51%;
 
-    --terminal-bg: 200 15% 8%;
+    --terminal-bg: 200 15% 5%;
     --terminal-text: 145 100% 70%;
-    --terminal-border: 200 10% 20%;
+    --terminal-border: 200 10% 15%;
     
-    --code-bg: 200 15% 10%;
+    --code-bg: 200 15% 6%;
     --code-text: 210 10% 85%;
 
     --sidebar-background: 240 5.9% 10%;
