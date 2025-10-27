@@ -10,7 +10,7 @@ import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IconButton } from "@/components/IconButton";
-import { BinaryBackground } from "@/components/BinaryBackground";
+import { FallingPattern } from "@/components/ui/falling-pattern";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 const Index = () => {
@@ -269,9 +269,12 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           {viewMode === "input" && (
             <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center overflow-hidden">
-              {/* Binary Background Animation */}
-              <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <BinaryBackground />
+              {/* Falling Pattern Animation - Light Mode Only */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden light:block dark:hidden">
+                <FallingPattern 
+                  className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent_20%,var(--background)_80%)]"
+                  blurIntensity="0.5em"
+                />
               </div>
 
               {/* Content */}
