@@ -56,7 +56,7 @@ const TreeNode = ({ node, level = 0 }: { node: FileNode; level?: number }) => {
     <div>
       <div
         className={cn(
-          "flex items-center gap-2 py-1.5 px-3 hover:bg-muted/50 rounded-md cursor-pointer transition-colors",
+          "flex items-center gap-2 py-2 px-3 hover:bg-muted/60 rounded-lg cursor-pointer transition-all duration-200",
           level > 0 && "ml-4"
         )}
         onClick={() => isDirectory && setIsOpen(!isOpen)}
@@ -98,13 +98,13 @@ export const FileTree = ({ files }: FileTreeProps) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="text-sm font-medium mb-2">Project Files</div>
-      <div className="h-full overflow-auto border border-border rounded-md p-2 bg-muted/20">
+      <div className="text-sm font-semibold mb-3 px-3 text-foreground/90">Project Files</div>
+      <div className="h-full overflow-auto rounded-lg p-3 bg-background/60">
         {tree.map((node) => (
           <TreeNode key={node.path} node={node} />
         ))}
       </div>
-      <div className="mt-2 text-xs text-muted-foreground">
+      <div className="mt-3 px-3 text-xs text-muted-foreground font-medium">
         {files.length} file(s) loaded
       </div>
     </div>

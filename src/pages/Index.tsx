@@ -313,29 +313,53 @@ const Index = () => {
           )}
 
           {viewMode === "ready" && (
-            <div className="flex items-center justify-center min-h-[calc(100vh-240px)]">
-              <Card className="p-8 border-border/50 shadow-sm max-w-2xl w-full">
-                <div className="mb-6">
-                  <h2 className="text-xl font-medium mb-1">Ready to Scan</h2>
-                  <p className="text-sm text-muted-foreground">{files.length} file(s) loaded</p>
-                </div>
+            <>
+              {/* PixelBlast Pattern Animation Behind Dialog - Light Mode Only */}
+              <div className="fixed inset-0 pointer-events-none dark:hidden" style={{ zIndex: 0, opacity: 0.3 }}>
+                <Suspense fallback={null}>
+                  <PixelBlast
+                    variant="circle"
+                    pixelSize={4}
+                    color="#E07A5F"
+                    patternScale={2.5}
+                    patternDensity={1.1}
+                    pixelSizeJitter={0.3}
+                    enableRipples={true}
+                    rippleSpeed={0.4}
+                    rippleThickness={0.12}
+                    rippleIntensityScale={1.2}
+                    speed={0.5}
+                    edgeFade={0.3}
+                    transparent={true}
+                    className="w-full h-full"
+                  />
+                </Suspense>
+              </div>
 
-                <div className="mb-6 max-h-[400px] overflow-auto border border-border/50 rounded-lg">
-                  <FileTree files={files} />
-                </div>
+              <div className="relative flex items-center justify-center min-h-[calc(100vh-240px)]" style={{ zIndex: 1 }}>
+                <Card className="p-10 border-border/30 backdrop-blur-sm bg-background/95 shadow-2xl max-w-2xl w-full rounded-2xl">
+                  <div className="mb-8">
+                    <h2 className="text-2xl font-semibold mb-2 tracking-tight">Ready to Scan</h2>
+                    <p className="text-sm text-muted-foreground">{files.length} file(s) loaded</p>
+                  </div>
 
-                <Separator className="mb-6" />
+                  <div className="mb-8 max-h-[400px] overflow-auto border border-border/40 rounded-xl bg-muted/30 backdrop-blur-sm">
+                    <FileTree files={files} />
+                  </div>
 
-                <div className="flex gap-3">
-                  <IconButton onClick={handleScan} icon={Search} className="flex-1" size="default">
-                    Scan for Secrets
-                  </IconButton>
-                  <Button onClick={handleClear} variant="outline" size="icon" className="h-12 w-12">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </Card>
-            </div>
+                  <Separator className="mb-8 bg-border/40" />
+
+                  <div className="flex gap-3">
+                    <IconButton onClick={handleScan} variant="key" className="flex-1" size="default">
+                      Start Security Scan
+                    </IconButton>
+                    <Button onClick={handleClear} variant="outline" size="icon" className="h-12 w-12 border-border/40 hover:bg-muted/50">
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            </>
           )}
 
           {viewMode === "results" && (
