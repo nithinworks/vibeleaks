@@ -275,9 +275,9 @@ const Index = () => {
                   color="hsl(12 78% 55% / 0.35)"
                   backgroundColor="hsl(48 25% 93%)"
                   className="w-full h-full"
-                  blurIntensity="0.9em"
+                  blurIntensity="0.2em"
                   duration={80}
-                  density={1}
+                  density={2}
                 />
               </div>
 
