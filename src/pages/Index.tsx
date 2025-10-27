@@ -270,10 +270,13 @@ const Index = () => {
           {viewMode === "input" && (
             <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center overflow-hidden">
               {/* Falling Pattern Animation - Light Mode Only */}
-              <div className="absolute inset-0 pointer-events-none overflow-hidden light:block dark:hidden">
+              <div className="absolute inset-0 pointer-events-none overflow-hidden dark:hidden">
                 <FallingPattern 
-                  className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent_20%,var(--background)_80%)]"
-                  blurIntensity="0.5em"
+                  color="hsl(12 78% 55%)"
+                  backgroundColor="hsl(48 25% 93%)"
+                  className="h-full"
+                  blurIntensity="0.8em"
+                  duration={100}
                 />
               </div>
 
