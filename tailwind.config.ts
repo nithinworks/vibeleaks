@@ -17,6 +17,7 @@ export default {
         sans: ['Geist', 'system-ui', 'sans-serif'],
         mono: ['Geist', 'system-ui', 'sans-serif'],
         display: ['Geist', 'system-ui', 'sans-serif'],
+        handwritten: ['Caveat', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -95,10 +96,19 @@ export default {
             height: "0",
           },
         },
+        "draw-arrow": {
+          from: {
+            strokeDashoffset: "100",
+          },
+          to: {
+            strokeDashoffset: "0",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "draw-arrow": "draw-arrow 2s ease-in-out infinite",
       },
     },
   },
