@@ -127,23 +127,23 @@ export const TerminalOutput = ({
                       </p>
 
                       <div className="space-y-2">
-                        <div className="rounded-md overflow-hidden border border-border/50">
-                          <div className="bg-muted/50 px-2.5 py-1 border-b border-border/50">
-                            <p className="text-xs text-muted-foreground font-medium">
+                        <div className="rounded-md overflow-hidden border border-border/60">
+                          <div className="bg-muted/70 dark:bg-muted/40 px-2.5 py-1.5 border-b border-border/60">
+                            <p className="text-xs font-semibold text-foreground/70">
                               Matched snippet
                             </p>
                           </div>
-                          <code className="text-xs font-mono bg-muted/30 px-2.5 py-2 block overflow-x-auto">
+                          <code className="text-xs font-mono bg-code-bg text-code-text px-2.5 py-2.5 block overflow-x-auto leading-relaxed">
                             {match.snippet}
                           </code>
                         </div>
-                        <div className="rounded-md overflow-hidden border border-border/50">
-                          <div className="bg-muted/50 px-2.5 py-1 border-b border-border/50">
-                            <p className="text-xs text-muted-foreground font-medium">
+                        <div className="rounded-md overflow-hidden border border-border/60">
+                          <div className="bg-muted/70 dark:bg-muted/40 px-2.5 py-1.5 border-b border-border/60">
+                            <p className="text-xs font-semibold text-foreground/70">
                               Full line context
                             </p>
                           </div>
-                          <code className="text-xs font-mono bg-muted/30 px-2.5 py-2 block overflow-x-auto">
+                          <code className="text-xs font-mono bg-code-bg text-code-text px-2.5 py-2.5 block overflow-x-auto leading-relaxed">
                             {match.line}
                           </code>
                         </div>
@@ -154,10 +154,10 @@ export const TerminalOutput = ({
               })}
             </div>}
 
-          {!isScanning && hasScanCompleted && matches.length === 0 && <Card className="p-6 border-primary/20 bg-primary/5">
-              <div className="flex items-center gap-3 text-primary">
+          {!isScanning && hasScanCompleted && matches.length === 0 && <Card className="p-6 border-success/30 bg-success/10 dark:bg-success/5">
+              <div className="flex items-center gap-3 text-success">
                 <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
-                <span className="text-sm font-normal">No secrets detected</span>
+                <span className="text-sm font-medium">No secrets detected</span>
               </div>
             </Card>}
 
