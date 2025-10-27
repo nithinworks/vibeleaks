@@ -2,7 +2,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { AlertCircle, Loader2, Shield, ShieldAlert, AlertTriangle, Info, FileText, ShieldCheck } from "lucide-react";
+import { AlertCircle, Loader2, Shield, ShieldAlert, AlertTriangle, Info, FileText, ShieldCheck, FileX } from "lucide-react";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 
@@ -61,6 +61,27 @@ export const TerminalOutput = ({
   return <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
         <div className="space-y-2.5 pr-4">
+          {/* Scan Configuration Info */}
+          {hasScanCompleted && (
+            <Card className="p-3 border-border/40 bg-muted/20">
+              <div className="flex items-start gap-3">
+                <Info className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                <div className="flex-1 space-y-1.5 text-xs text-muted-foreground">
+                  <p>
+                    <span className="font-medium text-foreground">206 patterns</span> scanned across 
+                    <span className="font-medium text-foreground"> 80+ services</span> (AWS, GitHub, Stripe, Google, etc.)
+                  </p>
+                  <div className="flex items-start gap-1.5">
+                    <FileX className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                    <p className="flex-1">
+                      <span className="font-medium text-foreground">Excluded:</span> Build artifacts (dist, node_modules), 
+                      lock files, media files, test/demo files, and binary formats
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          )}
           {isScanning && progress && <Card className="p-4 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
