@@ -271,48 +271,53 @@ const Index = () => {
             <>
               {/* Falling Pattern Animation - Full Viewport - Light Mode Only */}
               <div className="fixed inset-0 pointer-events-none dark:hidden" style={{ zIndex: 0 }}>
-                <FallingPattern 
+                <FallingPattern
                   color="hsl(12 78% 55% / 0.35)"
                   backgroundColor="hsl(48 25% 93%)"
                   className="w-full h-full"
-                  blurIntensity="0.2em"
+                  blurIntensity="0.9em"
                   duration={80}
-                  density={2}
+                  density={1}
                 />
               </div>
 
-              <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center" style={{ zIndex: 1 }}>
+              <div
+                className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center"
+                style={{ zIndex: 1 }}
+              >
                 {/* Content */}
                 <div className="relative max-w-2xl mx-auto space-y-8">
                   {/* Chrome Badge */}
                   <div className="flex justify-center mb-4">
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-primary-hover/10 border border-primary-hover/20">
-                      <svg 
-                        viewBox="0 0 24 24" 
-                        className="w-4 h-4 text-primary-hover" 
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="w-4 h-4 text-primary-hover"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
                       >
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                       </svg>
-                      <span className="text-xs font-medium text-primary-hover">For better experience use Chrome browser</span>
+                      <span className="text-xs font-medium text-primary-hover">
+                        For better experience use Chrome browser
+                      </span>
                     </div>
                   </div>
 
-                <div className="space-y-3">
-                  <h2 className="font-display font-medium tracking-tight text-4xl">
-                    Sniff Out <span className="text-primary-hover font-semibold">Secrets</span>. Locally. Fast.
-                  </h2>
-                  <p className="text-muted-foreground max-w-lg mx-auto text-sm px-[58px]">
-                    Scan your code instantly for secrets - Simple tool built for vibe coders who value speed and
-                    security.
-                  </p>
-                </div>
+                  <div className="space-y-3">
+                    <h2 className="font-display font-medium tracking-tight text-4xl">
+                      Sniff Out <span className="text-primary-hover font-semibold">Secrets</span>. Locally. Fast.
+                    </h2>
+                    <p className="text-muted-foreground max-w-lg mx-auto text-sm px-[58px]">
+                      Scan your code instantly for secrets - Simple tool built for vibe coders who value speed and
+                      security.
+                    </p>
+                  </div>
 
-                <div className="flex flex-col items-center gap-4 pt-4">
-                  <FileUpload onFilesSelected={handleFilesSelected} size="lg" />
-                </div>
+                  <div className="flex flex-col items-center gap-4 pt-4">
+                    <FileUpload onFilesSelected={handleFilesSelected} size="lg" />
+                  </div>
                 </div>
               </div>
             </>
