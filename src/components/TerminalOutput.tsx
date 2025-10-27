@@ -33,10 +33,10 @@ const severityConfig = {
   },
   low: {
     icon: Info,
-    color: "text-blue-600 dark:text-blue-400",
-    bgColor: "bg-blue-500/10 dark:bg-blue-500/5",
-    borderColor: "border-blue-500/30",
-    badgeColor: "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-800",
+    color: "text-muted-foreground",
+    bgColor: "bg-muted/20",
+    borderColor: "border-border/40",
+    badgeColor: "bg-muted/50 text-foreground/70 border-border/50",
     label: "Low"
   }
 };
@@ -154,7 +154,7 @@ export const TerminalOutput = ({
                               Matched snippet
                             </p>
                           </div>
-                          <code className="text-xs font-mono bg-code-bg text-code-text px-2.5 py-2.5 block overflow-x-auto leading-relaxed">
+                          <code className="text-xs font-mono bg-code-bg text-code-text px-2.5 py-2.5 block overflow-x-auto break-all leading-relaxed">
                             {match.snippet}
                           </code>
                         </div>
@@ -164,7 +164,7 @@ export const TerminalOutput = ({
                               Full line context
                             </p>
                           </div>
-                          <code className="text-xs font-mono bg-code-bg text-code-text px-2.5 py-2.5 block overflow-x-auto leading-relaxed">
+                          <code className="text-xs font-mono bg-code-bg text-code-text px-2.5 py-2.5 block overflow-x-auto break-all leading-relaxed">
                             {match.line}
                           </code>
                         </div>
