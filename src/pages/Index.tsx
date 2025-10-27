@@ -272,12 +272,12 @@ const Index = () => {
               {/* Falling Pattern Animation - Full Viewport - Light Mode Only */}
               <div className="fixed inset-0 pointer-events-none dark:hidden" style={{ zIndex: 0 }}>
                 <FallingPattern 
-                  color="hsl(12 78% 55% / 0.4)"
+                  color="hsl(12 78% 55% / 0.35)"
                   backgroundColor="hsl(48 25% 93%)"
                   className="w-full h-full"
-                  blurIntensity="0.3em"
+                  blurIntensity="0.2em"
                   duration={80}
-                  density={1.5}
+                  density={2}
                 />
               </div>
 
@@ -312,16 +312,7 @@ const Index = () => {
 
                 <div className="flex flex-col items-center gap-4 pt-4">
                   <FileUpload onFilesSelected={handleFilesSelected} size="lg" />
-                  <button
-                    onClick={() => {
-                      setShowManualInput(true);
-                      setViewMode("ready");
-                    }}
-                    className="text-xs text-muted-foreground hover:text-primary transition-colors font-light"
-                  >
-                    or enter code manually
-                  </button>
-                 </div>
+                </div>
                 </div>
               </div>
             </>
@@ -336,17 +327,7 @@ const Index = () => {
                 </div>
 
                 <div className="mb-6 max-h-[400px] overflow-auto border border-border/50 rounded-lg">
-                  {isDirectory ? (
-                    <FileTree files={files} />
-                  ) : showManualInput ? (
-                    <div className="h-[400px]">
-                      <CodeEditor value={code} onChange={setCode} />
-                    </div>
-                  ) : (
-                    <div className="h-[400px]">
-                      <CodeEditor value={code} onChange={setCode} />
-                    </div>
-                  )}
+                  <FileTree files={files} />
                 </div>
 
                 <Separator className="mb-6" />
