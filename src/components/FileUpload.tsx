@@ -17,6 +17,16 @@ export const FileUpload = ({ onFilesSelected, size = "default", className = "" }
 
   const handleDirectorySelect = async () => {
     try {
+      // Check if the File System Access API is supported
+      if (!('showDirectoryPicker' in window)) {
+        toast({
+          title: "Browser not supported",
+          description: "Your browser doesn't support folder selection. Please use Chrome, Edge, or another Chromium-based browser for the best experience.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       // @ts-ignore - File System Access API
       const handle = await window.showDirectoryPicker();
       const files: { name: string; content: string }[] = [];
@@ -75,9 +85,16 @@ export const FileUpload = ({ onFilesSelected, size = "default", className = "" }
       });
     } catch (error: any) {
       if (error.name !== 'AbortError') {
+        // Provide user-friendly error messages
+        let errorMessage = error.message;
+        
+        if (error.message?.includes('showDirectoryPicker') || error.message?.includes('Cross origin')) {
+          errorMessage = "Your browser doesn't support folder selection. Please use Chrome, Edge, or another Chromium-based browser.";
+        }
+        
         toast({
-          title: "Error loading directory",
-          description: error.message,
+          title: "Unable to load directory",
+          description: errorMessage,
           variant: "destructive",
         });
       }
