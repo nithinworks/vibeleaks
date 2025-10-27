@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -10,9 +10,11 @@ import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IconButton } from "@/components/IconButton";
-import PixelBlast from "@/components/ui/PixelBlast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
+
+// Lazy load heavy Three.js component - only load when needed
+const PixelBlast = lazy(() => import("@/components/ui/PixelBlast"));
 const Index = () => {
   const [code, setCode] = useState("");
   const [files, setFiles] = useState<
@@ -37,83 +39,65 @@ const Index = () => {
   const workerRef = useRef<Worker>();
   const { toast } = useToast();
 
-  // Filter matches based on severity
-  const filteredMatches = severityFilter === "all" ? matches : matches.filter((m) => m.severity === severityFilter);
+  // Memoize filtered matches to avoid recalculation on every render
+  const filteredMatches = useMemo(
+    () => (severityFilter === "all" ? matches : matches.filter((m) => m.severity === severityFilter)),
+    [matches, severityFilter]
+  );
 
-  // Count by severity
-  const severityCounts = {
-    critical: matches.filter((m) => m.severity === "critical").length,
-    high: matches.filter((m) => m.severity === "high").length,
-    medium: matches.filter((m) => m.severity === "medium").length,
-    low: matches.filter((m) => m.severity === "low").length,
-  };
-  useEffect(() => {
-    // Lazy initialize Web Worker only when needed
-    const initWorker = () => {
-      if (!workerRef.current) {
-        workerRef.current = new Worker(new URL("../workers/scanner.worker.ts", import.meta.url), {
-          type: "module",
+  // Memoize severity counts to avoid recalculation on every render
+  const severityCounts = useMemo(
+    () => ({
+      critical: matches.filter((m) => m.severity === "critical").length,
+      high: matches.filter((m) => m.severity === "high").length,
+      medium: matches.filter((m) => m.severity === "medium").length,
+      low: matches.filter((m) => m.severity === "low").length,
+    }),
+    [matches]
+  );
+  // Memoize worker message handler to avoid recreating on every render
+  const handleWorkerMessage = useCallback(
+    (e: MessageEvent) => {
+      if (e.data.type === "progress") {
+        setProgress(e.data);
+      } else if (e.data.type === "result") {
+        const { matches: foundMatches, filesScanned, totalLines, duration } = e.data;
+        setMatches(foundMatches);
+        setLogs((prev) => [
+          ...prev,
+          `Scan complete: ${filesScanned} files, ${totalLines} lines in ${duration.toFixed(2)}ms`,
+          `Found ${foundMatches.length} potential secret(s)`,
+        ]);
+        setIsScanning(false);
+        setHasScanCompleted(true);
+        setProgress(undefined);
+        toast({
+          title: "Scan complete",
+          description: `Found ${foundMatches.length} potential secret(s)`,
+          variant: foundMatches.length > 0 ? "destructive" : "default",
         });
-        workerRef.current.onmessage = (e) => {
-          if (e.data.type === "progress") {
-            setProgress(e.data);
-          } else if (e.data.type === "result") {
-            const { matches: foundMatches, filesScanned, totalLines, duration } = e.data;
-            setMatches(foundMatches);
-            setLogs((prev) => [
-              ...prev,
-              `Scan complete: ${filesScanned} files, ${totalLines} lines in ${duration.toFixed(2)}ms`,
-              `Found ${foundMatches.length} potential secret(s)`,
-            ]);
-            setIsScanning(false);
-            setHasScanCompleted(true);
-            setProgress(undefined);
-            toast({
-              title: "Scan complete",
-              description: `Found ${foundMatches.length} potential secret(s)`,
-              variant: foundMatches.length > 0 ? "destructive" : "default",
-            });
-          }
-        };
       }
-    };
+    },
+    [toast]
+  );
 
-    // Don't initialize worker on mount, wait until first scan
-    return () => {
-      workerRef.current?.terminate();
-    };
-  }, [toast]);
-
-  // Initialize worker before scanning
-  const ensureWorkerReady = () => {
+  // Initialize worker lazily only when first scan is triggered
+  const ensureWorkerReady = useCallback(() => {
     if (!workerRef.current) {
       workerRef.current = new Worker(new URL("../workers/scanner.worker.ts", import.meta.url), {
         type: "module",
       });
-      workerRef.current.onmessage = (e) => {
-        if (e.data.type === "progress") {
-          setProgress(e.data);
-        } else if (e.data.type === "result") {
-          const { matches: foundMatches, filesScanned, totalLines, duration } = e.data;
-          setMatches(foundMatches);
-          setLogs((prev) => [
-            ...prev,
-            `Scan complete: ${filesScanned} files, ${totalLines} lines in ${duration.toFixed(2)}ms`,
-            `Found ${foundMatches.length} potential secret(s)`,
-          ]);
-          setIsScanning(false);
-          setHasScanCompleted(true);
-          setProgress(undefined);
-          toast({
-            title: "Scan complete",
-            description: `Found ${foundMatches.length} potential secret(s)`,
-            variant: foundMatches.length > 0 ? "destructive" : "default",
-          });
-        }
-      };
+      workerRef.current.onmessage = handleWorkerMessage;
     }
-  };
-  const handleScan = () => {
+  }, [handleWorkerMessage]);
+
+  // Cleanup worker on unmount
+  useEffect(() => {
+    return () => {
+      workerRef.current?.terminate();
+    };
+  }, []);
+  const handleScan = useCallback(() => {
     const filesToScan =
       files.length > 0
         ? files
@@ -152,8 +136,8 @@ const Index = () => {
       type: "scan",
       files: filesToScan,
     });
-  };
-  const handleCancel = () => {
+  }, [code, files, ensureWorkerReady, toast]);
+  const handleCancel = useCallback(() => {
     workerRef.current?.postMessage({
       type: "cancel",
     });
@@ -165,8 +149,8 @@ const Index = () => {
       title: "Scan cancelled",
       description: "The scanning process has been stopped",
     });
-  };
-  const handleClear = () => {
+  }, [toast]);
+  const handleClear = useCallback(() => {
     setCode("");
     setFiles([]);
     setIsDirectory(false);
@@ -177,8 +161,8 @@ const Index = () => {
     setSeverityFilter("all");
     setShowManualInput(false);
     setViewMode("input");
-  };
-  const handleExportJSON = () => {
+  }, []);
+  const handleExportJSON = useCallback(() => {
     const exportData = {
       timestamp: new Date().toISOString(),
       summary: {
@@ -205,8 +189,8 @@ const Index = () => {
       title: "Export successful",
       description: "Scan results exported as JSON",
     });
-  };
-  const handleFilesSelected = (
+  }, [matches, severityCounts, toast]);
+  const handleFilesSelected = useCallback((
     selectedFiles: {
       name: string;
       content: string;
@@ -230,7 +214,7 @@ const Index = () => {
       setCode("");
     }
     setLogs((prev) => [...prev, `Loaded ${selectedFiles.length} file(s)`]);
-  };
+  }, []);
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -269,24 +253,26 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           {viewMode === "input" && (
             <>
-              {/* PixelBlast Pattern Animation - Full Viewport - Light Mode Only */}
+              {/* PixelBlast Pattern Animation - Full Viewport - Light Mode Only - Lazy Loaded */}
               <div className="fixed inset-0 pointer-events-none dark:hidden" style={{ zIndex: 0, opacity: 0.3 }}>
-                <PixelBlast
-                  variant="circle"
-                  pixelSize={4}
-                  color="#E07A5F"
-                  patternScale={2.5}
-                  patternDensity={1.1}
-                  pixelSizeJitter={0.3}
-                  enableRipples={true}
-                  rippleSpeed={0.4}
-                  rippleThickness={0.12}
-                  rippleIntensityScale={1.2}
-                  speed={0.5}
-                  edgeFade={0.3}
-                  transparent={true}
-                  className="w-full h-full"
-                />
+                <Suspense fallback={null}>
+                  <PixelBlast
+                    variant="circle"
+                    pixelSize={4}
+                    color="#E07A5F"
+                    patternScale={2.5}
+                    patternDensity={1.1}
+                    pixelSizeJitter={0.3}
+                    enableRipples={true}
+                    rippleSpeed={0.4}
+                    rippleThickness={0.12}
+                    rippleIntensityScale={1.2}
+                    speed={0.5}
+                    edgeFade={0.3}
+                    transparent={true}
+                    className="w-full h-full"
+                  />
+                </Suspense>
               </div>
 
               <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-240px)] text-center" style={{ zIndex: 1 }}>
