@@ -364,16 +364,16 @@ const Index = () => {
 
           {viewMode === "results" && (
             <div className="flex flex-col h-[calc(100vh-240px)]">
-              <Card className="p-8 flex flex-col flex-1 border-border/50 shadow-sm">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-medium">Scan Results</h2>
+              <Card className="p-6 flex flex-col flex-1 border-border/40 shadow-lg rounded-xl bg-card/50 backdrop-blur-sm">
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="text-xl font-semibold tracking-tight">Scan Results</h2>
                   <div className="flex items-center gap-2">
                     {isScanning ? (
-                      <Button onClick={handleCancel} variant="destructive" size="sm" className="h-9">
+                      <Button onClick={handleCancel} variant="destructive" size="sm" className="h-9 rounded-lg">
                         Cancel Scan
                       </Button>
                     ) : (
-                      <Button onClick={handleClear} variant="outline" size="sm" className="h-9">
+                      <Button onClick={handleClear} variant="outline" size="sm" className="h-9 rounded-lg border-border/50 hover:bg-muted/80">
                         <Search className="h-3.5 w-3.5 mr-2" />
                         New Scan
                       </Button>
@@ -384,7 +384,7 @@ const Index = () => {
                           value={severityFilter}
                           onValueChange={(value) => setSeverityFilter(value as SeverityLevel | "all")}
                         >
-                          <SelectTrigger className="w-[140px] h-9">
+                          <SelectTrigger className="w-[140px] h-9 rounded-lg border-border/50">
                             <Filter className="h-3.5 w-3.5 mr-2" />
                             <SelectValue />
                           </SelectTrigger>
@@ -396,9 +396,9 @@ const Index = () => {
                             <SelectItem value="low">Low ({severityCounts.low})</SelectItem>
                           </SelectContent>
                         </Select>
-                        <Button onClick={handleExportJSON} variant="outline" size="sm" className="h-9">
+                        <Button onClick={handleExportJSON} variant="outline" size="sm" className="h-9 rounded-lg border-border/50 hover:bg-muted/80">
                           <Download className="h-3.5 w-3.5 mr-2" />
-                          Export JSON
+                          Export
                         </Button>
                       </>
                     )}
