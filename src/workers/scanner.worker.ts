@@ -112,6 +112,15 @@ const enhancedAllowlistPatterns = [
   // Color codes
   /^#[0-9a-f]{3,8}$/i,
   
+  // Environment variable references (NOT actual secrets)
+  /process\.env\.[A-Z_][A-Z0-9_]*/i,
+  /import\.meta\.env\.[A-Z_][A-Z0-9_]*/i,
+  /Deno\.env\.get\(['"]/i,
+  /\$env\.[A-Z_][A-Z0-9_]*/i,
+  /\${[A-Z_][A-Z0-9_]*}/,
+  /%[A-Z_][A-Z0-9_]*%/,
+  /env\.[A-Z_][A-Z0-9_]*/i,
+  
   // Common placeholder/example values
   /AKIA[0-9A-Z]{16}EXAMPLE/i,
   /your[_-]?(api[_-]?)?key[_-]?here/i,
@@ -134,7 +143,7 @@ const enhancedAllowlistPatterns = [
   /^(localhost|127\.0\.0\.1)/,
   /^https?:\/\//,
   
-// Very short strings (likely not secrets)
+  // Very short strings (likely not secrets)
   /^.{1,6}$/,
 ];
 
@@ -390,9 +399,12 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
             }
 
             // Entropy check: If rule has entropy threshold, calculate and verify
+            // Improved entropy thresholds for better accuracy
             if (rule.entropy !== undefined) {
               const entropy = calculateEntropy(matchedText);
-              if (entropy < rule.entropy) {
+              // Use stricter entropy thresholds for generic rules
+              const entropyThreshold = rule.isGeneric ? rule.entropy + 0.5 : rule.entropy;
+              if (entropy < entropyThreshold) {
                 continue; // Skip low-entropy matches
               }
             }
