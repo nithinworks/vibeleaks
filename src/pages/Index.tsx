@@ -23,6 +23,11 @@ const Index = () => {
   const [severityFilter, setSeverityFilter] = useState<SeverityLevel | "all">("all");
   const [showManualInput, setShowManualInput] = useState(false);
   const [viewMode, setViewMode] = useState<"input" | "ready" | "results">("input");
+  const [scanStats, setScanStats] = useState<{ filesScanned: number; totalLines: number; duration: number }>({
+    filesScanned: 0,
+    totalLines: 0,
+    duration: 0,
+  });
   const workerRef = useRef<Worker>();
   const { toast } = useToast();
 
@@ -51,6 +56,7 @@ const Index = () => {
       } else if (e.data.type === "result") {
         const { matches: foundMatches, filesScanned, totalLines, duration } = e.data;
         setMatches(foundMatches);
+        setScanStats({ filesScanned, totalLines, duration });
         setLogs((prev) => [
           ...prev,
           `Scan complete: ${filesScanned} files, ${totalLines} lines in ${duration.toFixed(2)}ms`,
@@ -146,6 +152,7 @@ const Index = () => {
     setSeverityFilter("all");
     setShowManualInput(false);
     setViewMode("input");
+    setScanStats({ filesScanned: 0, totalLines: 0, duration: 0 });
   }, []);
 
   const handleExportJSON = useCallback(() => {
@@ -230,6 +237,7 @@ const Index = () => {
               progress={progress}
               severityFilter={severityFilter}
               severityCounts={severityCounts}
+              scanStats={scanStats}
               onScan={handleScan}
               onCancel={handleCancel}
               onClear={handleClear}

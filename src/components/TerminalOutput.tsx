@@ -14,6 +14,7 @@ import {
   FileX,
 } from "lucide-react";
 import { TextShimmer } from "@/components/ui/text-shimmer";
+import { ScanSummaryCard } from "@/components/scanner/ScanSummaryCard";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 
 const severityConfig = {
@@ -62,12 +63,33 @@ interface TerminalOutputProps {
     total: number;
     filename: string;
   };
+  severityCounts: {
+    critical: number;
+    high: number;
+    medium: number;
+    low: number;
+  };
+  scanStats: {
+    filesScanned: number;
+    totalLines: number;
+    duration: number;
+  };
 }
-export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, progress }: TerminalOutputProps) => {
+export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, progress, severityCounts, scanStats }: TerminalOutputProps) => {
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
         <div className="space-y-2 sm:space-y-2.5 pr-2 sm:pr-4">
+          {/* Scan Summary Card */}
+          {hasScanCompleted && scanStats.filesScanned > 0 && (
+            <ScanSummaryCard
+              filesScanned={scanStats.filesScanned}
+              totalLines={scanStats.totalLines}
+              duration={scanStats.duration}
+              severityCounts={severityCounts}
+            />
+          )}
+          
           {/* Scan Configuration Info */}
           {hasScanCompleted && (
             <Card className="p-2.5 sm:p-3 border-border/40 bg-muted/20">

@@ -27,6 +27,11 @@ interface ScannerInterfaceProps {
     medium: number;
     low: number;
   };
+  scanStats: {
+    filesScanned: number;
+    totalLines: number;
+    duration: number;
+  };
   onScan: () => void;
   onCancel: () => void;
   onClear: () => void;
@@ -45,6 +50,7 @@ export const ScannerInterface = ({
   progress,
   severityFilter,
   severityCounts,
+  scanStats,
   onScan,
   onCancel,
   onClear,
@@ -171,6 +177,8 @@ export const ScannerInterface = ({
                 isScanning={isScanning}
                 hasScanCompleted={hasScanCompleted}
                 progress={progress}
+                severityCounts={severityCounts}
+                scanStats={scanStats}
               />
             </div>
           </Card>
