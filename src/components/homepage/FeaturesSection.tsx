@@ -13,10 +13,10 @@ export const FeaturesSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Feature 1 */}
-          <Card className="p-6 border-border/30 backdrop-blur-sm bg-card/50 hover:border-primary/40 transition-colors">
+          <Card className="p-6 border-border/30 backdrop-blur-sm bg-card/50 hover:border-primary-hover/40 transition-colors">
             <div className="mb-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <div className="w-12 h-12 rounded-lg bg-primary-hover/10 flex items-center justify-center">
+                <svg className="w-6 h-6 text-primary-hover" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
@@ -28,10 +28,10 @@ export const FeaturesSection = () => {
           </Card>
 
           {/* Feature 2 */}
-          <Card className="p-6 border-border/30 backdrop-blur-sm bg-card/50 hover:border-primary/40 transition-colors">
+          <Card className="p-6 border-border/30 backdrop-blur-sm bg-card/50 hover:border-primary-hover/40 transition-colors">
             <div className="mb-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <div className="w-12 h-12 rounded-lg bg-primary-hover/10 flex items-center justify-center">
+                <svg className="w-6 h-6 text-primary-hover" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
@@ -43,10 +43,10 @@ export const FeaturesSection = () => {
           </Card>
 
           {/* Feature 3 */}
-          <Card className="p-6 border-border/30 backdrop-blur-sm bg-card/50 hover:border-primary/40 transition-colors">
+          <Card className="p-6 border-border/30 backdrop-blur-sm bg-card/50 hover:border-primary-hover/40 transition-colors">
             <div className="mb-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <div className="w-12 h-12 rounded-lg bg-primary-hover/10 flex items-center justify-center">
+                <svg className="w-6 h-6 text-primary-hover" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
