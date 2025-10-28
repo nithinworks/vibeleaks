@@ -3,9 +3,8 @@ import { useToast } from "@/hooks/use-toast";
 import { MobileWarning } from "@/components/MobileWarning";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/homepage/HeroSection";
-import { StatsBar } from "@/components/homepage/StatsBar";
 import { FeaturesSection } from "@/components/homepage/FeaturesSection";
-import { HowItWorksSection } from "@/components/homepage/HowItWorksSection";
+import { ProjectFailuresSection } from "@/components/homepage/ProjectFailuresSection";
 import { UseCasesSection } from "@/components/homepage/UseCasesSection";
 import { SecurityTipsSection } from "@/components/homepage/SecurityTipsSection";
 import { Footer } from "@/components/homepage/Footer";
@@ -211,9 +210,8 @@ const Index = () => {
           {viewMode === "input" && (
             <>
               <HeroSection onFilesSelected={handleFilesSelected} />
-              <StatsBar />
               <FeaturesSection />
-              <HowItWorksSection />
+              <ProjectFailuresSection />
               <UseCasesSection />
               <SecurityTipsSection />
               <Footer />
