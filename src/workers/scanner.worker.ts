@@ -1,4 +1,10 @@
-import type { ScanRule, AllowList, ScanMatch } from '../types/scanner';
+import type { 
+  ScanRule, 
+  AllowList, 
+  ScanMatch,
+  ScanProgressMessage,
+  ScanResultMessage
+} from '../types/scanner';
 
 // Lazy load rules config only when needed
 let rulesConfig: any = null;
@@ -37,21 +43,6 @@ const YIELD_INTERVAL = 50; // Yield control every 50ms
 
 // Cancellation flag
 let isCancelled = false;
-
-interface ProgressMessage {
-  type: 'progress';
-  current: number;
-  total: number;
-  filename: string;
-}
-
-interface ResultMessage {
-  type: 'result';
-  matches: ScanMatch[];
-  filesScanned: number;
-  totalLines: number;
-  duration: number;
-}
 
 // Calculate Shannon entropy for a string
 function calculateEntropy(str: string): number {
@@ -258,7 +249,7 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
         filesScanned: 0,
         totalLines: 0,
         duration: performance.now() - startTime,
-      } as ResultMessage);
+      } as ScanResultMessage);
       return;
     }
     const file = files[i];
@@ -269,7 +260,7 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
       current: i + 1,
       total: files.length,
       filename: file.name,
-    } as ProgressMessage);
+    } as ScanProgressMessage);
 
     // Skip build output folders and common false positive files
     const excludePatterns = [
@@ -330,7 +321,7 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
         current: i + (chunkIndex / totalChunks),
         total: files.length,
         filename: `${file.name} (${Math.round((chunkIndex / totalChunks) * 100)}%)`,
-      } as ProgressMessage);
+      } as ScanProgressMessage);
 
       for (let lineNum = startLine; lineNum < endLine; lineNum++) {
       const line = lines[lineNum];
@@ -470,7 +461,7 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
     filesScanned: files.length,
     totalLines,
     duration,
-  } as ResultMessage);
+  } as ScanResultMessage);
 };
 
 export {};

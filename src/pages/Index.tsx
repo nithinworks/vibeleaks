@@ -9,7 +9,7 @@ import { UseCasesSection } from "@/components/homepage/UseCasesSection";
 import { SecurityTipsSection } from "@/components/homepage/SecurityTipsSection";
 import { Footer } from "@/components/homepage/Footer";
 import { ScannerInterface } from "@/components/scanner/ScannerInterface";
-import type { ScanMatch, SeverityLevel } from "@/types/scanner";
+import type { ScanMatch, SeverityLevel, ScanProgressMessage, ScanResultMessage } from "@/types/scanner";
 
 const Index = () => {
   const [code, setCode] = useState("");
@@ -50,7 +50,7 @@ const Index = () => {
 
   // Memoize worker message handler to avoid recreating on every render
   const handleWorkerMessage = useCallback(
-    (e: MessageEvent) => {
+    (e: MessageEvent<ScanProgressMessage | ScanResultMessage>) => {
       if (e.data.type === "progress") {
         setProgress(e.data);
       } else if (e.data.type === "result") {

@@ -36,3 +36,19 @@ export interface ScanResult {
   totalLines: number;
   duration: number;
 }
+
+// Worker message types
+export interface ScanProgressMessage {
+  type: 'progress';
+  current: number;
+  total: number;
+  filename: string;
+}
+
+export interface ScanResultMessage {
+  type: 'result';
+  matches: ScanMatch[];
+  filesScanned: number;
+  totalLines: number;
+  duration: number;
+}
