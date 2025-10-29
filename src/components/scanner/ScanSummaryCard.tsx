@@ -17,27 +17,11 @@ export const ScanSummaryCard = ({ filesScanned, totalLines, duration, severityCo
   const totalFindings = severityCounts.critical + severityCounts.high + severityCounts.medium + severityCounts.low;
 
   return (
-    <Card className="p-4 sm:p-5 border-border/30 bg-card/50 backdrop-blur-sm">
+    <Card className="p-4 sm:p-5 border-border/30 bg-card/50 backdrop-blur-sm" style={{ backgroundColor: 'hsl(var(--primary) / 0.02)' }}>
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-foreground">Scan Summary</h3>
-        </div>
-
-        {/* Scanner Info */}
-        <div className="space-y-2 text-xs text-muted-foreground">
-          <div className="flex items-start gap-2">
-            <Info className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
-            <span>
-              <strong>250+ patterns</strong> scanned across <strong>100+ services</strong> (Stripe, Google, Supabase, OpenAI, etc.)
-            </span>
-          </div>
-          <div className="flex items-start gap-2">
-            <FileWarning className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
-            <span>
-              <strong>Excluded:</strong> Build artifacts (dist, node_modules), lock files, media files, test/demo files, and binary formats
-            </span>
-          </div>
         </div>
 
         {/* Stats Grid */}
