@@ -16,6 +16,8 @@ import {
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import { ScanSummaryCard } from "@/components/scanner/ScanSummaryCard";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
+import { Highlight, themes } from "prism-react-renderer";
+import { useTheme } from "next-themes";
 
 const severityConfig = {
   critical: {
@@ -76,6 +78,8 @@ interface TerminalOutputProps {
   };
 }
 export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, progress, severityCounts, scanStats }: TerminalOutputProps) => {
+  const { theme } = useTheme();
+  
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
@@ -177,9 +181,26 @@ export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, pr
                             <div className="bg-muted/70 dark:bg-muted/40 px-2 sm:px-2.5 py-1 sm:py-1.5 border-b border-border/60">
                               <p className="text-[10px] sm:text-xs font-semibold text-foreground/70">Matched snippet</p>
                             </div>
-                            <code className="text-[10px] sm:text-xs font-mono bg-code-bg text-code-text px-2 sm:px-2.5 py-2 sm:py-2.5 block overflow-x-auto break-all leading-relaxed">
-                              {match.snippet}
-                            </code>
+                            <Highlight
+                              theme={theme === "dark" ? themes.vsDark : themes.vsLight}
+                              code={match.snippet}
+                              language="javascript"
+                            >
+                              {({ style, tokens, getLineProps, getTokenProps }) => (
+                                <pre
+                                  style={style}
+                                  className="text-[10px] sm:text-xs font-mono px-2 sm:px-2.5 py-2 sm:py-2.5 overflow-x-auto leading-relaxed m-0"
+                                >
+                                  {tokens.map((line, i) => (
+                                    <div key={i} {...getLineProps({ line })}>
+                                      {line.map((token, key) => (
+                                        <span key={key} {...getTokenProps({ token })} />
+                                      ))}
+                                    </div>
+                                  ))}
+                                </pre>
+                              )}
+                            </Highlight>
                           </div>
                           <div className="rounded-md overflow-hidden border border-border/60">
                             <div className="bg-muted/70 dark:bg-muted/40 px-2 sm:px-2.5 py-1 sm:py-1.5 border-b border-border/60">
@@ -187,9 +208,26 @@ export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, pr
                                 Full line context
                               </p>
                             </div>
-                            <code className="text-[10px] sm:text-xs font-mono bg-code-bg text-code-text px-2 sm:px-2.5 py-2 sm:py-2.5 block overflow-x-auto break-all leading-relaxed">
-                              {match.line}
-                            </code>
+                            <Highlight
+                              theme={theme === "dark" ? themes.vsDark : themes.vsLight}
+                              code={match.line}
+                              language="javascript"
+                            >
+                              {({ style, tokens, getLineProps, getTokenProps }) => (
+                                <pre
+                                  style={style}
+                                  className="text-[10px] sm:text-xs font-mono px-2 sm:px-2.5 py-2 sm:py-2.5 overflow-x-auto leading-relaxed m-0"
+                                >
+                                  {tokens.map((line, i) => (
+                                    <div key={i} {...getLineProps({ line })}>
+                                      {line.map((token, key) => (
+                                        <span key={key} {...getTokenProps({ token })} />
+                                      ))}
+                                    </div>
+                                  ))}
+                                </pre>
+                              )}
+                            </Highlight>
                           </div>
                         </div>
                       </div>
