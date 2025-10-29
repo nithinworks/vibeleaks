@@ -159,6 +159,9 @@ const Index = () => {
     const exportData = {
       timestamp: new Date().toISOString(),
       summary: {
+        filesScanned: scanStats.filesScanned,
+        totalLines: scanStats.totalLines,
+        duration: scanStats.duration,
         total: matches.length,
         critical: severityCounts.critical,
         high: severityCounts.high,
@@ -182,7 +185,81 @@ const Index = () => {
       title: "Export successful",
       description: "Scan results exported as JSON",
     });
-  }, [matches, severityCounts, toast]);
+  }, [matches, severityCounts, scanStats, toast]);
+
+  const handleExportMarkdown = useCallback(() => {
+    let markdown = `# ViB Leaks Security Scan Report\n\n`;
+    markdown += `**Generated:** ${new Date().toLocaleString()}\n\n`;
+    markdown += `## Summary\n\n`;
+    markdown += `- **Files Scanned:** ${scanStats.filesScanned}\n`;
+    markdown += `- **Total Lines:** ${scanStats.totalLines}\n`;
+    markdown += `- **Duration:** ${scanStats.duration}ms\n`;
+    markdown += `- **Total Findings:** ${matches.length}\n`;
+    markdown += `  - 🔴 Critical: ${severityCounts.critical}\n`;
+    markdown += `  - 🟠 High: ${severityCounts.high}\n`;
+    markdown += `  - 🟡 Medium: ${severityCounts.medium}\n`;
+    markdown += `  - 🔵 Low: ${severityCounts.low}\n\n`;
+
+    if (matches.length > 0) {
+      markdown += `## Findings\n\n`;
+      matches.forEach((match, index) => {
+        const severityEmoji = {
+          critical: '🔴',
+          high: '🟠',
+          medium: '🟡',
+          low: '🔵'
+        }[match.severity];
+        
+        markdown += `### ${index + 1}. ${severityEmoji} ${match.description}\n\n`;
+        markdown += `- **Severity:** ${match.severity.toUpperCase()}\n`;
+        markdown += `- **File:** \`${match.filename}\`\n`;
+        markdown += `- **Line:** ${match.lineNumber}\n`;
+        markdown += `- **Rule ID:** ${match.ruleId}\n\n`;
+        markdown += `**Code Snippet:**\n\`\`\`\n${match.snippet}\n\`\`\`\n\n`;
+        markdown += `---\n\n`;
+      });
+    }
+
+    const blob = new Blob([markdown], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `vibleaks-scan-${Date.now()}.md`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast({
+      title: "Export successful",
+      description: "Scan results exported as Markdown",
+    });
+  }, [matches, severityCounts, scanStats, toast]);
+
+  const handleExportCSV = useCallback(() => {
+    let csv = `"Severity","Rule ID","Description","Filename","Line Number","Code Snippet"\n`;
+    
+    matches.forEach((match) => {
+      const escapedDescription = match.description.replace(/"/g, '""');
+      const escapedFilename = match.filename.replace(/"/g, '""');
+      const escapedSnippet = match.snippet.replace(/"/g, '""').replace(/\n/g, ' ');
+      
+      csv += `"${match.severity}","${match.ruleId}","${escapedDescription}","${escapedFilename}","${match.lineNumber}","${escapedSnippet}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `vibleaks-scan-${Date.now()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast({
+      title: "Export successful",
+      description: "Scan results exported as CSV",
+    });
+  }, [matches, toast]);
 
   const handleFilesSelected = useCallback(
     (selectedFiles: { name: string; content: string }[], isDir: boolean) => {
@@ -227,22 +304,24 @@ const Index = () => {
 
           {(viewMode === "ready" || viewMode === "results") && (
             <ScannerInterface
-              viewMode={viewMode}
-              files={files}
-              logs={logs}
-              matches={matches}
-              filteredMatches={filteredMatches}
-              isScanning={isScanning}
-              hasScanCompleted={hasScanCompleted}
-              progress={progress}
-              severityFilter={severityFilter}
-              severityCounts={severityCounts}
-              scanStats={scanStats}
-              onScan={handleScan}
-              onCancel={handleCancel}
-              onClear={handleClear}
-              onExportJSON={handleExportJSON}
-              onSeverityFilterChange={setSeverityFilter}
+          viewMode={viewMode}
+          files={files}
+          logs={logs}
+          matches={matches}
+          filteredMatches={filteredMatches}
+          isScanning={isScanning}
+          hasScanCompleted={hasScanCompleted}
+          progress={progress}
+          severityFilter={severityFilter}
+          severityCounts={severityCounts}
+          scanStats={scanStats}
+          onScan={handleScan}
+          onCancel={handleCancel}
+          onClear={handleClear}
+          onExportJSON={handleExportJSON}
+          onExportMarkdown={handleExportMarkdown}
+          onExportCSV={handleExportCSV}
+          onSeverityFilterChange={setSeverityFilter}
             />
           )}
         </div>

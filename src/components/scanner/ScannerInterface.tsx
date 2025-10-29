@@ -2,10 +2,11 @@ import { lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Search, Trash2, Download, Filter } from "lucide-react";
+import { Search, Trash2, Download, Filter, FileJson, FileText, Sheet } from "lucide-react";
 import { TerminalOutput } from "@/components/TerminalOutput";
 import { FileTree } from "@/components/FileTree";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { IconButton } from "@/components/IconButton";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 
@@ -36,6 +37,8 @@ interface ScannerInterfaceProps {
   onCancel: () => void;
   onClear: () => void;
   onExportJSON: () => void;
+  onExportMarkdown: () => void;
+  onExportCSV: () => void;
   onSeverityFilterChange: (value: SeverityLevel | "all") => void;
 }
 
@@ -55,6 +58,8 @@ export const ScannerInterface = ({
   onCancel,
   onClear,
   onExportJSON,
+  onExportMarkdown,
+  onExportCSV,
   onSeverityFilterChange,
 }: ScannerInterfaceProps) => {
   return (
@@ -162,10 +167,28 @@ export const ScannerInterface = ({
                         <SelectItem value="low">Low ({severityCounts.low})</SelectItem>
                       </SelectContent>
                     </Select>
-                    <Button onClick={onExportJSON} variant="outline" size="sm" className="h-8 sm:h-9 rounded-lg border-border/50 hover:bg-muted/80 text-xs sm:text-sm">
-                      <Download className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1.5 sm:mr-2" />
-                      Export
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="h-8 sm:h-9 rounded-lg border-border/50 hover:bg-muted/80 text-xs sm:text-sm">
+                          <Download className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1.5 sm:mr-2" />
+                          Export
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48 bg-background border-border">
+                        <DropdownMenuItem onClick={onExportJSON} className="cursor-pointer">
+                          <FileJson className="h-4 w-4 mr-2" />
+                          Export as JSON
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={onExportMarkdown} className="cursor-pointer">
+                          <FileText className="h-4 w-4 mr-2" />
+                          Export as Markdown
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={onExportCSV} className="cursor-pointer">
+                          <Sheet className="h-4 w-4 mr-2" />
+                          Export as CSV
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </>
                 )}
               </div>
