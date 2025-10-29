@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { FileText, Hash, Clock, ShieldAlert, AlertTriangle, AlertCircle, Info } from "lucide-react";
+import { FileText, Hash, Clock, ShieldAlert, AlertTriangle, AlertCircle, Info, FileWarning } from "lucide-react";
 
 interface ScanSummaryCardProps {
   filesScanned: number;
@@ -16,32 +15,29 @@ interface ScanSummaryCardProps {
 
 export const ScanSummaryCard = ({ filesScanned, totalLines, duration, severityCounts }: ScanSummaryCardProps) => {
   const totalFindings = severityCounts.critical + severityCounts.high + severityCounts.medium + severityCounts.low;
-  
-  // Calculate risk score (0-100)
-  const riskScore = Math.min(
-    100,
-    severityCounts.critical * 10 + severityCounts.high * 5 + severityCounts.medium * 2 + severityCounts.low * 1
-  );
-
-  const getRiskLevel = (score: number) => {
-    if (score === 0) return { label: "Secure", color: "text-success", bgColor: "bg-success/10", borderColor: "border-success/30" };
-    if (score < 20) return { label: "Low Risk", color: "text-blue-600 dark:text-blue-400", bgColor: "bg-blue-500/10", borderColor: "border-blue-500/30" };
-    if (score < 50) return { label: "Medium Risk", color: "text-yellow-600 dark:text-yellow-400", bgColor: "bg-yellow-500/10", borderColor: "border-yellow-500/30" };
-    if (score < 80) return { label: "High Risk", color: "text-orange-600 dark:text-orange-400", bgColor: "bg-orange-500/10", borderColor: "border-orange-500/30" };
-    return { label: "Critical Risk", color: "text-red-600 dark:text-red-400", bgColor: "bg-red-500/10", borderColor: "border-red-500/30" };
-  };
-
-  const riskLevel = getRiskLevel(riskScore);
 
   return (
-    <Card className={`p-4 sm:p-5 border ${riskLevel.borderColor} ${riskLevel.bgColor}`}>
+    <Card className="p-4 sm:p-5 border-border/30 bg-card/50 backdrop-blur-sm">
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-foreground">Scan Summary</h3>
-          <Badge className={`${riskLevel.color} font-semibold px-2 py-1`} variant="outline">
-            {riskLevel.label}
-          </Badge>
+        </div>
+
+        {/* Scanner Info */}
+        <div className="space-y-2 text-xs text-muted-foreground">
+          <div className="flex items-start gap-2">
+            <Info className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+            <span>
+              <strong>250+ patterns</strong> scanned across <strong>100+ services</strong> (Stripe, Google, Supabase, OpenAI, etc.)
+            </span>
+          </div>
+          <div className="flex items-start gap-2">
+            <FileWarning className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+            <span>
+              <strong>Excluded:</strong> Build artifacts (dist, node_modules), lock files, media files, test/demo files, and binary formats
+            </span>
+          </div>
         </div>
 
         {/* Stats Grid */}
