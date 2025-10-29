@@ -1,4 +1,5 @@
 import { Separator } from "@/components/ui/separator";
+import vibeleaksLogo from "@/assets/vibeleaks-logo.webp";
 
 export const Footer = () => {
   return (
@@ -7,29 +8,11 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
-              >
-                <path
-                  d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <circle cx="12" cy="11" r="3" fill="currentColor" opacity="0.2" />
-                <path d="M12 8V11M12 14V14.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-              <span className="font-display font-medium">
-                Vibe<span className="text-primary">Leaks</span>
-              </span>
-            </div>
+            <img 
+              src={vibeleaksLogo} 
+              alt="VibeLeaks Logo" 
+              className="h-7 mb-3"
+            />
             <p className="text-sm text-muted-foreground">
               Detect secrets in your code locally. Fast, private, and free.
             </p>
