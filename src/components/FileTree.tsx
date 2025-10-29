@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronRight, ChevronDown, File, Folder, FolderOpen } from "lucide-react";
+import { ChevronRight, ChevronDown, File, Folder, FolderOpen, FileCode, FileJson, FileType, FileText, Lock, Braces, Palette, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FileNode {
@@ -48,9 +48,49 @@ const buildTree = (files: { name: string; content: string }[]): FileNode[] => {
   return convertToArray(root);
 };
 
+const getFileIcon = (fileName: string) => {
+  const ext = fileName.split('.').pop()?.toLowerCase();
+  
+  switch (ext) {
+    case 'js':
+    case 'jsx':
+    case 'ts':
+    case 'tsx':
+      return { icon: FileCode, color: 'text-yellow-500' };
+    case 'json':
+      return { icon: FileJson, color: 'text-amber-500' };
+    case 'py':
+      return { icon: FileCode, color: 'text-blue-500' };
+    case 'env':
+      return { icon: Lock, color: 'text-green-500' };
+    case 'md':
+    case 'mdx':
+      return { icon: FileText, color: 'text-purple-500' };
+    case 'css':
+    case 'scss':
+    case 'sass':
+      return { icon: Palette, color: 'text-pink-500' };
+    case 'html':
+      return { icon: Globe, color: 'text-orange-500' };
+    case 'svg':
+    case 'png':
+    case 'jpg':
+    case 'jpeg':
+    case 'gif':
+      return { icon: FileType, color: 'text-indigo-500' };
+    case 'yml':
+    case 'yaml':
+      return { icon: Braces, color: 'text-red-500' };
+    default:
+      return { icon: File, color: 'text-muted-foreground' };
+  }
+};
+
 const TreeNode = ({ node, level = 0 }: { node: FileNode; level?: number }) => {
   const [isOpen, setIsOpen] = useState(level === 0);
   const isDirectory = node.type === "directory";
+  const fileIconData = !isDirectory ? getFileIcon(node.name) : null;
+  const FileIcon = fileIconData?.icon || File;
 
   return (
     <div>
@@ -77,7 +117,7 @@ const TreeNode = ({ node, level = 0 }: { node: FileNode; level?: number }) => {
         ) : (
           <>
             <div className="w-3.5 sm:w-4 flex-shrink-0" />
-            <File className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
+            <FileIcon className={cn("h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0", fileIconData?.color)} />
           </>
         )}
         <span className="text-xs sm:text-sm font-mono break-all">{node.name}</span>
