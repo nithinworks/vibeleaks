@@ -1,7 +1,5 @@
 import { FileUpload } from "@/components/FileUpload";
-import { lazy, Suspense } from "react";
-
-const PixelBlast = lazy(() => import("@/components/ui/PixelBlast"));
+import { BackgroundAnimation } from "@/components/ui/BackgroundAnimation";
 
 interface HeroSectionProps {
   onFilesSelected: (files: { name: string; content: string }[], isDir: boolean) => void;
@@ -10,49 +8,7 @@ interface HeroSectionProps {
 export const HeroSection = ({ onFilesSelected }: HeroSectionProps) => {
   return (
     <>
-      {/* PixelBlast Pattern Animation - Full Viewport - Light Mode - Lazy Loaded */}
-      <div className="fixed inset-0 pointer-events-none dark:hidden" style={{ zIndex: 0, opacity: 0.3 }}>
-        <Suspense fallback={null}>
-          <PixelBlast
-            variant="circle"
-            pixelSize={4}
-            color="#E07A5F"
-            patternScale={2.5}
-            patternDensity={1.1}
-            pixelSizeJitter={0.3}
-            enableRipples={true}
-            rippleSpeed={0.4}
-            rippleThickness={0.12}
-            rippleIntensityScale={1.2}
-            speed={0.5}
-            edgeFade={0.3}
-            transparent={true}
-            className="w-full h-full"
-          />
-        </Suspense>
-      </div>
-
-      {/* PixelBlast Pattern Animation - Full Viewport - Dark Mode - Lazy Loaded */}
-      <div className="fixed inset-0 pointer-events-none hidden dark:block" style={{ zIndex: 0, opacity: 0.4 }}>
-        <Suspense fallback={null}>
-          <PixelBlast
-            variant="circle"
-            pixelSize={4}
-            color="#FFA07A"
-            patternScale={2.5}
-            patternDensity={1.1}
-            pixelSizeJitter={0.3}
-            enableRipples={true}
-            rippleSpeed={0.4}
-            rippleThickness={0.12}
-            rippleIntensityScale={1.2}
-            speed={0.5}
-            edgeFade={0.3}
-            transparent={true}
-            className="w-full h-full"
-          />
-        </Suspense>
-      </div>
+      <BackgroundAnimation />
 
       <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-180px)] sm:min-h-[calc(100vh-240px)] text-center px-4" style={{ zIndex: 1 }}>
         <div className="relative max-w-2xl mx-auto space-y-6 sm:space-y-8">

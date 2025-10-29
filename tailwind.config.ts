@@ -104,11 +104,16 @@ export default {
             strokeDashoffset: "0",
           },
         },
+        shimmer: {
+          "0%": { backgroundPosition: "100% center" },
+          "100%": { backgroundPosition: "0% center" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "draw-arrow": "draw-arrow 2s ease-in-out infinite",
+        shimmer: "shimmer var(--shimmer-duration, 2s) linear infinite",
       },
     },
   },
