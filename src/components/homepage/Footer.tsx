@@ -74,7 +74,7 @@ export const Footer = () => {
           
           {/* Copyright */}
           <p className="text-xs text-muted-foreground pt-4">
-            © 2025 VibeLeaks • Best experienced on Chrome • Open Source MIT License
+            © 2025 VibeLeaks • Open Source MIT License
           </p>
           
         </div>

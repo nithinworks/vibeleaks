@@ -7,7 +7,7 @@ interface HeroSectionProps {
 
 export const HeroSection = ({ onFilesSelected }: HeroSectionProps) => {
   return (
-    <>
+    <section className="relative min-h-[calc(100vh-180px)] sm:min-h-[calc(100vh-240px)]">
       <BackgroundAnimation />
 
       <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-180px)] sm:min-h-[calc(100vh-240px)] text-center px-4" style={{ zIndex: 1 }}>
@@ -42,6 +42,6 @@ export const HeroSection = ({ onFilesSelected }: HeroSectionProps) => {
           </div>
         </div>
       </div>
-    </>
+    </section>
   );
 };
