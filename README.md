@@ -13,7 +13,7 @@
 
 - **🔒 100% Private**: All scanning happens in your browser - your code never leaves your machine
 - **⚡ Lightning Fast**: Built with Web Workers for non-blocking, parallel scanning
-- **🎯 Accurate Detection**: Uses proven [Gitleaks](https://github.com/gitleaks/gitleaks) rules to detect 140+ secret types
+- **🎯 Accurate Detection**: Uses proven patterns to detect 250+ secret types
 - **📁 Multi-File Support**: Scan individual files or entire project directories
 - **🎨 Beautiful UI**: Modern, responsive design with dark mode support
 - **📊 Detailed Reports**: Export results as JSON, Markdown, or CSV
@@ -22,7 +22,7 @@
 ## ✨ Features
 
 ### Core Scanning
-- ✅ Detect AWS keys, Google API keys, GitHub tokens, database credentials, and 140+ more secret types
+- ✅ Detect AWS keys, Google API keys, GitHub tokens, database credentials, and 250+ more secret types
 - ✅ Real-time scanning with progress indicators
 - ✅ Severity-based filtering (Critical, High, Medium, Low)
 - ✅ File tree visualization showing which files contain secrets
@@ -46,7 +46,7 @@
 ### Supported Secret Types
 
 <details>
-<summary>Click to see all 140+ supported secret patterns</summary>
+<summary>Click to see all 250+ supported secret patterns</summary>
 
 - AWS Access Keys & Secret Keys
 - Google API Keys & OAuth tokens
@@ -59,9 +59,9 @@
 - Azure credentials
 - Heroku API keys
 - Twilio credentials
-- And 130+ more...
+- And 230+ more...
 
-See [gitleaks-rules.json](src/config/gitleaks-rules.json) for the complete list.
+See [vibeleaks-rules.json](src/config/vibeleaks-rules.json) for the complete list.
 
 </details>
 
@@ -77,7 +77,7 @@ See [gitleaks-rules.json](src/config/gitleaks-rules.json) for the complete list.
 
 ### Online (Easiest)
 
-Just visit **[vibeleaks.lovable.app](https://vibeleaks.lovable.app)** - no installation needed!
+Just visit **[vibeleaks.dev](https://vibeleaks.dev)** - no installation needed!
 
 ### Local Development
 
@@ -205,11 +205,11 @@ zip -r project.zip .
 - **Tailwind CSS** - Styling
 - **Web Workers** - Non-blocking scanning
 - **Three.js** - WebGL background effects
-- **Gitleaks Rules** - Battle-tested secret detection patterns
+- **250+ Detection Patterns** - Comprehensive secret detection
 
 ## 🛠️ Configuration
 
-The scanner uses Gitleaks rule definitions from `src/config/gitleaks-rules.json`. You can:
+The scanner uses detection rule definitions from `src/config/vibeleaks-rules.json`. You can:
 
 - Add custom rules
 - Modify severity levels
@@ -261,14 +261,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - **[Gitleaks](https://github.com/gitleaks/gitleaks)** - For the excellent secret detection rules
-- **[Lovable](https://lovable.dev)** - Platform used to build this project
 - **Security Community** - For ongoing research into secret detection patterns
 
 ## 📞 Support
 
 - **Issues**: [GitHub Issues](https://github.com/nithinworks/vibeleaks/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/nithinworks/vibeleaks/discussions)
-- **Website**: [vibeleaks.lovable.app](https://vibeleaks.lovable.app)
+- **Website**: [vibeleaks.dev](https://vibeleaks.dev)
 
 ## ⚠️ Disclaimer
 

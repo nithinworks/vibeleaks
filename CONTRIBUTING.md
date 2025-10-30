@@ -47,7 +47,7 @@ When creating a bug report, include:
 When uploading a file larger than 10MB, the scanner worker crashes without error message.
 
 **Steps to Reproduce:**
-1. Go to vibeleaks.lovable.app
+1. Go to vibeleaks.dev
 2. Upload a 15MB JavaScript file
 3. Click "Scan for Secrets"
 4. Observe crash

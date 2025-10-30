@@ -8,7 +8,7 @@ VibeLeaks is a **100% client-side** web application that performs secret scannin
 
 ## System Architecture
 
-<lov-mermaid>
+```mermaid
 graph TB
     subgraph "Browser Environment"
         subgraph "Main Thread"
@@ -25,8 +25,8 @@ graph TB
         
         subgraph "Web Worker Thread"
             D -->|Apply patterns| H[Regex Matcher]
-            H -->|Match against| I[Gitleaks Rules]
-            I -->|140+ patterns| H
+            H -->|Match against| I[VibeLeaks Rules]
+            I -->|250+ patterns| H
             H -->|Calculate| J[Severity Scorer]
             J -->|Return matches| D
         end
@@ -35,13 +35,13 @@ graph TB
     style A fill:#ff6b35
     style D fill:#4ecdc4
     style I fill:#95e1d3
-</lov-mermaid>
+```
 
 ---
 
 ## Component Architecture
 
-<lov-mermaid>
+```mermaid
 graph LR
     subgraph "Pages"
         A[Index Page] -->|Route: /| B[Homepage]
@@ -79,19 +79,19 @@ graph LR
     
     style A fill:#ff6b35
     style C fill:#4ecdc4
-</lov-mermaid>
+```
 
 ---
 
 ## Data Flow
 
-<lov-mermaid>
+```mermaid
 sequenceDiagram
     participant User
     participant UI as React UI
     participant Parser as File Parser
     participant Worker as Web Worker
-    participant Rules as Gitleaks Rules
+    participant Rules as VibeLeaks Rules
     participant Export as Export Module
 
     User->>UI: Upload files/folders
@@ -105,7 +105,7 @@ sequenceDiagram
     
     loop For each file
         Worker->>Rules: Load detection patterns
-        Rules-->>Worker: Return 140+ regex patterns
+        Rules-->>Worker: Return 250+ regex patterns
         Worker->>Worker: Apply regex to content
         Worker->>Worker: Calculate severity
         Worker->>UI: postMessage(progress)
@@ -120,7 +120,7 @@ sequenceDiagram
     UI->>Export: Generate report
     Export->>Export: Format as JSON/MD/CSV
     Export->>User: Download file
-</lov-mermaid>
+```
 
 ---
 
@@ -147,7 +147,7 @@ sequenceDiagram
 - **Open Source:** Fully auditable code
 
 ### Detection Engine
-- **Rules:** Gitleaks 140+ patterns
+- **Rules:** 250+ detection patterns
 - **Pattern Matching:** JavaScript RegEx engine
 - **Severity Scoring:** Based on impact and likelihood
 
@@ -181,7 +181,7 @@ vibeleaks/
 │   │   ├── Header.tsx         # Global header
 │   │   └── ThemeToggle.tsx    # Dark/light mode
 │   ├── config/
-│   │   └── gitleaks-rules.json  # 140+ detection patterns
+│   │   └── vibeleaks-rules.json # 250+ detection patterns
 │   ├── workers/
 │   │   └── scanner.worker.ts    # Web Worker scanning logic
 │   ├── types/
@@ -219,7 +219,7 @@ vibeleaks/
 
 ### Privacy-First Architecture
 
-<lov-mermaid>
+```mermaid
 graph TD
     A[User's Files] -->|Stay in| B[Browser Memory]
     B -->|Processed by| C[Web Worker]
@@ -237,7 +237,7 @@ graph TD
     style G fill:#ff6b6b
     style H fill:#ff6b6b
     style I fill:#ff6b6b
-</lov-mermaid>
+```
 
 ### No Data Transmission
 - ✅ Files are read using `FileReader` API (client-side)
@@ -274,7 +274,7 @@ graph TD
 
 ### Pattern Matching Flow
 
-<lov-mermaid>
+```mermaid
 graph LR
     A[File Content] --> B{For each rule}
     B --> C[Check keywords]
@@ -291,7 +291,7 @@ graph LR
     
     style F fill:#ff6b35
     style I fill:#4ecdc4
-</lov-mermaid>
+```
 
 ### Severity Calculation
 - **Critical:** Full account access (AWS keys, database credentials)

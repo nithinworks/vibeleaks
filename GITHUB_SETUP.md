@@ -44,7 +44,7 @@ Set this as your repository description:
 2. Click the ⚙️ icon next to "About"
 3. Paste description in "Description" field
 4. Check "Use topics"
-5. Add website: `https://vibeleaks.lovable.app`
+5. Add website: `https://vibeleaks.dev`
 6. Click "Save changes"
 
 ---
