@@ -303,26 +303,29 @@ const Index = () => {
           )}
 
           {(viewMode === "ready" || viewMode === "results") && (
-            <ScannerInterface
-          viewMode={viewMode}
-          files={files}
-          logs={logs}
-          matches={matches}
-          filteredMatches={filteredMatches}
-          isScanning={isScanning}
-          hasScanCompleted={hasScanCompleted}
-          progress={progress}
-          severityFilter={severityFilter}
-          severityCounts={severityCounts}
-          scanStats={scanStats}
-          onScan={handleScan}
-          onCancel={handleCancel}
-          onClear={handleClear}
-          onExportJSON={handleExportJSON}
-          onExportMarkdown={handleExportMarkdown}
-          onExportCSV={handleExportCSV}
-          onSeverityFilterChange={setSeverityFilter}
-            />
+            <>
+              <ScannerInterface
+                viewMode={viewMode}
+                files={files}
+                logs={logs}
+                matches={matches}
+                filteredMatches={filteredMatches}
+                isScanning={isScanning}
+                hasScanCompleted={hasScanCompleted}
+                progress={progress}
+                severityFilter={severityFilter}
+                severityCounts={severityCounts}
+                scanStats={scanStats}
+                onScan={handleScan}
+                onCancel={handleCancel}
+                onClear={handleClear}
+                onExportJSON={handleExportJSON}
+                onExportMarkdown={handleExportMarkdown}
+                onExportCSV={handleExportCSV}
+                onSeverityFilterChange={setSeverityFilter}
+              />
+              <Footer />
+            </>
           )}
         </div>
       </main>

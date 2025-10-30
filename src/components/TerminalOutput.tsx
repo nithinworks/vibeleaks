@@ -189,7 +189,7 @@ export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, pr
                               {({ style, tokens, getLineProps, getTokenProps }) => (
                                 <pre
                                   style={style}
-                                  className="text-[10px] sm:text-xs font-mono px-2 sm:px-2.5 py-2 sm:py-2.5 overflow-x-auto leading-relaxed m-0"
+                                  className="text-[10px] sm:text-xs font-mono px-2 sm:px-2.5 py-2 sm:py-2.5 whitespace-pre-wrap break-all leading-relaxed m-0"
                                 >
                                   {tokens.map((line, i) => (
                                     <div key={i} {...getLineProps({ line })}>
@@ -216,7 +216,7 @@ export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, pr
                               {({ style, tokens, getLineProps, getTokenProps }) => (
                                 <pre
                                   style={style}
-                                  className="text-[10px] sm:text-xs font-mono px-2 sm:px-2.5 py-2 sm:py-2.5 overflow-x-auto leading-relaxed m-0"
+                                  className="text-[10px] sm:text-xs font-mono px-2 sm:px-2.5 py-2 sm:py-2.5 whitespace-pre-wrap break-all leading-relaxed m-0"
                                 >
                                   {tokens.map((line, i) => (
                                     <div key={i} {...getLineProps({ line })}>
