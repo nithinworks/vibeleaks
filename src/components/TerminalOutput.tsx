@@ -12,12 +12,14 @@ import {
   FileText,
   ShieldCheck,
   FileX,
+  ChevronDown,
 } from "lucide-react";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import { ScanSummaryCard } from "@/components/scanner/ScanSummaryCard";
 import type { ScanMatch, SeverityLevel } from "@/types/scanner";
 import { Highlight, themes } from "prism-react-renderer";
 import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
 
 const severityConfig = {
   critical: {
@@ -79,10 +81,35 @@ interface TerminalOutputProps {
 }
 export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, progress, severityCounts, scanStats }: TerminalOutputProps) => {
   const { theme } = useTheme();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+  
+  useEffect(() => {
+    const scrollViewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+    
+    const checkScroll = () => {
+      if (scrollViewport) {
+        const hasScroll = scrollViewport.scrollHeight > scrollViewport.clientHeight;
+        const isAtBottom = scrollViewport.scrollHeight - scrollViewport.scrollTop <= scrollViewport.clientHeight + 10;
+        setShowScrollIndicator(hasScroll && !isAtBottom);
+      }
+    };
+    
+    checkScroll();
+    scrollViewport?.addEventListener('scroll', checkScroll);
+    
+    // Recheck when matches change
+    const timer = setTimeout(checkScroll, 100);
+    
+    return () => {
+      scrollViewport?.removeEventListener('scroll', checkScroll);
+      clearTimeout(timer);
+    };
+  }, [matches.length, hasScanCompleted]);
   
   return (
-    <div className="flex flex-col">
-      <ScrollArea className="h-[600px]">
+    <div className="flex flex-col relative">
+      <ScrollArea className="h-[600px]" ref={scrollAreaRef}>
         <div className="space-y-2 sm:space-y-2.5 pr-2 sm:pr-4">
           {/* Scan Summary Card */}
           {hasScanCompleted && scanStats.filesScanned > 0 && (
@@ -257,6 +284,17 @@ export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, pr
           )}
         </div>
       </ScrollArea>
+      
+      {/* Scroll Down Indicator */}
+      {showScrollIndicator && (
+        <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none bg-gradient-to-t from-background via-background/80 to-transparent flex items-end justify-center pb-3">
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground animate-bounce">
+            <ChevronDown className="h-4 w-4" />
+            <span className="font-medium">Scroll for more results</span>
+            <ChevronDown className="h-4 w-4" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

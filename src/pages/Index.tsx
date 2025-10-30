@@ -289,41 +289,43 @@ const Index = () => {
       <MobileWarning />
       <Header />
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex-1">
-        <div className="max-w-7xl mx-auto">
-          {viewMode === "input" && (
-            <>
-              <HeroSection onFilesSelected={handleFilesSelected} />
-              <FeaturesSection />
-              <ProjectFailuresSection />
-              <UseCasesSection />
-              <SecurityTipsSection />
-            </>
-          )}
+      <main className="flex-1 flex flex-col">
+        {viewMode === "input" && (
+          <div className="flex-1">
+            <HeroSection onFilesSelected={handleFilesSelected} />
+            <FeaturesSection />
+            <ProjectFailuresSection />
+            <UseCasesSection />
+            <SecurityTipsSection />
+          </div>
+        )}
 
-          {(viewMode === "ready" || viewMode === "results") && (
-            <ScannerInterface
-                viewMode={viewMode}
-                files={files}
-                logs={logs}
-                matches={matches}
-                filteredMatches={filteredMatches}
-                isScanning={isScanning}
-                hasScanCompleted={hasScanCompleted}
-                progress={progress}
-                severityFilter={severityFilter}
-                severityCounts={severityCounts}
-                scanStats={scanStats}
-                onScan={handleScan}
-                onCancel={handleCancel}
-                onClear={handleClear}
-                onExportJSON={handleExportJSON}
-                onExportMarkdown={handleExportMarkdown}
-                onExportCSV={handleExportCSV}
-                onSeverityFilterChange={setSeverityFilter}
-            />
-          )}
-        </div>
+        {(viewMode === "ready" || viewMode === "results") && (
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex-1">
+            <div className="max-w-7xl mx-auto">
+              <ScannerInterface
+                  viewMode={viewMode}
+                  files={files}
+                  logs={logs}
+                  matches={matches}
+                  filteredMatches={filteredMatches}
+                  isScanning={isScanning}
+                  hasScanCompleted={hasScanCompleted}
+                  progress={progress}
+                  severityFilter={severityFilter}
+                  severityCounts={severityCounts}
+                  scanStats={scanStats}
+                  onScan={handleScan}
+                  onCancel={handleCancel}
+                  onClear={handleClear}
+                  onExportJSON={handleExportJSON}
+                  onExportMarkdown={handleExportMarkdown}
+                  onExportCSV={handleExportCSV}
+                  onSeverityFilterChange={setSeverityFilter}
+              />
+            </div>
+          </div>
+        )}
       </main>
 
       <Footer />
