@@ -44,7 +44,7 @@ export const MobileWarning = () => {
           <div className="space-y-2">
             <h3 className="text-lg font-semibold">Desktop Experience Recommended</h3>
             <p className="text-sm text-muted-foreground">
-              This site is optimized for desktop/laptop devices for the best experience.
+              This site is specifically made & optimized for desktop/laptop devices for the best experience.
             </p>
           </div>
 
