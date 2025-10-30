@@ -1,66 +1,82 @@
-import { Separator } from "@/components/ui/separator";
 import vibeleaksLogo from "@/assets/vibeleaks-logo.webp";
 
 export const Footer = () => {
   return (
     <footer className="relative border-t border-border/50 mt-16" style={{ zIndex: 1 }}>
-      <div className="max-w-5xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Brand */}
-          <div>
-            <img 
-              src={vibeleaksLogo} 
-              alt="VibeLeaks Logo" 
-              className="h-7 mb-3"
-            />
-            <p className="text-sm text-muted-foreground">
-              Detect secrets in your code locally. Fast, private, and free.
-            </p>
-          </div>
-
-          {/* Links */}
-          <div>
-            <h4 className="font-semibold mb-3 text-sm">Resources</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                  GitHub Repository
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                  Contribute Patterns
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com/gitleaks/gitleaks" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                  Gitleaks Rules
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Tech & Privacy */}
-          <div>
-            <h4 className="font-semibold mb-3 text-sm">Built With</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground mb-4">
-              <li>React + TypeScript</li>
-              <li>Web Workers</li>
-              <li>Tailwind CSS</li>
-            </ul>
-            <p className="text-xs text-muted-foreground mb-3">
-              <span className="font-semibold">Privacy:</span> We don't store anything. All processing happens locally in your browser.
-            </p>
-            <p className="text-xs text-muted-foreground">
-              <span className="font-semibold">Best Experience:</span> Use Chrome browser for optimal performance.
-            </p>
-          </div>
-        </div>
-
-        <Separator className="my-6" />
-
-        <div className="text-center text-sm text-muted-foreground">
-          <p>© 2025 VibeLeaks. Built for developers who care about security.</p>
+      <div className="max-w-3xl mx-auto px-6 py-12">
+        {/* Centered Layout */}
+        <div className="flex flex-col items-center text-center space-y-6">
+          
+          {/* Logo */}
+          <img 
+            src={vibeleaksLogo} 
+            alt="VibeLeaks Logo" 
+            className="h-8"
+          />
+          
+          {/* Description */}
+          <p className="text-sm text-muted-foreground max-w-md">
+            A browser-based secret scanner that keeps your code private. 
+            Detect hardcoded API keys, tokens, and credentials instantly—100% client-side, 
+            no data ever leaves your device.
+          </p>
+          
+          {/* Thank You Note */}
+          <p className="text-xs text-muted-foreground">
+            Built with gratitude to{" "}
+            <a 
+              href="https://github.com/gitleaks/gitleaks" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:underline font-medium"
+            >
+              Gitleaks
+            </a>
+            {" "}for detection patterns and{" "}
+            <a 
+              href="https://regex101.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:underline font-medium"
+            >
+              regex101
+            </a>
+            {" "}for pattern testing.
+          </p>
+          
+          {/* Navigation Menu */}
+          <nav className="flex items-center gap-6 text-sm">
+            <a 
+              href="https://github.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              GitHub
+            </a>
+            <span className="text-border">•</span>
+            <a 
+              href="mailto:connect.naganithin@gmail.com"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              Contact
+            </a>
+            <span className="text-border">•</span>
+            <a 
+              href="https://github.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              Discussions
+            </a>
+          </nav>
+          
+          {/* Copyright */}
+          <p className="text-xs text-muted-foreground pt-4">
+            © 2025 VibeLeaks • Best experienced on Chrome • Open Source MIT License
+          </p>
+          
         </div>
       </div>
     </footer>
