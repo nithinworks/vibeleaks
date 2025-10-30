@@ -1,73 +1,253 @@
-# Welcome to your Lovable project
+# 🔐 VibeLeaks - Client-Side Secret Scanner
 
-## Project info
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-38bdf8.svg)](https://tailwindcss.com/)
 
-**URL**: https://lovable.dev/projects/f5eba486-e18f-4256-a504-14a31e265d4a
+> **Browser-based secret scanner that runs 100% locally. Detect hardcoded API keys, tokens, and credentials in your code without sending data anywhere.**
 
-## How can I edit this code?
+![VibeLeaks Hero](public/public/hero-pattern.png)
 
-There are several ways of editing your application.
+## 🚀 Why VibeLeaks?
 
-**Use Lovable**
+- **🔒 100% Private**: All scanning happens in your browser - your code never leaves your machine
+- **⚡ Lightning Fast**: Built with Web Workers for non-blocking, parallel scanning
+- **🎯 Accurate Detection**: Uses proven [Gitleaks](https://github.com/gitleaks/gitleaks) rules to detect 140+ secret types
+- **📁 Multi-File Support**: Scan individual files or entire project directories
+- **🎨 Beautiful UI**: Modern, responsive design with dark mode support
+- **📊 Detailed Reports**: Export results as JSON, Markdown, or CSV
+- **🔧 Developer-Friendly**: No installation, no CLI, just open and scan
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f5eba486-e18f-4256-a504-14a31e265d4a) and start prompting.
+## ✨ Features
 
-Changes made via Lovable will be committed automatically to this repo.
+### Core Scanning
+- ✅ Detect AWS keys, Google API keys, GitHub tokens, database credentials, and 140+ more secret types
+- ✅ Real-time scanning with progress indicators
+- ✅ Severity-based filtering (Critical, High, Medium, Low)
+- ✅ File tree visualization showing which files contain secrets
+- ✅ Syntax-highlighted code snippets showing exact leak locations
 
-**Use your preferred IDE**
+### Security & Privacy
+- ✅ **No data transmission** - everything runs client-side
+- ✅ **No backend** - pure frontend application
+- ✅ **No tracking** - your code is your business
+- ✅ Open-source and auditable
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### User Experience
+- ✅ Drag & drop file upload
+- ✅ Paste code directly
+- ✅ Filter results by severity
+- ✅ Export reports in multiple formats
+- ✅ Responsive design (desktop & tablet optimized)
+- ✅ Dark/Light theme support
+- ✅ Gorgeous WebGL background effects
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Supported Secret Types
 
-Follow these steps:
+<details>
+<summary>Click to see all 140+ supported secret patterns</summary>
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- AWS Access Keys & Secret Keys
+- Google API Keys & OAuth tokens
+- GitHub Personal Access Tokens
+- Slack tokens & webhooks
+- Stripe API keys
+- Database connection strings (MySQL, PostgreSQL, MongoDB)
+- Private SSH keys
+- JWT tokens
+- Azure credentials
+- Heroku API keys
+- Twilio credentials
+- And 130+ more...
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+See [gitleaks-rules.json](src/config/gitleaks-rules.json) for the complete list.
 
-# Step 3: Install the necessary dependencies.
-npm i
+</details>
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+## 🎯 Use Cases
+
+- **Pre-commit checks**: Scan your code before committing to catch secrets
+- **Security audits**: Review legacy codebases for hardcoded credentials
+- **Learning tool**: Understand what patterns constitute security risks
+- **Code reviews**: Quick verification during PR reviews
+- **Open-source prep**: Clean your codebase before open-sourcing
+
+## 🚦 Getting Started
+
+### Online (Easiest)
+
+Just visit **[vibeleaks.lovable.app](https://vibeleaks.lovable.app)** - no installation needed!
+
+### Local Development
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/vibeleaks.git
+   cd vibeleaks
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**
+   ```
+   http://localhost:5173
+   ```
+
+### Build for Production
+
+```bash
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+The production-ready files will be in the `dist/` directory.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📖 Usage
 
-**Use GitHub Codespaces**
+### Quick Start
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. **Upload your code**
+   - Drag & drop files/folders onto the upload area
+   - Or paste code directly into the text area
 
-## What technologies are used for this project?
+2. **Start scanning**
+   - Click "Scan for Secrets"
+   - Watch real-time progress as files are analyzed
 
-This project is built with:
+3. **Review results**
+   - See all detected secrets grouped by severity
+   - Click on matches to view file location and code context
+   - Filter by severity level (Critical/High/Medium/Low)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+4. **Export findings**
+   - Download results as JSON for automation
+   - Export as Markdown for documentation
+   - Save as CSV for spreadsheet analysis
 
-## How can I deploy this project?
+### Example: Scanning a Project
 
-Simply open [Lovable](https://lovable.dev/projects/f5eba486-e18f-4256-a504-14a31e265d4a) and click on Share -> Publish.
+```bash
+# Navigate to your project
+cd my-project
 
-## Can I connect a custom domain to my Lovable project?
+# Zip it (or select folder in browser)
+zip -r project.zip .
 
-Yes, you can!
+# Upload to VibeLeaks and scan
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🏗️ Technical Architecture
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```
+┌─────────────────────────────────────────────────┐
+│                   React App                     │
+│  (Main Thread - UI & State Management)          │
+└────────────┬────────────────────────────────────┘
+             │
+             │ postMessage()
+             │
+┌────────────▼────────────────────────────────────┐
+│            Web Worker                           │
+│  (Background Thread - Heavy Scanning Logic)     │
+│                                                 │
+│  • Parses files                                 │
+│  • Applies regex patterns                       │
+│  • Matches against Gitleaks rules               │
+│  • Returns results                              │
+└─────────────────────────────────────────────────┘
+```
+
+### Key Technologies
+
+- **React 18** - UI framework
+- **TypeScript** - Type safety
+- **Vite** - Build tool & dev server
+- **Tailwind CSS** - Styling
+- **Web Workers** - Non-blocking scanning
+- **Three.js** - WebGL background effects
+- **Gitleaks Rules** - Battle-tested secret detection patterns
+
+## 🛠️ Configuration
+
+The scanner uses Gitleaks rule definitions from `src/config/gitleaks-rules.json`. You can:
+
+- Add custom rules
+- Modify severity levels
+- Adjust regex patterns
+- Disable specific detectors
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on adding new rules.
+
+## 🤝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on:
+
+- How to report bugs
+- How to suggest features
+- Code style guidelines
+- Pull request process
+
+## 📋 Roadmap
+
+### v1.1 - Enhanced Detection
+- [ ] Add support for custom rule files
+- [ ] Entropy-based detection for unknown secrets
+- [ ] Machine learning-based false positive reduction
+
+### v1.2 - Developer Experience
+- [ ] VS Code extension
+- [ ] CLI version for CI/CD integration
+- [ ] GitHub Action
+- [ ] Pre-commit hook template
+
+### v1.3 - Advanced Features
+- [ ] Secret rotation guidance
+- [ ] Integration with secret management tools (1Password, Vault)
+- [ ] Historical scan comparison
+- [ ] Team collaboration features
+
+### v2.0 - Platform Expansion
+- [ ] Browser extension (Chrome/Firefox)
+- [ ] Mobile responsive scanning
+- [ ] Real-time code editor integration
+- [ ] API for programmatic access
+
+**Want to help?** Check [open issues](../../issues) or suggest new features!
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **[Gitleaks](https://github.com/gitleaks/gitleaks)** - For the excellent secret detection rules
+- **[Lovable](https://lovable.dev)** - Platform used to build this project
+- **Security Community** - For ongoing research into secret detection patterns
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](../../issues)
+- **Discussions**: [GitHub Discussions](../../discussions)
+- **Website**: [vibeleaks.lovable.app](https://vibeleaks.lovable.app)
+
+## ⚠️ Disclaimer
+
+VibeLeaks is a detection tool and may produce false positives or miss certain patterns. Always:
+- Review results manually
+- Use in combination with other security practices
+- Rotate any discovered secrets immediately
+- Never commit secrets to version control
+
+---
+
+**Made with ❤️ by the open-source community**
+
+If VibeLeaks helped secure your code, give us a ⭐ on GitHub!
