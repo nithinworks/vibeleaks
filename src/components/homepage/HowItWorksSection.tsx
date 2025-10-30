@@ -1,7 +1,7 @@
 export const HowItWorksSection = () => {
   return (
     <div className="relative py-16" style={{ zIndex: 1 }}>
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
           <h3 className="text-2xl font-semibold mb-3">How It Works</h3>
           <p className="text-muted-foreground text-sm max-w-2xl mx-auto">

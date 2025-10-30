@@ -1,7 +1,7 @@
 export const SecurityTipsSection = () => {
   return (
     <div className="relative py-16 bg-muted/30" style={{ zIndex: 1 }}>
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto px-4 md:px-6">
         <div className="text-center mb-8">
           <h3 className="text-2xl font-semibold mb-3">Security Best Practices</h3>
           <p className="text-muted-foreground text-sm">

@@ -3,7 +3,7 @@ import pieChartImage from "@/assets/why-vibe-coding-fails.webp";
 export const ProjectFailuresSection = () => {
   return (
     <div className="relative py-16" style={{ zIndex: 1 }}>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text content */}
           <div className="space-y-4">

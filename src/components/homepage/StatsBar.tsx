@@ -1,7 +1,7 @@
 export const StatsBar = () => {
   return (
     <div className="relative mt-16 mb-20" style={{ zIndex: 1 }}>
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto px-4 md:px-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           <div className="text-center p-4">
             <div className="text-3xl lg:text-4xl font-bold text-primary-hover mb-2">250+</div>
