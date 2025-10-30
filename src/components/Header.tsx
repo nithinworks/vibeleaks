@@ -13,7 +13,7 @@ export const Header = () => {
             className="h-8 sm:h-10"
           />
           <a 
-            href="https://github.com" 
+            href="https://github.com/nithinworks/vibeleaks" 
             target="_blank" 
             rel="noopener noreferrer"
             className="transition-transform hover:scale-105"

@@ -47,7 +47,7 @@ export const Footer = () => {
           {/* Navigation Menu */}
           <nav className="flex items-center gap-6 text-sm">
             <a 
-              href="https://github.com" 
+              href="https://github.com/nithinworks/vibeleaks" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
@@ -63,7 +63,7 @@ export const Footer = () => {
             </a>
             <span className="text-border">•</span>
             <a 
-              href="https://github.com" 
+              href="https://github.com/nithinworks/vibeleaks/discussions" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
