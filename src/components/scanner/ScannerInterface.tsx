@@ -102,7 +102,7 @@ export const ScannerInterface = ({
                     Cancel
                   </Button>
                 ) : (
-                  <Button onClick={onClear} variant="outline" size="sm" className="h-8 sm:h-9 rounded-lg border-border/50 hover:bg-muted/80 text-xs sm:text-sm">
+                  <Button onClick={onClear} variant="outline" size="sm" className="h-8 sm:h-9 rounded-lg border-border hover:border-primary/50 hover:bg-background text-xs sm:text-sm">
                     <Search className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1.5 sm:mr-2" />
                     <span className="hidden sm:inline">New Scan</span>
                     <span className="sm:hidden">New</span>
@@ -111,7 +111,7 @@ export const ScannerInterface = ({
                 {matches.length > 0 && (
                   <>
                     <Select value={severityFilter} onValueChange={(value) => onSeverityFilterChange(value as SeverityLevel | "all")}>
-                      <SelectTrigger className="w-[110px] sm:w-[140px] h-8 sm:h-9 rounded-lg border-border/50 text-xs sm:text-sm">
+                      <SelectTrigger className="w-[110px] sm:w-[140px] h-8 sm:h-9 rounded-lg border-border hover:border-primary/50 text-xs sm:text-sm">
                         <Filter className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1.5 sm:mr-2" />
                         <SelectValue />
                       </SelectTrigger>
@@ -125,12 +125,12 @@ export const ScannerInterface = ({
                     </Select>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-8 sm:h-9 rounded-lg border-border/50 hover:bg-muted/80 text-xs sm:text-sm">
+                        <Button variant="outline" size="sm" className="h-8 sm:h-9 rounded-lg border-border hover:border-primary/50 hover:bg-background text-xs sm:text-sm">
                           <Download className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1.5 sm:mr-2" />
                           Export
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48 bg-background border-border">
+                      <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuItem onClick={onExportJSON} className="cursor-pointer">
                           <FileJson className="h-4 w-4 mr-2" />
                           Export as JSON
