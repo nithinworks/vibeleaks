@@ -2,7 +2,7 @@ import vibeleaksLogo from "@/assets/vibeleaks-logo.webp";
 
 export const Footer = () => {
   return (
-    <footer className="relative border-t border-border/50 mt-16" style={{ zIndex: 1 }}>
+    <footer className="border-t border-border/50 mt-16 bg-background">
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Centered Layout */}
         <div className="flex flex-col items-center text-center space-y-6">

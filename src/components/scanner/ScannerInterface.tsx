@@ -61,11 +61,11 @@ export const ScannerInterface = ({
   onSeverityFilterChange,
 }: ScannerInterfaceProps) => {
   return (
-    <>
+    <div className="relative">
       <BackgroundAnimation />
 
       {viewMode === "ready" && (
-        <div className="relative flex items-center justify-center min-h-[60vh] px-4 py-8" style={{ zIndex: 1 }}>
+        <div className="flex items-center justify-center min-h-[60vh] px-4 py-8">
           <Card className="p-6 sm:p-8 lg:p-10 border-border/30 backdrop-blur-sm bg-background/95 shadow-2xl max-w-2xl w-full rounded-2xl">
             <div className="mb-6 sm:mb-8">
               <h2 className="text-xl sm:text-2xl font-semibold mb-2 tracking-tight">Ready to Scan</h2>
@@ -92,8 +92,8 @@ export const ScannerInterface = ({
       )}
 
       {viewMode === "results" && (
-        <div className="flex flex-col min-h-[60vh] max-h-[calc(100vh-300px)] py-4">
-          <Card className="p-4 sm:p-6 flex flex-col flex-1 border-border/40 shadow-lg rounded-xl bg-card/50 backdrop-blur-sm">
+        <div className="py-4">
+          <Card className="p-4 sm:p-6 border-border/40 shadow-lg rounded-xl bg-card/50 backdrop-blur-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-5">
               <h2 className="text-lg sm:text-xl font-semibold tracking-tight">Scan Results</h2>
               <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
@@ -149,7 +149,7 @@ export const ScannerInterface = ({
                 )}
               </div>
             </div>
-            <div className="flex-1 min-h-0">
+            <div>
               <TerminalOutput
                 logs={logs}
                 matches={filteredMatches}
@@ -163,6 +163,6 @@ export const ScannerInterface = ({
           </Card>
         </div>
       )}
-    </>
+    </div>
   );
 };

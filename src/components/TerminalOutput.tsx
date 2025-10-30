@@ -81,8 +81,8 @@ export const TerminalOutput = ({ logs, matches, isScanning, hasScanCompleted, pr
   const { theme } = useTheme();
   
   return (
-    <div className="flex flex-col h-full">
-      <ScrollArea className="flex-1">
+    <div className="flex flex-col">
+      <ScrollArea className="h-[600px]">
         <div className="space-y-2 sm:space-y-2.5 pr-2 sm:pr-4">
           {/* Scan Summary Card */}
           {hasScanCompleted && scanStats.filesScanned > 0 && (
