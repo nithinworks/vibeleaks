@@ -83,7 +83,7 @@ Just visit **[vibeleaks.lovable.app](https://vibeleaks.lovable.app)** - no insta
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/vibeleaks.git
+   git clone https://github.com/nithinworks/vibeleaks.git
    cd vibeleaks
    ```
 
@@ -109,6 +109,38 @@ npm run build
 ```
 
 The production-ready files will be in the `dist/` directory.
+
+## 🚀 Deploy to Vercel
+
+### One-Click Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/nithinworks/vibeleaks)
+
+### Manual Deployment
+
+1. **Install Vercel CLI** (optional)
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Deploy**
+   ```bash
+   vercel
+   ```
+
+3. **Production Deploy**
+   ```bash
+   vercel --prod
+   ```
+
+### Environment Configuration
+
+No environment variables needed! VibeLeaks runs entirely client-side.
+
+The `vercel.json` configuration is already included for:
+- ✅ SPA routing (all routes redirect to index.html)
+- ✅ Asset caching (1 year cache for static assets)
+- ✅ Security headers (CSP, XSS protection, etc.)
 
 ## 📖 Usage
 
@@ -220,7 +252,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 - [ ] Real-time code editor integration
 - [ ] API for programmatic access
 
-**Want to help?** Check [open issues](../../issues) or suggest new features!
+**Want to help?** Check [open issues](https://github.com/nithinworks/vibeleaks/issues) or suggest new features!
 
 ## 📄 License
 
@@ -234,8 +266,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](../../issues)
-- **Discussions**: [GitHub Discussions](../../discussions)
+- **Issues**: [GitHub Issues](https://github.com/nithinworks/vibeleaks/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/nithinworks/vibeleaks/discussions)
 - **Website**: [vibeleaks.lovable.app](https://vibeleaks.lovable.app)
 
 ## ⚠️ Disclaimer
