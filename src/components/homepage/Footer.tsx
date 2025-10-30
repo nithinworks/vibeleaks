@@ -48,8 +48,11 @@ export const Footer = () => {
               <li>Web Workers</li>
               <li>Tailwind CSS</li>
             </ul>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground mb-3">
               <span className="font-semibold">Privacy:</span> We don't store anything. All processing happens locally in your browser.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              <span className="font-semibold">Best Experience:</span> Use Chrome browser for optimal performance.
             </p>
           </div>
         </div>
