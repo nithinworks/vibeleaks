@@ -1,5 +1,5 @@
 {
-  "title": "gitleaks config (customized)",
+  "title": "VibeLeaks Detection Rules",
   "allowlist": {
     "description": "Global allowlists for false positives and safe paths/files.",
     "regexes": [
@@ -18,7 +18,6 @@
       "^/(?:bin|etc|home|opt|tmp|usr|var)/[\\w ./-]+$"
     ],
     "paths": [
-      "gitleaks\\.toml",
       "(?i)\\.(?:bmp|gif|jpe?g|png|svg|tiff?)$",
       "(?i)\\.(?:eot|[ot]tf|woff2?)$",
       "(?i)\\.(?:docx?|xlsx?|pdf|bin|socket|vsidx|v2|suo|wsuo|.dll|pdb|exe|gltf|zip)$",

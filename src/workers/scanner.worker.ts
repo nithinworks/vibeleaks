@@ -11,7 +11,7 @@ let rulesConfig: any = null;
 
 async function loadRulesConfig() {
   if (!rulesConfig) {
-    const module = await import('../config/gitleaks-rules.json');
+    const module = await import('../config/vibeleaks-rules.json');
     rulesConfig = module.default;
   }
   return rulesConfig;
