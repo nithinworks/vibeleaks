@@ -285,11 +285,11 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <MobileWarning />
       <Header />
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex-1">
         <div className="max-w-7xl mx-auto">
           {viewMode === "input" && (
             <>
@@ -298,13 +298,11 @@ const Index = () => {
               <ProjectFailuresSection />
               <UseCasesSection />
               <SecurityTipsSection />
-              <Footer />
             </>
           )}
 
           {(viewMode === "ready" || viewMode === "results") && (
-            <>
-              <ScannerInterface
+            <ScannerInterface
                 viewMode={viewMode}
                 files={files}
                 logs={logs}
@@ -323,12 +321,12 @@ const Index = () => {
                 onExportMarkdown={handleExportMarkdown}
                 onExportCSV={handleExportCSV}
                 onSeverityFilterChange={setSeverityFilter}
-              />
-              <Footer />
-            </>
+            />
           )}
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 };
