@@ -4,7 +4,7 @@ const PixelBlast = lazy(() => import("@/components/ui/PixelBlast"));
 
 export const BackgroundAnimation = () => {
   return (
-    <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0, opacity: 0.3 }}>
+    <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0, opacity: 0.15 }}>
       <Suspense fallback={null}>
         <PixelBlast
           variant="circle"
