@@ -1,0 +1,88 @@
+name: 🔍 New Detection Rule
+description: Suggest a new secret pattern or improve existing detection
+title: "[Rule]: "
+labels: ["detection-rule", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us improve secret detection! Suggest a new pattern or service.
+
+  - type: input
+    id: service
+    attributes:
+      label: Service/Platform Name
+      description: What service or platform does this secret belong to?
+      placeholder: e.g., GitHub, AWS, Stripe, Custom API
+    validations:
+      required: true
+
+  - type: dropdown
+    id: rule-type
+    attributes:
+      label: Rule Type
+      description: What type of detection rule is this?
+      options:
+        - New service detection
+        - Improve existing rule
+        - Fix false positive
+        - Fix false negative
+    validations:
+      required: true
+
+  - type: textarea
+    id: pattern
+    attributes:
+      label: Pattern Description
+      description: Describe the secret pattern (structure, format, prefixes, etc.)
+      placeholder: |
+        Example: GitHub tokens start with "ghp_" followed by 36 alphanumeric characters
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example Pattern (FAKE/TEST ONLY)
+      description: Provide an example (use FAKE credentials only!)
+      placeholder: |
+        ⚠️ NEVER paste real secrets!
+        Example: ghp_1234567890abcdefghijklmnopqrstuv
+    validations:
+      required: true
+
+  - type: textarea
+    id: regex
+    attributes:
+      label: Proposed Regex (Optional)
+      description: If you have a regex pattern suggestion, include it here
+      placeholder: |
+        ghp_[a-zA-Z0-9]{36}
+
+  - type: textarea
+    id: documentation
+    attributes:
+      label: Documentation Links
+      description: Links to official documentation about this secret type
+      placeholder: |
+        - https://docs.example.com/api-keys
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested Severity
+      description: How critical is exposure of this secret?
+      options:
+        - Critical - Full account access
+        - High - Significant access/damage
+        - Medium - Limited access
+        - Low - Minimal risk
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context about this detection rule
+      placeholder: Common locations, rotation procedures, etc.
