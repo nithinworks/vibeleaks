@@ -228,40 +228,34 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
     return;
   }
 
-  // Initialize rules on first scan
-  await initializeRules();
+  try {
+    // Initialize rules on first scan
+    await initializeRules();
 
-  // Reset cancellation flag
-  isCancelled = false;
-  
-  const { files } = e.data;
-  const startTime = performance.now();
-  const matches: ScanMatch[] = [];
-  let totalLines = 0;
-  let lastYieldTime = performance.now();
-
-  for (let i = 0; i < files.length; i++) {
-    // Check for cancellation
-    if (isCancelled) {
-      self.postMessage({
-        type: 'result',
-        matches: [],
-        filesScanned: 0,
-        totalLines: 0,
-        duration: performance.now() - startTime,
-      } as ScanResultMessage);
-      return;
-    }
-    const file = files[i];
+    // Reset cancellation flag
+    isCancelled = false;
     
-    // Send progress update
-    self.postMessage({
-      type: 'progress',
-      current: i + 1,
-      total: files.length,
-      filename: file.name,
-    } as ScanProgressMessage);
+    const { files } = e.data;
+    const startTime = performance.now();
+    const matches: ScanMatch[] = [];
+    let totalLines = 0;
+    let lastYieldTime = performance.now();
+    let filesProcessed = 0;
 
+    for (let i = 0; i < files.length; i++) {
+      // Check for cancellation
+      if (isCancelled) {
+        self.postMessage({
+          type: 'result',
+          matches: [],
+          filesScanned: 0,
+          totalLines: 0,
+          duration: performance.now() - startTime,
+        } as ScanResultMessage);
+        return;
+      }
+      const file = files[i];
+    
     // Skip build output folders and common false positive files
     const excludePatterns = [
       /^(?:dist|build|\.next|\.nuxt|out|\.cache|\.vite|\.turbo|node_modules)\//,
@@ -282,23 +276,57 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
     ];
 
     if (excludePatterns.some(pattern => pattern.test(file.name))) {
+      // Send progress update for skipped files too
+      self.postMessage({
+        type: 'progress',
+        current: i + 1,
+        total: files.length,
+        filename: file.name,
+      } as ScanProgressMessage);
       continue;
     }
 
     // Binary file detection using null byte check
     if (file.content.includes('\0')) {
+      self.postMessage({
+        type: 'progress',
+        current: i + 1,
+        total: files.length,
+        filename: file.name,
+      } as ScanProgressMessage);
       continue;
     }
 
     // Context-aware filtering: Skip test and example files
     if (isTestOrExampleFile(file.name)) {
+      self.postMessage({
+        type: 'progress',
+        current: i + 1,
+        total: files.length,
+        filename: file.name,
+      } as ScanProgressMessage);
       continue;
     }
 
     // Check if file path matches pre-compiled allowlist paths
     if (compiledAllowlistPaths.some(regex => regex.test(file.name))) {
+      self.postMessage({
+        type: 'progress',
+        current: i + 1,
+        total: files.length,
+        filename: file.name,
+      } as ScanProgressMessage);
       continue;
     }
+
+    // Send progress update for files being processed
+    filesProcessed++;
+    self.postMessage({
+      type: 'progress',
+      current: i + 1,
+      total: files.length,
+      filename: file.name,
+    } as ScanProgressMessage);
 
     const lines = file.content.split('\n');
     totalLines += lines.length;
@@ -448,20 +476,31 @@ self.onmessage = async (e: MessageEvent<ScanMessage | CancelMessage>) => {
       }
     }
 
-    // Clear file content from memory after processing
-    file.content = '';
+      // Clear file content from memory after processing
+      file.content = '';
+    }
+
+    const duration = performance.now() - startTime;
+
+    // Send final result
+    self.postMessage({
+      type: 'result',
+      matches,
+      filesScanned: filesProcessed,
+      totalLines,
+      duration,
+    } as ScanResultMessage);
+  } catch (error) {
+    // Handle any unexpected errors
+    console.error('Scanner worker error:', error);
+    self.postMessage({
+      type: 'result',
+      matches: [],
+      filesScanned: 0,
+      totalLines: 0,
+      duration: 0,
+    } as ScanResultMessage);
   }
-
-  const duration = performance.now() - startTime;
-
-  // Send final result
-  self.postMessage({
-    type: 'result',
-    matches,
-    filesScanned: files.length,
-    totalLines,
-    duration,
-  } as ScanResultMessage);
 };
 
 export {};

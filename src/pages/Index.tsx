@@ -134,6 +134,7 @@ const Index = () => {
     setIsScanning(false);
     setHasScanCompleted(false);
     setProgress(undefined);
+    setViewMode("input");
     setLogs((prev) => [...prev, "Scan cancelled by user"]);
     toast({
       title: "Scan cancelled",
