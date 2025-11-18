@@ -7,7 +7,7 @@
 
 > **Browser-based secret scanner that runs 100% locally. Detect hardcoded API keys, tokens, and credentials in your code without sending data anywhere.**
 
-![VibeLeaks Hero](public/public/hero-pattern.png)
+![VibeLeaks Hero](public/public/vibeleaks-og.jpg)
 
 ## 🚀 Why VibeLeaks?
 
